@@ -123,16 +123,16 @@ const Navigation: React.FC<NavigationProps> = ({ onLoginClick = () => {}, onEdit
               )}
             </motion.button>
 
-            {/* Admin Editor Button */}
+            {/* Admin Overlay Editor Button */}
             {isAdmin && (
               <motion.button
                 {...motionProps}
                 onClick={onEditorClick}
                 className="bg-purple-500/20 text-purple-400 p-2 rounded-lg hover:bg-purple-500/30 transition-all flex items-center space-x-2"
-                title="Open Visual Editor"
+                title="Open Overlay Editor"
               >
                 <Edit className="w-5 h-5" />
-                <span className="hidden lg:inline">Editor</span>
+                <span className="hidden lg:inline">Edit Page</span>
               </motion.button>
             )}
 
@@ -246,7 +246,7 @@ const Navigation: React.FC<NavigationProps> = ({ onLoginClick = () => {}, onEdit
                   )}
                 </motion.button>
 
-                {/* Mobile Admin Editor Button */}
+                {/* Mobile Admin Overlay Editor Button */}
                 {isAdmin && (
                   <motion.button
                     {...motionProps}
@@ -257,7 +257,7 @@ const Navigation: React.FC<NavigationProps> = ({ onLoginClick = () => {}, onEdit
                     className="bg-purple-500/20 text-purple-400 px-4 py-2 rounded-lg hover:bg-purple-500/30 transition-all flex items-center space-x-2"
                   >
                     <Edit className="w-4 h-4" />
-                    <span>Editor</span>
+                    <span>Edit Page</span>
                   </motion.button>
                 )}
 
