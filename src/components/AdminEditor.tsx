@@ -20,6 +20,9 @@ import { initialiseEditorStyles } from './editorStyles';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
 
+// Make grapesjs globally available for plugins
+(window as any).grapesjs = grapesjs;
+
 interface AdminEditorProps {
   isOpen: boolean;
   onClose: () => void;
