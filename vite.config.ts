@@ -31,15 +31,14 @@ export default defineConfig(({ command, mode }) => {
         output: {
           manualChunks: {
             'react-vendor': ['react', 'react-dom'],
-            'editor-vendor': [
-              'quill',
-              '@tiptap/react',
-              'grapesjs',
-              'grapesjs-preset-webpage'
-            ],
             'ui-vendor': [
               'framer-motion',
               'lucide-react'
+            ],
+            'dnd-vendor': [
+              '@dnd-kit/core',
+              '@dnd-kit/sortable',
+              '@dnd-kit/utilities'
             ],
           },
         },
