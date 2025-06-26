@@ -8,7 +8,7 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 import LoginModal from './components/LoginModal';
 import ProfilePage from './components/ProfilePage';
-import OverlayEditor from './components/OverlayEditor';
+import WYSIWYGEditor from './components/WYSIWYGEditor';
 import { AuthProvider } from './contexts/AuthContext';
 import { CartProvider } from './contexts/CartContext';
 
@@ -48,7 +48,7 @@ const AppContent = () => {
       </Routes>
       
       <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
-      <OverlayEditor isOpen={isEditorOpen} onClose={() => setIsEditorOpen(false)} />
+      <WYSIWYGEditor isOpen={isEditorOpen} onClose={() => setIsEditorOpen(false)} />
     </div>
   );
 };
