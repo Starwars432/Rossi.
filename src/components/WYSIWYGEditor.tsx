@@ -72,6 +72,7 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
   const [replaceText, setReplaceText] = useState('');
   const [isDragging, setIsDragging] = useState(false);
   const [draggedElement, setDraggedElement] = useState<string | null>(null);
+  const [websiteContent, setWebsiteContent] = useState<string>('');
   const canvasRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -89,6 +90,7 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
       // Load the actual website content from the static homepage
       const response = await fetch('/static/homepage.html');
       const htmlContent = await response.text();
+      setWebsiteContent(htmlContent);
       
       // Parse the HTML and extract editable elements
       const parser = new DOMParser();
@@ -100,17 +102,17 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
       // Extract text elements (h1, h2, h3, p, etc.)
       const textElements = doc.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, div');
       textElements.forEach((el) => {
-        if (el.textContent && el.textContent.trim()) {
+        if (el.textContent && el.textContent.trim() && el.textContent.length > 3) {
           elements.push({
             id: `element-${elementId++}`,
             type: 'text',
             content: el.textContent.trim(),
             styles: {
-              fontSize: getComputedStyle(el).fontSize || '16px',
-              fontFamily: getComputedStyle(el).fontFamily || 'inherit',
-              color: getComputedStyle(el).color || '#ffffff',
-              fontWeight: getComputedStyle(el).fontWeight || 'normal',
-              textAlign: getComputedStyle(el).textAlign || 'left',
+              fontSize: '16px',
+              fontFamily: 'Playfair Display, serif',
+              color: '#ffffff',
+              fontWeight: 'normal',
+              textAlign: 'left',
               tagName: el.tagName.toLowerCase()
             },
             position: { x: 0, y: 0 },
@@ -127,12 +129,12 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
           type: 'image',
           content: img.src,
           styles: {
-            width: img.width || 'auto',
-            height: img.height || 'auto',
+            width: 'auto',
+            height: 'auto',
             alt: img.alt || ''
           },
           position: { x: 0, y: 0 },
-          size: { width: img.width || 200, height: img.height || 'auto' }
+          size: { width: 200, height: 'auto' }
         });
       });
 
@@ -145,11 +147,11 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
             type: 'button',
             content: btn.textContent.trim(),
             styles: {
-              backgroundColor: getComputedStyle(btn).backgroundColor || '#3B82F6',
-              color: getComputedStyle(btn).color || '#ffffff',
-              padding: getComputedStyle(btn).padding || '8px 16px',
-              borderRadius: getComputedStyle(btn).borderRadius || '4px',
-              border: getComputedStyle(btn).border || 'none'
+              backgroundColor: '#3B82F6',
+              color: '#ffffff',
+              padding: '8px 16px',
+              borderRadius: '4px',
+              border: 'none'
             },
             position: { x: 0, y: 0 },
             size: { width: 'auto', height: 'auto' }
@@ -419,7 +421,7 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
       <div className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-sm">
         <div className="flex h-full">
           {/* Left Sidebar */}
-          <div className="w-80 bg-black/90 border-r border-blue-400/30 flex flex-col">
+          <div className="w-64 bg-black/90 border-r border-blue-400/30 flex flex-col">
             {/* Header */}
             <div className="p-4 border-b border-blue-400/30">
               <div className="flex items-center justify-between mb-4">
@@ -622,14 +624,14 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
                       placeholder="Find text..."
                       value={findText}
                       onChange={(e) => setFindText(e.target.value)}
-                      className="w-full px-3 py-2 bg-black/50 border border-blue-400/30 rounded text-white placeholder-gray-400 mb-2"
+                      className="w-full px-3 py-2 bg-black/50 border border-blue-400/30 rounded text-black placeholder-gray-400 mb-2"
                     />
                     <input
                       type="text"
                       placeholder="Replace with..."
                       value={replaceText}
                       onChange={(e) => setReplaceText(e.target.value)}
-                      className="w-full px-3 py-2 bg-black/50 border border-blue-400/30 rounded text-white placeholder-gray-400 mb-2"
+                      className="w-full px-3 py-2 bg-black/50 border border-blue-400/30 rounded text-black placeholder-gray-400 mb-2"
                     />
                     <button
                       onClick={findAndReplace}
@@ -637,6 +639,17 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
                     >
                       Replace All
                     </button>
+                  </div>
+
+                  {/* Instructions */}
+                  <div className="mt-6 p-3 bg-blue-500/10 rounded border border-blue-400/30">
+                    <h4 className="text-blue-400 mb-2">Instructions</h4>
+                    <ul className="text-sm text-gray-300 space-y-1">
+                      <li>• Click on any text to edit it directly</li>
+                      <li>• Click on images to replace them</li>
+                      <li>• Use the Styles panel to customize appearance</li>
+                      <li>• Drag elements from above to add new content</li>
+                    </ul>
                   </div>
                 </div>
               )}
@@ -695,7 +708,7 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
                                 createPage();
                               }}
                               className="p-1 text-green-400 hover:text-green-300"
-                              title="Create Page"
+                              title="+ Page"
                             >
                               <Plus className="w-4 h-4" />
                             </button>
@@ -711,6 +724,11 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
                 <div className="space-y-4">
                   <h3 className="text-lg text-blue-400">Properties</h3>
                   
+                  <div className="text-sm text-gray-400 mb-4">
+                    Select an element to view its properties<br/>
+                    Click on any element on the page to get started
+                  </div>
+
                   <div>
                     <label className="block text-sm text-gray-400 mb-1">Font Size</label>
                     <input
@@ -733,7 +751,7 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
                       onChange={(e) => updateElement(selectedElement!, {
                         styles: { ...selectedElementData.styles, fontFamily: e.target.value }
                       })}
-                      className="w-full px-3 py-2 bg-black/50 border border-blue-400/30 rounded text-white"
+                      className="w-full px-3 py-2 bg-white border border-blue-400/30 rounded text-black"
                     >
                       <option value="Playfair Display">Playfair Display</option>
                       <option value="Arial">Arial</option>
@@ -750,7 +768,7 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
                       onChange={(e) => updateElement(selectedElement!, {
                         styles: { ...selectedElementData.styles, fontWeight: e.target.value }
                       })}
-                      className="w-full px-3 py-2 bg-black/50 border border-blue-400/30 rounded text-white"
+                      className="w-full px-3 py-2 bg-white border border-blue-400/30 rounded text-black"
                     >
                       <option value="normal">Normal</option>
                       <option value="bold">Bold</option>
@@ -791,50 +809,90 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
           <div className="flex-1 bg-black overflow-auto">
             <div 
               ref={canvasRef}
-              className="min-h-full p-4"
+              className="min-h-full"
               style={{ 
                 background: 'black',
-                minWidth: '1200px'
+                minWidth: '1200px',
+                padding: '20px'
               }}
             >
-              {/* Load the actual website content */}
-              <iframe
-                src="/static/homepage.html"
-                className="w-full h-screen border-0"
-                style={{
-                  background: 'black',
-                  minHeight: '100vh'
-                }}
-                title="Website Preview"
-              />
-              
-              {/* Overlay for editing */}
-              <div className="absolute inset-0 pointer-events-none">
-                {editableElements.map((element) => (
-                  <div
-                    key={element.id}
-                    className={`absolute pointer-events-auto cursor-pointer border-2 ${
-                      selectedElement === element.id
-                        ? 'border-blue-400'
-                        : 'border-transparent hover:border-blue-400/50'
-                    }`}
-                    style={{
-                      left: element.position.x,
-                      top: element.position.y,
-                      width: element.size.width,
-                      height: element.size.height
-                    }}
-                    onClick={() => setSelectedElement(element.id)}
-                  >
-                    {selectedElement === element.id && (
-                      <div className="absolute -top-6 left-0 bg-blue-500 text-white px-2 py-1 text-xs rounded">
-                        {element.type}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
+              {/* Render the actual website content */}
+              {websiteContent && (
+                <div 
+                  dangerouslySetInnerHTML={{ __html: websiteContent }}
+                  className="w-full"
+                  style={{
+                    background: 'black',
+                    color: 'white',
+                    fontFamily: 'Playfair Display, serif'
+                  }}
+                />
+              )}
             </div>
+          </div>
+
+          {/* Right Properties Panel */}
+          <div className="w-80 bg-black/90 border-l border-blue-400/30 p-4">
+            <h3 className="text-xl text-blue-400 mb-4">Properties</h3>
+            
+            {selectedElementData ? (
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm text-gray-400 mb-1">Content</label>
+                  <textarea
+                    value={selectedElementData.content}
+                    onChange={(e) => updateElement(selectedElement!, { content: e.target.value })}
+                    className="w-full px-3 py-2 bg-white border border-blue-400/30 rounded text-black"
+                    rows={3}
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm text-gray-400 mb-1">Font Size</label>
+                  <input
+                    type="range"
+                    min="8"
+                    max="72"
+                    value={parseInt(selectedElementData.styles.fontSize) || 16}
+                    onChange={(e) => updateElement(selectedElement!, {
+                      styles: { ...selectedElementData.styles, fontSize: `${e.target.value}px` }
+                    })}
+                    className="w-full"
+                  />
+                  <span className="text-xs text-gray-400">{selectedElementData.styles.fontSize}</span>
+                </div>
+
+                <div>
+                  <label className="block text-sm text-gray-400 mb-1">Text Color</label>
+                  <input
+                    type="color"
+                    value={selectedElementData.styles.color || '#ffffff'}
+                    onChange={(e) => updateElement(selectedElement!, {
+                      styles: { ...selectedElementData.styles, color: e.target.value }
+                    })}
+                    className="w-full h-10 rounded border border-blue-400/30"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm text-gray-400 mb-1">Background Color</label>
+                  <input
+                    type="color"
+                    value={selectedElementData.styles.backgroundColor || '#000000'}
+                    onChange={(e) => updateElement(selectedElement!, {
+                      styles: { ...selectedElementData.styles, backgroundColor: e.target.value }
+                    })}
+                    className="w-full h-10 rounded border border-blue-400/30"
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className="text-center text-gray-400">
+                <Settings className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                <p>Select an element to view its properties</p>
+                <p className="text-sm mt-2">Click on any element on the page to get started</p>
+              </div>
+            )}
           </div>
         </div>
 
