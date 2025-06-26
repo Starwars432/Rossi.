@@ -677,6 +677,21 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
     saveToHistory(updatedElements);
   };
 
+  const updateElementContent = (newContent: string) => {
+    if (!selectedElement) return;
+    
+    selectedElement.element.textContent = newContent;
+    
+    const updatedElements = editableElements.map(el => 
+      el.id === selectedElement.id 
+        ? { ...el, content: newContent }
+        : el
+    );
+    
+    setEditableElements(updatedElements);
+    saveToHistory(updatedElements);
+  };
+
   const findAndReplace = () => {
     if (!findText) return;
     
@@ -1086,6 +1101,20 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
                   </div>
                 </div>
 
+                {/* Text Content Editor */}
+                {(selectedElement.type === 'text' || selectedElement.type === 'button') && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Text Content</label>
+                    <textarea
+                      value={selectedElement.content}
+                      onChange={(e) => updateElementContent(e.target.value)}
+                      className="w-full p-2 border border-gray-200 rounded text-gray-800 bg-white text-sm"
+                      rows={3}
+                      placeholder="Enter text content..."
+                    />
+                  </div>
+                )}
+
                 {/* Quick Actions */}
                 <div className="flex gap-2">
                   <button
@@ -1294,10 +1323,10 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
         <div 
           className="w-full h-full"
           style={{
-            transform: 'scale(0.6)',
+            transform: 'scale(0.4)',
             transformOrigin: 'top left',
-            width: '166.67%',
-            height: '166.67%'
+            width: '250%',
+            height: '250%'
           }}
         >
           {/* The actual website content will be here */}
