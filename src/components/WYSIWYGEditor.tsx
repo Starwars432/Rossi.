@@ -5,7 +5,8 @@ import {
   List, Quote, Video, Bold, Italic, Underline, Strikethrough,
   AlignLeft, AlignCenter, AlignRight, AlignJustify, Search,
   Plus, Move, Trash2, Copy, Link, Upload, ArrowUp, ArrowDown,
-  ArrowLeft, ArrowRight, Eye, EyeOff, Layers, Palette, Settings
+  ArrowLeft, ArrowRight, Eye, EyeOff, Layers, Palette, Settings,
+  FileText, ChevronRight, Home, ExternalLink
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -20,11 +21,21 @@ interface EditableElement {
   type: 'text' | 'image' | 'button' | 'section';
   content: string;
   styles: Record<string, string>;
+  tagName: string;
 }
 
 interface HistoryState {
   elements: EditableElement[];
   timestamp: number;
+}
+
+interface Page {
+  id: string;
+  name: string;
+  slug: string;
+  parentElement?: string;
+  url: string;
+  isActive: boolean;
 }
 
 const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
@@ -41,8 +52,12 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
   const [replaceText, setReplaceText] = useState('');
   const [isInlineEditing, setIsInlineEditing] = useState(false);
   const [inlineEditElement, setInlineEditElement] = useState<HTMLElement | null>(null);
-  const [showStyles, setShowStyles] = useState(false);
+  const [activeTab, setActiveTab] = useState<'elements' | 'layers' | 'styles'>('elements');
   const [isSaving, setIsSaving] = useState(false);
+  const [pages, setPages] = useState<Page[]>([
+    { id: 'home', name: 'Home', slug: '', parentElement: '', url: '/', isActive: true }
+  ]);
+  const [currentPage, setCurrentPage] = useState<Page>(pages[0]);
   
   const editorRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -59,7 +74,7 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
     if (isOpen) {
       setTimeout(() => {
         initializeEditor();
-      }, 100); // Small delay to ensure DOM is ready
+      }, 100);
     }
 
     return () => {
@@ -72,7 +87,6 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
     if (isEditMode) {
       document.addEventListener('keydown', handleKeyDown);
       
-      // Use capture phase for better event handling
       const contentArea = contentAreaRef.current;
       if (contentArea) {
         contentArea.addEventListener('click', handleContentClick, true);
@@ -102,7 +116,6 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
   };
 
   const cleanupEditor = () => {
-    // Remove all editor overlays and restore original state
     document.querySelectorAll('.wysiwyg-overlay, .wysiwyg-hover, .wysiwyg-selected').forEach(el => {
       el.remove();
     });
@@ -120,7 +133,6 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
   const findEditableElements = (): EditableElement[] => {
     const elements: EditableElement[] = [];
     
-    // More comprehensive selectors for text elements
     const textSelectors = [
       'h1, h2, h3, h4, h5, h6',
       'p',
@@ -136,13 +148,11 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
       'label'
     ];
 
-    // Find all text elements
     textSelectors.forEach(selector => {
       try {
         document.querySelectorAll(selector).forEach((el, index) => {
           const htmlEl = el as HTMLElement;
           
-          // Skip editor elements, empty elements, and script/style tags
           if (htmlEl.closest('[data-wysiwyg-editor]') || 
               htmlEl.classList.contains('wysiwyg-editor') ||
               htmlEl.tagName === 'SCRIPT' ||
@@ -152,7 +162,6 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
             return;
           }
 
-          // Skip if element is inside another editable element
           if (htmlEl.closest('[data-wysiwyg-id]') && htmlEl.closest('[data-wysiwyg-id]') !== htmlEl) {
             return;
           }
@@ -170,7 +179,8 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
             element: htmlEl,
             type,
             content: type === 'image' ? (htmlEl as HTMLImageElement).src : htmlEl.textContent || '',
-            styles: getComputedStyles(htmlEl)
+            styles: getComputedStyles(htmlEl),
+            tagName: htmlEl.tagName.toLowerCase()
           });
         });
       } catch (error) {
@@ -178,7 +188,6 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
       }
     });
 
-    // Find all images separately
     document.querySelectorAll('img').forEach((img, index) => {
       const htmlEl = img as HTMLElement;
       
@@ -195,7 +204,8 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
         element: htmlEl,
         type: 'image',
         content: (htmlEl as HTMLImageElement).src,
-        styles: getComputedStyles(htmlEl)
+        styles: getComputedStyles(htmlEl),
+        tagName: 'img'
       });
     });
 
@@ -232,7 +242,6 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
     const editableEl = target.closest('[data-wysiwyg-id]') as HTMLElement;
     
     if (editableEl && editableEl !== selectedElement?.element && editableEl !== hoveredElement) {
-      // Clear previous hover
       if (hoveredElement && hoveredElement !== selectedElement?.element) {
         hoveredElement.style.outline = '';
       }
@@ -279,15 +288,13 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
       if (element) {
         selectElement(element);
         
-        // Double click for inline editing
         if (e.detail === 2 && (element.type === 'text' || element.type === 'button')) {
           startInlineEditing(element);
         }
       }
     } else {
-      // Clicked outside, deselect
       setSelectedElement(null);
-      setShowStyles(false);
+      setActiveTab('elements');
       document.querySelectorAll('[data-wysiwyg-id]').forEach(el => {
         (el as HTMLElement).style.outline = '';
       });
@@ -297,26 +304,37 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
   const selectElement = (element: EditableElement) => {
     console.log('Selecting element:', element);
     
-    // Clear previous selection
     document.querySelectorAll('[data-wysiwyg-id]').forEach(el => {
       (el as HTMLElement).style.outline = '';
     });
     
-    // Clear hover state
     if (hoveredElement) {
       hoveredElement.style.outline = '';
       setHoveredElement(null);
     }
     
     setSelectedElement(element);
-    setShowStyles(true);
+    setActiveTab('styles');
     
-    // Highlight selected element
     element.element.style.outline = '3px solid #3B82F6';
     element.element.style.outlineOffset = '2px';
     
-    // Scroll element into view if needed
     element.element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  };
+
+  const selectElementFromLayer = (element: EditableElement) => {
+    selectElement(element);
+    
+    // Scroll to element in the content area
+    const contentArea = contentAreaRef.current;
+    if (contentArea && element.element) {
+      const elementRect = element.element.getBoundingClientRect();
+      const contentRect = contentArea.getBoundingClientRect();
+      
+      if (elementRect.top < contentRect.top || elementRect.bottom > contentRect.bottom) {
+        element.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
   };
 
   const startInlineEditing = (element: EditableElement) => {
@@ -327,24 +345,20 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
     setIsInlineEditing(true);
     setInlineEditElement(element.element);
     
-    // Make element editable
     element.element.contentEditable = 'true';
     element.element.focus();
     
-    // Select all text
     const range = document.createRange();
     range.selectNodeContents(element.element);
     const selection = window.getSelection();
     selection?.removeAllRanges();
     selection?.addRange(range);
     
-    // Handle blur to finish editing
     const handleBlur = () => {
       finishInlineEditing();
       element.element.removeEventListener('blur', handleBlur);
     };
     
-    // Handle enter key to finish editing
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
@@ -364,7 +378,6 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
     
     inlineEditElement.contentEditable = 'false';
     
-    // Update element content
     const elementId = inlineEditElement.getAttribute('data-wysiwyg-id');
     if (elementId) {
       const updatedElements = editableElements.map(el => {
@@ -384,7 +397,6 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
   const handleKeyDown = (e: KeyboardEvent) => {
     if (!isEditMode) return;
     
-    // Undo/Redo
     if (e.ctrlKey || e.metaKey) {
       if (e.key === 'z' && !e.shiftKey) {
         e.preventDefault();
@@ -395,7 +407,6 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
       }
     }
     
-    // Arrow keys for positioning
     if (selectedElement && !isInlineEditing) {
       const step = e.shiftKey ? 10 : 1;
       let moved = false;
@@ -430,7 +441,7 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
             finishInlineEditing();
           } else {
             setSelectedElement(null);
-            setShowStyles(false);
+            setActiveTab('elements');
           }
           break;
       }
@@ -448,7 +459,6 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
   const moveElement = (element: EditableElement, deltaX: number, deltaY: number) => {
     const el = element.element;
     
-    // Make element absolutely positioned if not already
     if (getComputedStyle(el).position === 'static') {
       el.style.position = 'relative';
     }
@@ -465,7 +475,7 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
     const updatedElements = editableElements.filter(el => el.id !== element.id);
     setEditableElements(updatedElements);
     setSelectedElement(null);
-    setShowStyles(false);
+    setActiveTab('elements');
     saveToHistory(updatedElements);
   };
 
@@ -474,7 +484,6 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
     const newId = `${element.id}-copy-${Date.now()}`;
     cloned.setAttribute('data-wysiwyg-id', newId);
     
-    // Position slightly offset
     cloned.style.position = 'relative';
     cloned.style.left = '10px';
     cloned.style.top = '10px';
@@ -486,7 +495,8 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
       element: cloned,
       type: element.type,
       content: element.content,
-      styles: getComputedStyles(cloned)
+      styles: getComputedStyles(cloned),
+      tagName: element.tagName
     };
     
     const updatedElements = [...editableElements, newElement];
@@ -504,7 +514,6 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
     const newHistory = history.slice(0, historyIndex + 1);
     newHistory.push(newState);
     
-    // Limit history to 50 states
     if (newHistory.length > 50) {
       newHistory.shift();
     }
@@ -528,8 +537,6 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
   };
 
   const restoreFromHistory = (state: HistoryState) => {
-    // This is a simplified restore - in a real implementation,
-    // you'd need to restore the actual DOM state
     setEditableElements(state.elements);
   };
 
@@ -572,7 +579,6 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
         element.style.color = 'white';
         break;
       case 'image':
-        // Trigger file input
         fileInputRef.current?.click();
         return;
       case 'button':
@@ -621,17 +627,14 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
     
     element.setAttribute('data-wysiwyg-id', id);
     
-    // Position element
     if (x !== undefined && y !== undefined) {
       element.style.position = 'absolute';
       element.style.left = `${x}px`;
       element.style.top = `${y}px`;
       element.style.zIndex = '1000';
     } else if (selectedElement) {
-      // Insert after selected element
       selectedElement.element.parentNode?.insertBefore(element, selectedElement.element.nextSibling);
     } else {
-      // Append to main content area
       const mainContent = document.querySelector('main') || document.body;
       mainContent.appendChild(element);
     }
@@ -641,7 +644,8 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
       element,
       type: type === 'image' ? 'image' : type === 'button' ? 'button' : type === 'section' ? 'section' : 'text',
       content: element.textContent || '',
-      styles: getComputedStyles(element)
+      styles: getComputedStyles(element),
+      tagName: element.tagName.toLowerCase()
     };
     
     const updatedElements = [...editableElements, newElement];
@@ -677,7 +681,8 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
         element: img,
         type: 'image',
         content: img.src,
-        styles: getComputedStyles(img)
+        styles: getComputedStyles(img),
+        tagName: 'img'
       };
       
       const updatedElements = [...editableElements, newElement];
@@ -687,8 +692,6 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
     };
     
     reader.readAsDataURL(file);
-    
-    // Reset input
     e.target.value = '';
   };
 
@@ -740,10 +743,8 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
     
     setIsSaving(true);
     try {
-      // Get current page HTML
       const html = document.documentElement.outerHTML;
       
-      // Clean up editor artifacts
       const cleanHtml = html
         .replace(/data-wysiwyg-[^=]*="[^"]*"/g, '')
         .replace(/style="[^"]*outline[^"]*"/g, '')
@@ -751,7 +752,6 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
       
       const [owner, repo] = githubSettings.repo.split('/');
       
-      // Get current file SHA
       const getFileResponse = await fetch(
         `https://api.github.com/repos/${owner}/${repo}/contents/public/static/homepage.html`,
         {
@@ -768,7 +768,6 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
         sha = fileData.sha;
       }
       
-      // Update file
       const updateResponse = await fetch(
         `https://api.github.com/repos/${owner}/${repo}/contents/public/static/homepage.html`,
         {
@@ -826,9 +825,30 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
     if (!pageName) return;
     
     const slug = pageName.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    const newPage: Page = {
+      id: `page-${Date.now()}`,
+      name: pageName,
+      slug,
+      parentElement: selectedElement.id,
+      url: `/${slug}`,
+      isActive: false
+    };
     
-    // This would typically create a new page in your routing system
-    alert(`New page "${pageName}" would be created with slug: ${slug}`);
+    setPages([...pages, newPage]);
+    alert(`New page "${pageName}" created! You can navigate to it from the pages list.`);
+  };
+
+  const navigateToPage = (page: Page) => {
+    // Update current page
+    setCurrentPage(page);
+    setPages(pages.map(p => ({ ...p, isActive: p.id === page.id })));
+    
+    // In a real implementation, you would navigate to the actual page
+    // For now, we'll just show an alert
+    if (page.slug) {
+      alert(`Navigating to page: ${page.name} (${page.url})`);
+      // window.location.href = page.url;
+    }
   };
 
   if (!isOpen) return null;
@@ -844,6 +864,26 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
             <span className="text-sm text-gray-600">Live Edit</span>
           </div>
           <span className="text-sm text-gray-500">{editableElements.length} editable elements</span>
+          
+          {/* Page Navigation */}
+          <div className="flex items-center space-x-2 ml-8">
+            <span className="text-sm text-gray-600">Pages:</span>
+            {pages.map((page) => (
+              <button
+                key={page.id}
+                onClick={() => navigateToPage(page)}
+                className={`px-3 py-1 rounded text-xs flex items-center space-x-1 ${
+                  page.isActive 
+                    ? 'bg-blue-500 text-white' 
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                {page.id === 'home' ? <Home className="w-3 h-3" /> : <FileText className="w-3 h-3" />}
+                <span>{page.name}</span>
+                {page.id !== 'home' && <ExternalLink className="w-3 h-3" />}
+              </button>
+            ))}
+          </div>
         </div>
         
         <div className="flex items-center space-x-2">
@@ -887,368 +927,430 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
         </div>
       </div>
 
-      {/* Left Panel - Smaller width (200px) */}
-      <div className="absolute left-0 top-16 bottom-0 w-50 bg-white border-r border-gray-200 overflow-y-auto z-[10000]" style={{ width: '200px' }}>
-        <div className="p-3">
-          <h3 className="text-sm font-semibold text-gray-800 mb-3">Add Elements</h3>
-          
-          <div className="grid grid-cols-2 gap-1 mb-4">
-            <div
-              draggable
-              onDragStart={() => handleDragStart('heading')}
-              onDragEnd={handleDragEnd}
-              onClick={() => createElement('heading')}
-              className="p-2 border border-gray-200 rounded cursor-pointer hover:bg-gray-50 text-center"
-            >
-              <Type className="w-4 h-4 mx-auto mb-1 text-gray-600" />
-              <span className="text-xs text-gray-800">Heading</span>
-            </div>
-            
-            <div
-              draggable
-              onDragStart={() => handleDragStart('paragraph')}
-              onDragEnd={handleDragEnd}
-              onClick={() => createElement('paragraph')}
-              className="p-2 border border-gray-200 rounded cursor-pointer hover:bg-gray-50 text-center"
-            >
-              <Type className="w-4 h-4 mx-auto mb-1 text-gray-600" />
-              <span className="text-xs text-gray-800">Paragraph</span>
-            </div>
-            
-            <div
-              draggable
-              onDragStart={() => handleDragStart('image')}
-              onDragEnd={handleDragEnd}
-              onClick={() => createElement('image')}
-              className="p-2 border border-gray-200 rounded cursor-pointer hover:bg-gray-50 text-center"
-            >
-              <Image className="w-4 h-4 mx-auto mb-1 text-gray-600" />
-              <span className="text-xs text-gray-800">Image</span>
-            </div>
-            
-            <div
-              draggable
-              onDragStart={() => handleDragStart('button')}
-              onDragEnd={handleDragEnd}
-              onClick={() => createElement('button')}
-              className="p-2 border border-gray-200 rounded cursor-pointer hover:bg-gray-50 text-center"
-            >
-              <Square className="w-4 h-4 mx-auto mb-1 text-gray-600" />
-              <span className="text-xs text-gray-800">Button</span>
-            </div>
-            
-            <div
-              draggable
-              onDragStart={() => handleDragStart('section')}
-              onDragEnd={handleDragEnd}
-              onClick={() => createElement('section')}
-              className="p-2 border border-gray-200 rounded cursor-pointer hover:bg-gray-50 text-center"
-            >
-              <Square className="w-4 h-4 mx-auto mb-1 text-gray-600" />
-              <span className="text-xs text-gray-800">Section</span>
-            </div>
-            
-            <div
-              draggable
-              onDragStart={() => handleDragStart('list')}
-              onDragEnd={handleDragEnd}
-              onClick={() => createElement('list')}
-              className="p-2 border border-gray-200 rounded cursor-pointer hover:bg-gray-50 text-center"
-            >
-              <List className="w-4 h-4 mx-auto mb-1 text-gray-600" />
-              <span className="text-xs text-gray-800">List</span>
-            </div>
-            
-            <div
-              draggable
-              onDragStart={() => handleDragStart('quote')}
-              onDragEnd={handleDragEnd}
-              onClick={() => createElement('quote')}
-              className="p-2 border border-gray-200 rounded cursor-pointer hover:bg-gray-50 text-center"
-            >
-              <Quote className="w-4 h-4 mx-auto mb-1 text-gray-600" />
-              <span className="text-xs text-gray-800">Quote</span>
-            </div>
-            
-            <div
-              draggable
-              onDragStart={() => handleDragStart('video')}
-              onDragEnd={handleDragEnd}
-              onClick={() => createElement('video')}
-              className="p-2 border border-gray-200 rounded cursor-pointer hover:bg-gray-50 text-center"
-            >
-              <Video className="w-4 h-4 mx-auto mb-1 text-gray-600" />
-              <span className="text-xs text-gray-800">Video</span>
-            </div>
-          </div>
-
-          {/* Text Formatting */}
-          <div className="mb-4">
-            <h4 className="text-sm font-medium text-gray-800 mb-2">Text Formatting</h4>
-            <div className="flex flex-wrap gap-1">
-              <button
-                onClick={() => document.execCommand('bold')}
-                className="p-1 border border-gray-200 rounded hover:bg-gray-50"
-                title="Bold"
-              >
-                <Bold className="w-3 h-3 text-gray-600" />
-              </button>
-              <button
-                onClick={() => document.execCommand('italic')}
-                className="p-1 border border-gray-200 rounded hover:bg-gray-50"
-                title="Italic"
-              >
-                <Italic className="w-3 h-3 text-gray-600" />
-              </button>
-              <button
-                onClick={() => document.execCommand('underline')}
-                className="p-1 border border-gray-200 rounded hover:bg-gray-50"
-                title="Underline"
-              >
-                <Underline className="w-3 h-3 text-gray-600" />
-              </button>
-              <button
-                onClick={() => document.execCommand('strikethrough')}
-                className="p-1 border border-gray-200 rounded hover:bg-gray-50"
-                title="Strikethrough"
-              >
-                <Strikethrough className="w-3 h-3 text-gray-600" />
-              </button>
-            </div>
-          </div>
-
-          {/* Text Alignment */}
-          <div className="mb-4">
-            <h4 className="text-sm font-medium text-gray-800 mb-2">Text Alignment</h4>
-            <div className="flex gap-1">
-              <button
-                onClick={() => updateElementStyle('textAlign', 'left')}
-                className="p-1 border border-gray-200 rounded hover:bg-gray-50"
-                title="Align Left"
-              >
-                <AlignLeft className="w-3 h-3 text-gray-600" />
-              </button>
-              <button
-                onClick={() => updateElementStyle('textAlign', 'center')}
-                className="p-1 border border-gray-200 rounded hover:bg-gray-50"
-                title="Align Center"
-              >
-                <AlignCenter className="w-3 h-3 text-gray-600" />
-              </button>
-              <button
-                onClick={() => updateElementStyle('textAlign', 'right')}
-                className="p-1 border border-gray-200 rounded hover:bg-gray-50"
-                title="Align Right"
-              >
-                <AlignRight className="w-3 h-3 text-gray-600" />
-              </button>
-              <button
-                onClick={() => updateElementStyle('textAlign', 'justify')}
-                className="p-1 border border-gray-200 rounded hover:bg-gray-50"
-                title="Justify"
-              >
-                <AlignJustify className="w-3 h-3 text-gray-600" />
-              </button>
-            </div>
-          </div>
-
-          {/* Find & Replace */}
-          <div className="mb-4">
-            <h4 className="text-sm font-medium text-gray-800 mb-2">Find & Replace</h4>
-            <input
-              type="text"
-              placeholder="Find text..."
-              value={findText}
-              onChange={(e) => setFindText(e.target.value)}
-              className="w-full p-1 border border-gray-200 rounded mb-1 text-gray-800 bg-white text-xs"
-            />
-            <input
-              type="text"
-              placeholder="Replace with..."
-              value={replaceText}
-              onChange={(e) => setReplaceText(e.target.value)}
-              className="w-full p-1 border border-gray-200 rounded mb-1 text-gray-800 bg-white text-xs"
-            />
-            <button
-              onClick={findAndReplace}
-              className="w-full bg-blue-500 text-white p-1 rounded hover:bg-blue-600 text-xs"
-            >
-              Replace All
-            </button>
-          </div>
-
-          {/* Instructions */}
-          <div className="text-xs text-gray-600 space-y-1">
-            <p>• Click on any text to edit it directly</p>
-            <p>• Double-click text for inline editing</p>
-            <p>• Click on images to replace them</p>
-            <p>• Use arrow keys to move selected elements</p>
-            <p>• Drag elements from above to add new content</p>
-          </div>
+      {/* Left Panel */}
+      <div className="absolute left-0 top-16 bottom-0 w-64 bg-white border-r border-gray-200 overflow-y-auto z-[10000]">
+        {/* Tab Navigation */}
+        <div className="flex border-b border-gray-200">
+          <button
+            onClick={() => setActiveTab('elements')}
+            className={`flex-1 px-3 py-2 text-xs font-medium ${
+              activeTab === 'elements' 
+                ? 'bg-blue-50 text-blue-600 border-b-2 border-blue-600' 
+                : 'text-gray-600 hover:text-gray-800'
+            }`}
+          >
+            <Square className="w-4 h-4 mx-auto mb-1" />
+            Elements
+          </button>
+          <button
+            onClick={() => setActiveTab('layers')}
+            className={`flex-1 px-3 py-2 text-xs font-medium ${
+              activeTab === 'layers' 
+                ? 'bg-blue-50 text-blue-600 border-b-2 border-blue-600' 
+                : 'text-gray-600 hover:text-gray-800'
+            }`}
+          >
+            <Layers className="w-4 h-4 mx-auto mb-1" />
+            Layers
+          </button>
+          <button
+            onClick={() => setActiveTab('styles')}
+            className={`flex-1 px-3 py-2 text-xs font-medium ${
+              activeTab === 'styles' 
+                ? 'bg-blue-50 text-blue-600 border-b-2 border-blue-600' 
+                : 'text-gray-600 hover:text-gray-800'
+            }`}
+          >
+            <Palette className="w-4 h-4 mx-auto mb-1" />
+            Styles
+          </button>
         </div>
-      </div>
 
-      {/* Right Panel - Smaller width (250px) */}
-      <div className="absolute right-0 top-16 bottom-0 bg-white border-l border-gray-200 overflow-y-auto z-[10000]" style={{ width: '250px' }}>
         <div className="p-3">
-          <h3 className="text-sm font-semibold text-gray-800 mb-3">Properties</h3>
-          
-          {selectedElement ? (
-            <div className="space-y-3">
-              {/* Element Info */}
-              <div className="p-2 bg-gray-50 rounded">
-                <div className="text-sm font-medium text-gray-800 mb-1">
-                  {selectedElement.element.tagName.toLowerCase()}
+          {/* Elements Tab */}
+          {activeTab === 'elements' && (
+            <>
+              <h3 className="text-sm font-semibold text-gray-800 mb-3">Add Elements</h3>
+              
+              <div className="grid grid-cols-2 gap-2 mb-4">
+                <div
+                  draggable
+                  onDragStart={() => handleDragStart('heading')}
+                  onDragEnd={handleDragEnd}
+                  onClick={() => createElement('heading')}
+                  className="p-2 border border-gray-200 rounded cursor-pointer hover:bg-gray-50 text-center"
+                >
+                  <Type className="w-4 h-4 mx-auto mb-1 text-gray-600" />
+                  <span className="text-xs text-gray-800">Heading</span>
                 </div>
-                <div className="text-xs text-gray-600">
-                  {selectedElement.type} element
+                
+                <div
+                  draggable
+                  onDragStart={() => handleDragStart('paragraph')}
+                  onDragEnd={handleDragEnd}
+                  onClick={() => createElement('paragraph')}
+                  className="p-2 border border-gray-200 rounded cursor-pointer hover:bg-gray-50 text-center"
+                >
+                  <Type className="w-4 h-4 mx-auto mb-1 text-gray-600" />
+                  <span className="text-xs text-gray-800">Paragraph</span>
+                </div>
+                
+                <div
+                  draggable
+                  onDragStart={() => handleDragStart('image')}
+                  onDragEnd={handleDragEnd}
+                  onClick={() => createElement('image')}
+                  className="p-2 border border-gray-200 rounded cursor-pointer hover:bg-gray-50 text-center"
+                >
+                  <Image className="w-4 h-4 mx-auto mb-1 text-gray-600" />
+                  <span className="text-xs text-gray-800">Image</span>
+                </div>
+                
+                <div
+                  draggable
+                  onDragStart={() => handleDragStart('button')}
+                  onDragEnd={handleDragEnd}
+                  onClick={() => createElement('button')}
+                  className="p-2 border border-gray-200 rounded cursor-pointer hover:bg-gray-50 text-center"
+                >
+                  <Square className="w-4 h-4 mx-auto mb-1 text-gray-600" />
+                  <span className="text-xs text-gray-800">Button</span>
+                </div>
+                
+                <div
+                  draggable
+                  onDragStart={() => handleDragStart('section')}
+                  onDragEnd={handleDragEnd}
+                  onClick={() => createElement('section')}
+                  className="p-2 border border-gray-200 rounded cursor-pointer hover:bg-gray-50 text-center"
+                >
+                  <Square className="w-4 h-4 mx-auto mb-1 text-gray-600" />
+                  <span className="text-xs text-gray-800">Section</span>
+                </div>
+                
+                <div
+                  draggable
+                  onDragStart={() => handleDragStart('list')}
+                  onDragEnd={handleDragEnd}
+                  onClick={() => createElement('list')}
+                  className="p-2 border border-gray-200 rounded cursor-pointer hover:bg-gray-50 text-center"
+                >
+                  <List className="w-4 h-4 mx-auto mb-1 text-gray-600" />
+                  <span className="text-xs text-gray-800">List</span>
+                </div>
+                
+                <div
+                  draggable
+                  onDragStart={() => handleDragStart('quote')}
+                  onDragEnd={handleDragEnd}
+                  onClick={() => createElement('quote')}
+                  className="p-2 border border-gray-200 rounded cursor-pointer hover:bg-gray-50 text-center"
+                >
+                  <Quote className="w-4 h-4 mx-auto mb-1 text-gray-600" />
+                  <span className="text-xs text-gray-800">Quote</span>
+                </div>
+                
+                <div
+                  draggable
+                  onDragStart={() => handleDragStart('video')}
+                  onDragEnd={handleDragEnd}
+                  onClick={() => createElement('video')}
+                  className="p-2 border border-gray-200 rounded cursor-pointer hover:bg-gray-50 text-center"
+                >
+                  <Video className="w-4 h-4 mx-auto mb-1 text-gray-600" />
+                  <span className="text-xs text-gray-800">Video</span>
                 </div>
               </div>
 
-              {/* Quick Actions */}
-              <div className="flex gap-1">
-                <button
-                  onClick={() => duplicateElement(selectedElement)}
-                  className="flex-1 bg-blue-500 text-white p-1 rounded hover:bg-blue-600 flex items-center justify-center space-x-1"
-                >
-                  <Copy className="w-3 h-3" />
-                  <span className="text-xs">Copy</span>
-                </button>
-                <button
-                  onClick={() => deleteElement(selectedElement)}
-                  className="flex-1 bg-red-500 text-white p-1 rounded hover:bg-red-600 flex items-center justify-center space-x-1"
-                >
-                  <Trash2 className="w-3 h-3" />
-                  <span className="text-xs">Delete</span>
-                </button>
-                <button
-                  onClick={createNewPage}
-                  className="flex-1 bg-green-500 text-white p-1 rounded hover:bg-green-600 flex items-center justify-center space-x-1"
-                >
-                  <Plus className="w-3 h-3" />
-                  <span className="text-xs">Page</span>
-                </button>
-              </div>
-
-              {/* Font Size */}
-              <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">Font Size</label>
-                <input
-                  type="range"
-                  min="8"
-                  max="72"
-                  value={parseInt(selectedElement.styles.fontSize) || 16}
-                  onChange={(e) => updateElementStyle('fontSize', `${e.target.value}px`)}
-                  className="w-full"
-                />
-                <div className="text-xs text-gray-500 mt-1">
-                  {parseInt(selectedElement.styles.fontSize) || 16}px
-                </div>
-              </div>
-
-              {/* Font Family */}
-              <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">Font Family</label>
-                <select
-                  value={selectedElement.styles.fontFamily?.replace(/['"]/g, '') || 'inherit'}
-                  onChange={(e) => updateElementStyle('fontFamily', e.target.value)}
-                  className="w-full p-1 border border-gray-200 rounded text-gray-800 bg-white text-xs"
-                >
-                  <option value="inherit">Inherit</option>
-                  <option value="Arial, sans-serif">Arial</option>
-                  <option value="Helvetica, sans-serif">Helvetica</option>
-                  <option value="Times New Roman, serif">Times New Roman</option>
-                  <option value="Georgia, serif">Georgia</option>
-                  <option value="Verdana, sans-serif">Verdana</option>
-                  <option value="Courier New, monospace">Courier New</option>
-                  <option value="Playfair Display, serif">Playfair Display</option>
-                </select>
-              </div>
-
-              {/* Font Weight */}
-              <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">Font Weight</label>
-                <select
-                  value={selectedElement.styles.fontWeight || 'normal'}
-                  onChange={(e) => updateElementStyle('fontWeight', e.target.value)}
-                  className="w-full p-1 border border-gray-200 rounded text-gray-800 bg-white text-xs"
-                >
-                  <option value="100">Thin</option>
-                  <option value="200">Extra Light</option>
-                  <option value="300">Light</option>
-                  <option value="400">Normal</option>
-                  <option value="500">Medium</option>
-                  <option value="600">Semi Bold</option>
-                  <option value="700">Bold</option>
-                  <option value="800">Extra Bold</option>
-                  <option value="900">Black</option>
-                </select>
-              </div>
-
-              {/* Text Color */}
-              <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">Text Color</label>
-                <input
-                  type="color"
-                  value={rgbToHex(selectedElement.styles.color) || '#000000'}
-                  onChange={(e) => updateElementStyle('color', e.target.value)}
-                  className="w-full h-8 border border-gray-200 rounded"
-                />
-              </div>
-
-              {/* Background Color */}
-              <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">Background Color</label>
-                <input
-                  type="color"
-                  value={rgbToHex(selectedElement.styles.backgroundColor) || '#ffffff'}
-                  onChange={(e) => updateElementStyle('backgroundColor', e.target.value)}
-                  className="w-full h-8 border border-gray-200 rounded"
-                />
-              </div>
-
-              {/* Image specific controls */}
-              {selectedElement.type === 'image' && (
-                <div className="space-y-3 pt-3 border-t border-gray-200">
-                  <h4 className="text-xs font-medium text-gray-800">Image Controls</h4>
-                  
+              {/* Text Formatting */}
+              <div className="mb-4">
+                <h4 className="text-sm font-medium text-gray-800 mb-2">Text Formatting</h4>
+                <div className="flex flex-wrap gap-1">
                   <button
-                    onClick={() => fileInputRef.current?.click()}
-                    className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 text-xs"
+                    onClick={() => document.execCommand('bold')}
+                    className="p-1 border border-gray-200 rounded hover:bg-gray-50"
+                    title="Bold"
                   >
-                    Replace Image
+                    <Bold className="w-3 h-3 text-gray-600" />
                   </button>
-                  
+                  <button
+                    onClick={() => document.execCommand('italic')}
+                    className="p-1 border border-gray-200 rounded hover:bg-gray-50"
+                    title="Italic"
+                  >
+                    <Italic className="w-3 h-3 text-gray-600" />
+                  </button>
+                  <button
+                    onClick={() => document.execCommand('underline')}
+                    className="p-1 border border-gray-200 rounded hover:bg-gray-50"
+                    title="Underline"
+                  >
+                    <Underline className="w-3 h-3 text-gray-600" />
+                  </button>
+                  <button
+                    onClick={() => document.execCommand('strikethrough')}
+                    className="p-1 border border-gray-200 rounded hover:bg-gray-50"
+                    title="Strikethrough"
+                  >
+                    <Strikethrough className="w-3 h-3 text-gray-600" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Text Alignment */}
+              <div className="mb-4">
+                <h4 className="text-sm font-medium text-gray-800 mb-2">Text Alignment</h4>
+                <div className="flex gap-1">
+                  <button
+                    onClick={() => updateElementStyle('textAlign', 'left')}
+                    className="p-1 border border-gray-200 rounded hover:bg-gray-50"
+                    title="Align Left"
+                  >
+                    <AlignLeft className="w-3 h-3 text-gray-600" />
+                  </button>
+                  <button
+                    onClick={() => updateElementStyle('textAlign', 'center')}
+                    className="p-1 border border-gray-200 rounded hover:bg-gray-50"
+                    title="Align Center"
+                  >
+                    <AlignCenter className="w-3 h-3 text-gray-600" />
+                  </button>
+                  <button
+                    onClick={() => updateElementStyle('textAlign', 'right')}
+                    className="p-1 border border-gray-200 rounded hover:bg-gray-50"
+                    title="Align Right"
+                  >
+                    <AlignRight className="w-3 h-3 text-gray-600" />
+                  </button>
+                  <button
+                    onClick={() => updateElementStyle('textAlign', 'justify')}
+                    className="p-1 border border-gray-200 rounded hover:bg-gray-50"
+                    title="Justify"
+                  >
+                    <AlignJustify className="w-3 h-3 text-gray-600" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Find & Replace */}
+              <div className="mb-4">
+                <h4 className="text-sm font-medium text-gray-800 mb-2">Find & Replace</h4>
+                <input
+                  type="text"
+                  placeholder="Find text..."
+                  value={findText}
+                  onChange={(e) => setFindText(e.target.value)}
+                  className="w-full p-1 border border-gray-200 rounded mb-1 text-gray-800 bg-white text-xs"
+                />
+                <input
+                  type="text"
+                  placeholder="Replace with..."
+                  value={replaceText}
+                  onChange={(e) => setReplaceText(e.target.value)}
+                  className="w-full p-1 border border-gray-200 rounded mb-1 text-gray-800 bg-white text-xs"
+                />
+                <button
+                  onClick={findAndReplace}
+                  className="w-full bg-blue-500 text-white p-1 rounded hover:bg-blue-600 text-xs"
+                >
+                  Replace All
+                </button>
+              </div>
+            </>
+          )}
+
+          {/* Layers Tab */}
+          {activeTab === 'layers' && (
+            <>
+              <h3 className="text-sm font-semibold text-gray-800 mb-3">Page Layers</h3>
+              <div className="space-y-1">
+                {editableElements.map((element) => (
+                  <div
+                    key={element.id}
+                    onClick={() => selectElementFromLayer(element)}
+                    className={`p-2 rounded cursor-pointer text-xs flex items-center justify-between ${
+                      selectedElement?.id === element.id 
+                        ? 'bg-blue-100 text-blue-800 border border-blue-300' 
+                        : 'hover:bg-gray-100 text-gray-700'
+                    }`}
+                  >
+                    <div className="flex items-center space-x-2">
+                      {element.type === 'text' && <Type className="w-3 h-3" />}
+                      {element.type === 'image' && <Image className="w-3 h-3" />}
+                      {element.type === 'button' && <Square className="w-3 h-3" />}
+                      {element.type === 'section' && <Square className="w-3 h-3" />}
+                      <span className="font-medium">{element.tagName}</span>
+                    </div>
+                    <div className="text-xs text-gray-500 truncate max-w-20">
+                      {element.content.substring(0, 20)}...
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+
+          {/* Styles Tab */}
+          {activeTab === 'styles' && (
+            <>
+              {selectedElement ? (
+                <div className="space-y-3">
+                  {/* Element Info */}
+                  <div className="p-2 bg-gray-50 rounded">
+                    <div className="text-sm font-medium text-gray-800 mb-1">
+                      {selectedElement.element.tagName.toLowerCase()}
+                    </div>
+                    <div className="text-xs text-gray-600">
+                      {selectedElement.type} element
+                    </div>
+                  </div>
+
+                  {/* Quick Actions */}
+                  <div className="flex gap-1">
+                    <button
+                      onClick={() => duplicateElement(selectedElement)}
+                      className="flex-1 bg-blue-500 text-white p-1 rounded hover:bg-blue-600 flex items-center justify-center space-x-1"
+                    >
+                      <Copy className="w-3 h-3" />
+                      <span className="text-xs">Copy</span>
+                    </button>
+                    <button
+                      onClick={() => deleteElement(selectedElement)}
+                      className="flex-1 bg-red-500 text-white p-1 rounded hover:bg-red-600 flex items-center justify-center space-x-1"
+                    >
+                      <Trash2 className="w-3 h-3" />
+                      <span className="text-xs">Delete</span>
+                    </button>
+                    <button
+                      onClick={createNewPage}
+                      className="flex-1 bg-green-500 text-white p-1 rounded hover:bg-green-600 flex items-center justify-center space-x-1"
+                    >
+                      <Plus className="w-3 h-3" />
+                      <span className="text-xs">Page</span>
+                    </button>
+                  </div>
+
+                  {/* Font Size */}
                   <div>
-                    <label className="block text-xs font-medium text-gray-700 mb-1">Width</label>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Font Size</label>
                     <input
-                      type="number"
-                      value={parseInt(selectedElement.element.style.width) || ''}
-                      onChange={(e) => updateElementStyle('width', `${e.target.value}px`)}
+                      type="range"
+                      min="8"
+                      max="72"
+                      value={parseInt(selectedElement.styles.fontSize) || 16}
+                      onChange={(e) => updateElementStyle('fontSize', `${e.target.value}px`)}
+                      className="w-full"
+                    />
+                    <div className="text-xs text-gray-500 mt-1">
+                      {parseInt(selectedElement.styles.fontSize) || 16}px
+                    </div>
+                  </div>
+
+                  {/* Font Family */}
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Font Family</label>
+                    <select
+                      value={selectedElement.styles.fontFamily?.replace(/['"]/g, '') || 'inherit'}
+                      onChange={(e) => updateElementStyle('fontFamily', e.target.value)}
                       className="w-full p-1 border border-gray-200 rounded text-gray-800 bg-white text-xs"
-                      placeholder="Auto"
+                    >
+                      <option value="inherit">Inherit</option>
+                      <option value="Arial, sans-serif">Arial</option>
+                      <option value="Helvetica, sans-serif">Helvetica</option>
+                      <option value="Times New Roman, serif">Times New Roman</option>
+                      <option value="Georgia, serif">Georgia</option>
+                      <option value="Verdana, sans-serif">Verdana</option>
+                      <option value="Courier New, monospace">Courier New</option>
+                      <option value="Playfair Display, serif">Playfair Display</option>
+                    </select>
+                  </div>
+
+                  {/* Font Weight */}
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Font Weight</label>
+                    <select
+                      value={selectedElement.styles.fontWeight || 'normal'}
+                      onChange={(e) => updateElementStyle('fontWeight', e.target.value)}
+                      className="w-full p-1 border border-gray-200 rounded text-gray-800 bg-white text-xs"
+                    >
+                      <option value="100">Thin</option>
+                      <option value="200">Extra Light</option>
+                      <option value="300">Light</option>
+                      <option value="400">Normal</option>
+                      <option value="500">Medium</option>
+                      <option value="600">Semi Bold</option>
+                      <option value="700">Bold</option>
+                      <option value="800">Extra Bold</option>
+                      <option value="900">Black</option>
+                    </select>
+                  </div>
+
+                  {/* Text Color */}
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Text Color</label>
+                    <input
+                      type="color"
+                      value={rgbToHex(selectedElement.styles.color) || '#000000'}
+                      onChange={(e) => updateElementStyle('color', e.target.value)}
+                      className="w-full h-8 border border-gray-200 rounded"
                     />
                   </div>
-                  
+
+                  {/* Background Color */}
                   <div>
-                    <label className="block text-xs font-medium text-gray-700 mb-1">Height</label>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Background Color</label>
                     <input
-                      type="number"
-                      value={parseInt(selectedElement.element.style.height) || ''}
-                      onChange={(e) => updateElementStyle('height', `${e.target.value}px`)}
-                      className="w-full p-1 border border-gray-200 rounded text-gray-800 bg-white text-xs"
-                      placeholder="Auto"
+                      type="color"
+                      value={rgbToHex(selectedElement.styles.backgroundColor) || '#ffffff'}
+                      onChange={(e) => updateElementStyle('backgroundColor', e.target.value)}
+                      className="w-full h-8 border border-gray-200 rounded"
                     />
                   </div>
+
+                  {/* Image specific controls */}
+                  {selectedElement.type === 'image' && (
+                    <div className="space-y-3 pt-3 border-t border-gray-200">
+                      <h4 className="text-xs font-medium text-gray-800">Image Controls</h4>
+                      
+                      <button
+                        onClick={() => fileInputRef.current?.click()}
+                        className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 text-xs"
+                      >
+                        Replace Image
+                      </button>
+                      
+                      <div>
+                        <label className="block text-xs font-medium text-gray-700 mb-1">Width</label>
+                        <input
+                          type="number"
+                          value={parseInt(selectedElement.element.style.width) || ''}
+                          onChange={(e) => updateElementStyle('width', `${e.target.value}px`)}
+                          className="w-full p-1 border border-gray-200 rounded text-gray-800 bg-white text-xs"
+                          placeholder="Auto"
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-xs font-medium text-gray-700 mb-1">Height</label>
+                        <input
+                          type="number"
+                          value={parseInt(selectedElement.element.style.height) || ''}
+                          onChange={(e) => updateElementStyle('height', `${e.target.value}px`)}
+                          className="w-full p-1 border border-gray-200 rounded text-gray-800 bg-white text-xs"
+                          placeholder="Auto"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="text-center text-gray-500 mt-8">
+                  <Settings className="w-8 h-8 mx-auto mb-3 text-gray-300" />
+                  <p className="text-xs">Select an element to view its properties</p>
+                  <p className="text-xs mt-2">Click on any element on the page to get started</p>
                 </div>
               )}
-            </div>
-          ) : (
-            <div className="text-center text-gray-500 mt-8">
-              <Settings className="w-8 h-8 mx-auto mb-3 text-gray-300" />
-              <p className="text-xs">Select an element to view its properties</p>
-              <p className="text-xs mt-2">Click on any element on the page to get started</p>
-            </div>
+            </>
           )}
         </div>
       </div>
@@ -1262,25 +1364,22 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
         className="hidden"
       />
 
-      {/* Main content area - Much smaller margins to show full website */}
+      {/* Main content area with horizontal and vertical scrolling */}
       <div 
         ref={contentAreaRef}
-        className="absolute top-16 bottom-0 overflow-auto"
+        className="absolute top-16 bottom-0 left-64 right-0 overflow-auto bg-gray-100"
         style={{ 
-          left: '200px',
-          right: '250px',
-          background: 'transparent',
-          pointerEvents: 'auto'
+          background: 'linear-gradient(45deg, #f3f4f6 25%, transparent 25%), linear-gradient(-45deg, #f3f4f6 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f3f4f6 75%), linear-gradient(-45deg, transparent 75%, #f3f4f6 75%)',
+          backgroundSize: '20px 20px',
+          backgroundPosition: '0 0, 0 10px, 10px -10px, -10px 0px'
         }}
       >
-        {/* Content is the actual website - it will be scaled to fit */}
+        {/* Content wrapper with proper scrolling */}
         <div 
-          className="w-full h-full"
+          className="min-w-full min-h-full"
           style={{
-            transform: 'scale(0.8)',
-            transformOrigin: 'top left',
-            width: '125%', // Compensate for scale
-            height: '125%'
+            width: 'max-content',
+            minWidth: '100%'
           }}
         >
           {/* The actual website content will be here */}
