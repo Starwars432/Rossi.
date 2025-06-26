@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { ImageIcon, FileText, Palette, Brain, ShoppingBag, BarChart3 } from 'lucide-react';
+import { ImageIcon, FileText, Palette, Brain, ShoppingBag, BarChart3, Sparkles, Video, PenTool } from 'lucide-react';
 
 interface ServiceCardProps {
   icon: React.ReactNode;
@@ -82,10 +82,28 @@ const Services: React.FC = () => {
             fieldPath="sections.6"
           />
           <ServiceCard
-            icon={<FileText className="w-8 h-8" />}
-            title="Custom Design Solutions"
-            description="Tailored design solutions for your unique needs."
+            icon={<Sparkles className="w-8 h-8" />}
+            title="Favicon Creation"
+            description="Custom favicon design to enhance your brand's web presence."
             fieldPath="sections.7"
+          />
+          <ServiceCard
+            icon={<FileText className="w-8 h-8" />}
+            title="Hero Section Creations"
+            description="Compelling hero sections that capture attention and drive conversions."
+            fieldPath="sections.8"
+          />
+          <ServiceCard
+            icon={<PenTool className="w-8 h-8" />}
+            title="Copywriting"
+            description="Persuasive copy that converts visitors into customers and builds brand voice."
+            fieldPath="sections.9"
+          />
+          <ServiceCard
+            icon={<Video className="w-8 h-8" />}
+            title="Video Ad Creations"
+            description="Dynamic video advertisements for social media and digital marketing campaigns."
+            fieldPath="sections.10"
           />
         </div>
       </div>

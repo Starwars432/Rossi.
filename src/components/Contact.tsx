@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
 
 const Contact: React.FC = () => {
   return (
@@ -19,9 +18,9 @@ const Contact: React.FC = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div className="max-w-2xl mx-auto">
           <div className="space-y-6">
-            <h3 className="text-2xl text-blue-400 mb-6">Send Us a Message</h3>
+            <h3 className="text-2xl text-blue-400 mb-6 text-center">Send Us a Message</h3>
             <form className="space-y-6">
               <input
                 type="text"
@@ -56,67 +55,6 @@ const Contact: React.FC = () => {
                 Send Message
               </motion.button>
             </form>
-          </div>
-
-          <div className="space-y-8">
-            <div>
-              <h3 className="text-2xl text-blue-400 mb-6">Contact Information</h3>
-              <div className="space-y-4">
-                <div>
-                  <h4 className="text-lg font-semibold mb-2">Email</h4>
-                  <p className="text-gray-400">contact@techdesignstudio.com</p>
-                </div>
-                <div>
-                  <h4 className="text-lg font-semibold mb-2">Phone</h4>
-                  <p className="text-gray-400">+1 (234) 567-890</p>
-                </div>
-                <div>
-                  <h4 className="text-lg font-semibold mb-2">Location</h4>
-                  <p className="text-gray-400">San Francisco, CA</p>
-                  <p className="text-gray-400">United States</p>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h4 className="text-lg font-semibold mb-2">Business Hours</h4>
-              <p className="text-gray-400">Monday - Friday</p>
-              <p className="text-gray-400">9:00 AM - 6:00 PM EST</p>
-            </div>
-
-            <div>
-              <h4 className="text-lg font-semibold mb-4">Follow Us</h4>
-              <div className="flex space-x-4">
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-blue-400 transition-colors"
-                  aria-label="Facebook"
-                >
-                  <Facebook className="w-6 h-6" />
-                </a>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-blue-400 transition-colors"
-                  aria-label="Twitter"
-                >
-                  <Twitter className="w-6 h-6" />
-                </a>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-blue-400 transition-colors"
-                  aria-label="Instagram"
-                >
-                  <Instagram className="w-6 h-6" />
-                </a>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-blue-400 transition-colors"
-                  aria-label="LinkedIn"
-                >
-                  <Linkedin className="w-6 h-6" />
-                </a>
-              </div>
-            </div>
           </div>
         </div>
       </div>

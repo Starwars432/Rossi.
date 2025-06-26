@@ -1,25 +1,21 @@
 import { useState } from 'react';
 import { Link } from 'react-scroll';
 import { motion, AnimatePresence, useIsomorphicLayoutEffect } from 'framer-motion';
-import { ShoppingCart, LogIn, Menu, X, User, Edit } from 'lucide-react';
+import { ShoppingCart, LogIn, Menu, X, User } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useCart } from '../contexts/CartContext';
 import ProfileDropdown from './ProfileDropdown';
 
 interface NavigationProps {
   onLoginClick?: () => void;
-  onEditorClick?: () => void;
 }
 
-const Navigation: React.FC<NavigationProps> = ({ onLoginClick = () => {}, onEditorClick = () => {} }) => {
+const Navigation: React.FC<NavigationProps> = ({ onLoginClick = () => {} }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const { user } = useAuth();
   const { items = [] } = useCart();
-
-  // Check if user is admin
-  const isAdmin = user?.email === 'madisn382@gmail.com';
 
   // Use isomorphicLayoutEffect to avoid SSR warnings
   useIsomorphicLayoutEffect(() => {
@@ -122,19 +118,6 @@ const Navigation: React.FC<NavigationProps> = ({ onLoginClick = () => {}, onEdit
                 </span>
               )}
             </motion.button>
-
-            {/* Admin WYSIWYG Editor Button */}
-            {isAdmin && (
-              <motion.button
-                {...motionProps}
-                onClick={onEditorClick}
-                className="bg-purple-500/20 text-purple-400 p-2 rounded-lg hover:bg-purple-500/30 transition-all flex items-center space-x-2"
-                title="Open WYSIWYG Editor"
-              >
-                <Edit className="w-5 h-5" />
-                <span className="hidden lg:inline">Edit Page</span>
-              </motion.button>
-            )}
 
             {user ? (
               <div className="relative">
@@ -245,21 +228,6 @@ const Navigation: React.FC<NavigationProps> = ({ onLoginClick = () => {}, onEdit
                     </span>
                   )}
                 </motion.button>
-
-                {/* Mobile Admin WYSIWYG Editor Button */}
-                {isAdmin && (
-                  <motion.button
-                    {...motionProps}
-                    onClick={() => {
-                      onEditorClick();
-                      setIsMenuOpen(false);
-                    }}
-                    className="bg-purple-500/20 text-purple-400 px-4 py-2 rounded-lg hover:bg-purple-500/30 transition-all flex items-center space-x-2"
-                  >
-                    <Edit className="w-4 h-4" />
-                    <span>Edit Page</span>
-                  </motion.button>
-                )}
 
                 {user ? (
                   <div className="flex-1">

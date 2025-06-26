@@ -8,7 +8,6 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 import LoginModal from './components/LoginModal';
 import ProfilePage from './components/ProfilePage';
-import WYSIWYGEditor from './components/WYSIWYGEditor';
 import { AuthProvider } from './contexts/AuthContext';
 import { CartProvider } from './contexts/CartContext';
 
@@ -24,13 +23,11 @@ const ScrollToTop = () => {
 
 const AppContent = () => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [isEditorOpen, setIsEditorOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-black text-white relative font-serif overflow-x-hidden">
       <Navigation 
         onLoginClick={() => setIsLoginOpen(true)}
-        onEditorClick={() => setIsEditorOpen(true)}
       />
       
       <Routes>
@@ -48,7 +45,6 @@ const AppContent = () => {
       </Routes>
       
       <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
-      <WYSIWYGEditor isOpen={isEditorOpen} onClose={() => setIsEditorOpen(false)} />
     </div>
   );
 };
