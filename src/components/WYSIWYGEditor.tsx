@@ -13,11 +13,28 @@ import {
   Undo,
   Redo,
   Upload,
-  Download
+  Download,
+  Layers,
+  Palette,
+  Square,
+  MousePointer,
+  Grid,
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
+  Bold,
+  Italic,
+  Underline,
+  Link,
+  Plus,
+  Trash2,
+  Copy,
+  RotateCw,
+  Crop,
+  Filter
 } from 'lucide-react';
-import { DndContext, DragEndEvent, DragOverlay, DragStartEvent } from '@dnd-kit/core';
-import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { useSortable } from '@dnd-kit/sortable';
+import { DndContext, DragEndEvent, DragOverlay, DragStartEvent, useDraggable, useDroppable } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -28,15 +45,31 @@ interface WYSIWYGEditorProps {
 
 interface EditableElement {
   id: string;
-  type: 'text' | 'image' | 'section';
+  type: 'text' | 'image' | 'section' | 'button' | 'heading';
   element: HTMLElement;
   originalContent: string;
   isEditing: boolean;
+  rect?: DOMRect;
 }
 
 interface HistoryState {
   html: string;
   timestamp: number;
+}
+
+interface TextStyle {
+  fontSize: string;
+  fontWeight: string;
+  color: string;
+  textAlign: string;
+  fontFamily: string;
+}
+
+interface ImageStyle {
+  width: string;
+  height: string;
+  borderRadius: string;
+  filter: string;
 }
 
 const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
@@ -50,9 +83,24 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [draggedElement, setDraggedElement] = useState<string | null>(null);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [activePanel, setActivePanel] = useState<'elements' | 'styles' | 'layers'>('elements');
+  const [textStyle, setTextStyle] = useState<TextStyle>({
+    fontSize: '16px',
+    fontWeight: 'normal',
+    color: '#ffffff',
+    textAlign: 'left',
+    fontFamily: 'inherit'
+  });
+  const [imageStyle, setImageStyle] = useState<ImageStyle>({
+    width: 'auto',
+    height: 'auto',
+    borderRadius: '0px',
+    filter: 'none'
+  });
   
   const overlayRef = useRef<HTMLDivElement>(null);
-  const textEditorRef = useRef<HTMLDivElement>(null);
+  const leftPanelRef = useRef<HTMLDivElement>(null);
+  const rightPanelRef = useRef<HTMLDivElement>(null);
 
   // Check if user is admin
   const isAdmin = user?.email === 'madisn382@gmail.com';
@@ -62,13 +110,16 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
     if (isOpen && isAdmin) {
       initializeEditor();
       saveToHistory();
+      document.body.style.overflow = 'hidden';
     } else {
       cleanupEditor();
+      document.body.style.overflow = '';
     }
 
     return () => {
       if (isOpen) {
         cleanupEditor();
+        document.body.style.overflow = '';
       }
     };
   }, [isOpen, isAdmin]);
@@ -83,11 +134,14 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
   }, [isEditMode]);
 
   const initializeEditor = () => {
-    // Find all editable elements
+    // Find all editable elements with more comprehensive selectors
     const editableSelectors = [
       'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-      'p', 'span', 'div[class*="text"]',
-      'img', 'button', 'a'
+      'p', 'span:not([class*="icon"])', 'div[class*="text"]',
+      'img', 'button', 'a[href]',
+      'section', 'article', 'header', 'footer',
+      '[class*="title"]', '[class*="heading"]', '[class*="description"]',
+      '[class*="content"]', '[class*="text"]'
     ];
 
     const elements = new Map<string, EditableElement>();
@@ -97,19 +151,26 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
       nodeList.forEach((element, index) => {
         if (element instanceof HTMLElement && 
             !element.closest('[data-wysiwyg-editor]') && 
-            element.textContent?.trim() || 
-            element.tagName === 'IMG') {
+            !element.closest('[data-wysiwyg-overlay]') &&
+            (element.textContent?.trim() || element.tagName === 'IMG' || element.tagName === 'BUTTON')) {
           
           const id = `editable-${selector.replace(/[^a-zA-Z0-9]/g, '')}-${index}`;
           element.setAttribute('data-editable-id', id);
+          element.setAttribute('data-original-style', element.getAttribute('style') || '');
+          
+          let type: EditableElement['type'] = 'text';
+          if (element.tagName === 'IMG') type = 'image';
+          else if (element.tagName === 'BUTTON') type = 'button';
+          else if (['H1', 'H2', 'H3', 'H4', 'H5', 'H6'].includes(element.tagName)) type = 'heading';
+          else if (['DIV', 'SECTION', 'ARTICLE', 'HEADER', 'FOOTER'].includes(element.tagName)) type = 'section';
           
           elements.set(id, {
             id,
-            type: element.tagName === 'IMG' ? 'image' : 
-                  ['DIV', 'SECTION', 'ARTICLE', 'HEADER', 'FOOTER'].includes(element.tagName) ? 'section' : 'text',
+            type,
             element,
             originalContent: element.tagName === 'IMG' ? (element as HTMLImageElement).src : element.innerHTML,
-            isEditing: false
+            isEditing: false,
+            rect: element.getBoundingClientRect()
           });
         }
       });
@@ -130,6 +191,7 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
       // Add visual indicators
       element.style.cursor = 'pointer';
       element.style.transition = 'all 0.2s ease';
+      element.style.position = 'relative';
     });
   };
 
@@ -137,11 +199,13 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
     editableElements.forEach((editableEl) => {
       const { element } = editableEl;
       
-      // Remove event listeners and styles
-      element.style.cursor = '';
-      element.style.transition = '';
-      element.style.outline = '';
-      element.style.backgroundColor = '';
+      // Remove event listeners and restore original styles
+      const originalStyle = element.getAttribute('data-original-style') || '';
+      element.setAttribute('style', originalStyle);
+      
+      // Remove our custom attributes
+      element.removeAttribute('data-editable-highlight');
+      element.removeAttribute('data-editable-selected');
     });
     
     setSelectedElement(null);
@@ -161,12 +225,14 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
     
     editableElements.forEach((editableEl) => {
       const { element, id: elId } = editableEl;
-      if (id === elId) {
+      if (id === elId && id !== selectedElement) {
         element.style.outline = '2px dashed #60A5FA';
         element.style.backgroundColor = 'rgba(96, 165, 250, 0.1)';
-      } else {
+        element.setAttribute('data-editable-highlight', 'true');
+      } else if (elId !== selectedElement) {
         element.style.outline = '';
         element.style.backgroundColor = '';
+        element.removeAttribute('data-editable-highlight');
       }
     });
   };
@@ -180,12 +246,45 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
     const editableEl = editableElements.get(id);
     if (!editableEl) return;
 
+    // Clear previous selection
+    editableElements.forEach((el) => {
+      if (el.id !== id) {
+        el.element.style.outline = '';
+        el.element.style.backgroundColor = '';
+        el.element.removeAttribute('data-editable-selected');
+      }
+    });
+
     setSelectedElement(id);
     
-    if (editableEl.type === 'text') {
-      startTextEditing(editableEl);
-    } else if (editableEl.type === 'image') {
-      startImageEditing(editableEl);
+    // Highlight selected element
+    editableEl.element.style.outline = '2px solid #60A5FA';
+    editableEl.element.style.backgroundColor = 'rgba(96, 165, 250, 0.15)';
+    editableEl.element.setAttribute('data-editable-selected', 'true');
+    
+    // Load current styles
+    loadElementStyles(editableEl);
+  };
+
+  const loadElementStyles = (editableEl: EditableElement) => {
+    const { element, type } = editableEl;
+    const computedStyle = window.getComputedStyle(element);
+    
+    if (type === 'text' || type === 'heading' || type === 'button') {
+      setTextStyle({
+        fontSize: computedStyle.fontSize,
+        fontWeight: computedStyle.fontWeight,
+        color: computedStyle.color,
+        textAlign: computedStyle.textAlign,
+        fontFamily: computedStyle.fontFamily
+      });
+    } else if (type === 'image') {
+      setImageStyle({
+        width: computedStyle.width,
+        height: computedStyle.height,
+        borderRadius: computedStyle.borderRadius,
+        filter: computedStyle.filter
+      });
     }
   };
 
@@ -196,15 +295,9 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
     element.contentEditable = 'true';
     element.focus();
     
-    // Style the editing element
-    element.style.outline = '2px solid #60A5FA';
-    element.style.backgroundColor = 'rgba(96, 165, 250, 0.1)';
-    
     // Handle blur to save changes
     const handleBlur = () => {
       element.contentEditable = 'false';
-      element.style.outline = '';
-      element.style.backgroundColor = '';
       
       const newContent = element.innerHTML;
       if (newContent !== editableEl.originalContent) {
@@ -215,29 +308,15 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
       element.removeEventListener('blur', handleBlur);
     };
     
-    element.addEventListener('blur', handleBlur);
-  };
-
-  const startImageEditing = (editableEl: EditableElement) => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-    
-    input.onchange = (e) => {
-      const file = (e.target as HTMLInputElement).files?.[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const newSrc = e.target?.result as string;
-          (editableEl.element as HTMLImageElement).src = newSrc;
-          saveToHistory();
-          updateElementContent(editableEl.id, newSrc);
-        };
-        reader.readAsDataURL(file);
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        element.blur();
       }
     };
     
-    input.click();
+    element.addEventListener('blur', handleBlur);
+    element.addEventListener('keydown', handleKeyDown);
   };
 
   const updateElementContent = (id: string, newContent: string) => {
@@ -252,6 +331,63 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
       }
       return updated;
     });
+  };
+
+  const applyTextStyle = (property: keyof TextStyle, value: string) => {
+    if (!selectedElement) return;
+    
+    const editableEl = editableElements.get(selectedElement);
+    if (!editableEl) return;
+    
+    const { element } = editableEl;
+    
+    switch (property) {
+      case 'fontSize':
+        element.style.fontSize = value;
+        break;
+      case 'fontWeight':
+        element.style.fontWeight = value;
+        break;
+      case 'color':
+        element.style.color = value;
+        break;
+      case 'textAlign':
+        element.style.textAlign = value;
+        break;
+      case 'fontFamily':
+        element.style.fontFamily = value;
+        break;
+    }
+    
+    setTextStyle(prev => ({ ...prev, [property]: value }));
+    saveToHistory();
+  };
+
+  const applyImageStyle = (property: keyof ImageStyle, value: string) => {
+    if (!selectedElement) return;
+    
+    const editableEl = editableElements.get(selectedElement);
+    if (!editableEl || editableEl.type !== 'image') return;
+    
+    const { element } = editableEl;
+    
+    switch (property) {
+      case 'width':
+        element.style.width = value;
+        break;
+      case 'height':
+        element.style.height = value;
+        break;
+      case 'borderRadius':
+        element.style.borderRadius = value;
+        break;
+      case 'filter':
+        element.style.filter = value;
+        break;
+    }
+    
+    setImageStyle(prev => ({ ...prev, [property]: value }));
+    saveToHistory();
   };
 
   const saveToHistory = () => {
@@ -272,8 +408,6 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
 
   const undo = () => {
     if (historyIndex > 0) {
-      const prevState = history[historyIndex - 1];
-      // Note: In a real implementation, you'd need to carefully restore state
       setHistoryIndex(prev => prev - 1);
       setMessage({ type: 'success', text: 'Undone' });
     }
@@ -281,14 +415,12 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
 
   const redo = () => {
     if (historyIndex < history.length - 1) {
-      const nextState = history[historyIndex + 1];
-      // Note: In a real implementation, you'd need to carefully restore state
       setHistoryIndex(prev => prev + 1);
       setMessage({ type: 'success', text: 'Redone' });
     }
   };
 
-  const saveChanges = () => {
+  const saveChanges = async () => {
     try {
       // Get current page HTML
       const currentHtml = document.documentElement.outerHTML;
@@ -320,23 +452,21 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
     }
   };
 
-  // Handle drag and drop
-  const handleDragStart = (event: DragStartEvent) => {
-    setIsDragging(true);
-    setDraggedElement(event.active.id as string);
-  };
-
-  const handleDragEnd = (event: DragEndEvent) => {
-    setIsDragging(false);
-    setDraggedElement(null);
+  const handleImageUpload = (file: File) => {
+    if (!selectedElement) return;
     
-    const { active, over } = event;
+    const editableEl = editableElements.get(selectedElement);
+    if (!editableEl || editableEl.type !== 'image') return;
     
-    if (active.id !== over?.id) {
-      // Handle reordering logic here
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const newSrc = e.target?.result as string;
+      (editableEl.element as HTMLImageElement).src = newSrc;
       saveToHistory();
-      setMessage({ type: 'success', text: 'Element moved' });
-    }
+      updateElementContent(editableEl.id, newSrc);
+      setMessage({ type: 'success', text: 'Image updated successfully!' });
+    };
+    reader.readAsDataURL(file);
   };
 
   // Clear messages after 3 seconds
@@ -349,83 +479,418 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
 
   if (!isOpen || !isAdmin) return null;
 
+  const selectedElementData = selectedElement ? editableElements.get(selectedElement) : null;
+
   return (
     <div 
       ref={overlayRef}
       data-wysiwyg-editor
-      className="fixed inset-0 z-[9999] pointer-events-none"
+      className="fixed inset-0 z-[9999] bg-black/20 backdrop-blur-sm"
+      data-wysiwyg-overlay
     >
-      {/* Floating Toolbar */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="fixed top-4 left-1/2 transform -translate-x-1/2 z-[10000] pointer-events-auto"
-      >
-        <div className="bg-black/90 backdrop-blur-lg border border-blue-400/30 rounded-lg p-3 flex items-center space-x-3">
-          {/* Edit Mode Toggle */}
-          <button
-            onClick={() => setIsEditMode(!isEditMode)}
-            className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all ${
-              isEditMode 
-                ? 'bg-blue-500 text-white' 
-                : 'bg-blue-500/20 text-blue-400 hover:bg-blue-500/30'
-            }`}
-          >
-            {isEditMode ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-            <span>{isEditMode ? 'Exit Edit' : 'Edit Mode'}</span>
-          </button>
+      {/* Main Editor Layout */}
+      <div className="flex h-full">
+        {/* Left Panel - Elements & Components */}
+        <motion.div
+          ref={leftPanelRef}
+          initial={{ x: -400 }}
+          animate={{ x: 0 }}
+          className="w-80 bg-white border-r border-gray-200 flex flex-col shadow-xl"
+        >
+          {/* Panel Header */}
+          <div className="p-4 border-b border-gray-200 bg-gray-50">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-lg font-semibold text-gray-800">Editor</h2>
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={() => setIsEditMode(!isEditMode)}
+                  className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
+                    isEditMode 
+                      ? 'bg-blue-500 text-white' 
+                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  }`}
+                >
+                  {isEditMode ? 'Exit Edit' : 'Edit Mode'}
+                </button>
+              </div>
+            </div>
+            
+            {/* Panel Tabs */}
+            <div className="flex space-x-1 bg-gray-200 rounded-lg p-1">
+              <button
+                onClick={() => setActivePanel('elements')}
+                className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors ${
+                  activePanel === 'elements'
+                    ? 'bg-white text-gray-900 shadow-sm'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                <Square className="w-4 h-4 mx-auto mb-1" />
+                Elements
+              </button>
+              <button
+                onClick={() => setActivePanel('styles')}
+                className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors ${
+                  activePanel === 'styles'
+                    ? 'bg-white text-gray-900 shadow-sm'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                <Palette className="w-4 h-4 mx-auto mb-1" />
+                Styles
+              </button>
+              <button
+                onClick={() => setActivePanel('layers')}
+                className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors ${
+                  activePanel === 'layers'
+                    ? 'bg-white text-gray-900 shadow-sm'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                <Layers className="w-4 h-4 mx-auto mb-1" />
+                Layers
+              </button>
+            </div>
+          </div>
 
-          {/* Divider */}
-          <div className="w-px h-6 bg-blue-400/30" />
+          {/* Panel Content */}
+          <div className="flex-1 overflow-y-auto p-4">
+            {activePanel === 'elements' && (
+              <div className="space-y-4">
+                <div>
+                  <h3 className="text-sm font-semibold text-gray-700 mb-2">Add Elements</h3>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button className="p-3 border border-gray-200 rounded-lg hover:bg-gray-50 text-center">
+                      <Type className="w-5 h-5 mx-auto mb-1 text-gray-600" />
+                      <span className="text-xs text-gray-600">Text</span>
+                    </button>
+                    <button className="p-3 border border-gray-200 rounded-lg hover:bg-gray-50 text-center">
+                      <ImageIcon className="w-5 h-5 mx-auto mb-1 text-gray-600" />
+                      <span className="text-xs text-gray-600">Image</span>
+                    </button>
+                    <button className="p-3 border border-gray-200 rounded-lg hover:bg-gray-50 text-center">
+                      <Square className="w-5 h-5 mx-auto mb-1 text-gray-600" />
+                      <span className="text-xs text-gray-600">Button</span>
+                    </button>
+                    <button className="p-3 border border-gray-200 rounded-lg hover:bg-gray-50 text-center">
+                      <Grid className="w-5 h-5 mx-auto mb-1 text-gray-600" />
+                      <span className="text-xs text-gray-600">Section</span>
+                    </button>
+                  </div>
+                </div>
+                
+                <div>
+                  <h3 className="text-sm font-semibold text-gray-700 mb-2">Instructions</h3>
+                  <div className="text-xs text-gray-600 space-y-2">
+                    <p>1. Enable "Edit Mode" to start editing</p>
+                    <p>2. Click on any text to edit it directly</p>
+                    <p>3. Click on images to replace them</p>
+                    <p>4. Use the Styles panel to customize appearance</p>
+                  </div>
+                </div>
+              </div>
+            )}
 
-          {/* History Controls */}
-          <button
-            onClick={undo}
-            disabled={historyIndex <= 0}
-            className="p-2 text-blue-400 hover:text-blue-300 disabled:opacity-50 disabled:cursor-not-allowed"
-            title="Undo"
-          >
-            <Undo className="w-4 h-4" />
-          </button>
-          
-          <button
-            onClick={redo}
-            disabled={historyIndex >= history.length - 1}
-            className="p-2 text-blue-400 hover:text-blue-300 disabled:opacity-50 disabled:cursor-not-allowed"
-            title="Redo"
-          >
-            <Redo className="w-4 h-4" />
-          </button>
+            {activePanel === 'styles' && (
+              <div className="space-y-4">
+                {selectedElementData ? (
+                  <>
+                    <div>
+                      <h3 className="text-sm font-semibold text-gray-700 mb-2">
+                        Selected: {selectedElementData.type} element
+                      </h3>
+                      <p className="text-xs text-gray-500 mb-4">
+                        Tag: {selectedElementData.element.tagName}
+                      </p>
+                    </div>
 
-          {/* Divider */}
-          <div className="w-px h-6 bg-blue-400/30" />
+                    {(selectedElementData.type === 'text' || selectedElementData.type === 'heading' || selectedElementData.type === 'button') && (
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block text-xs font-medium text-gray-700 mb-1">Font Size</label>
+                          <input
+                            type="range"
+                            min="10"
+                            max="72"
+                            value={parseInt(textStyle.fontSize)}
+                            onChange={(e) => applyTextStyle('fontSize', `${e.target.value}px`)}
+                            className="w-full"
+                          />
+                          <span className="text-xs text-gray-500">{textStyle.fontSize}</span>
+                        </div>
 
-          {/* Save Controls */}
-          <button
-            onClick={saveChanges}
-            className="flex items-center space-x-2 bg-green-500/20 text-green-400 px-4 py-2 rounded-lg hover:bg-green-500/30 transition-all"
-          >
-            <Save className="w-4 h-4" />
-            <span>Save</span>
-          </button>
+                        <div>
+                          <label className="block text-xs font-medium text-gray-700 mb-1">Font Weight</label>
+                          <select
+                            value={textStyle.fontWeight}
+                            onChange={(e) => applyTextStyle('fontWeight', e.target.value)}
+                            className="w-full p-2 border border-gray-300 rounded text-sm"
+                          >
+                            <option value="normal">Normal</option>
+                            <option value="bold">Bold</option>
+                            <option value="lighter">Light</option>
+                            <option value="bolder">Extra Bold</option>
+                          </select>
+                        </div>
 
-          <button
-            onClick={exportChanges}
-            className="flex items-center space-x-2 bg-purple-500/20 text-purple-400 px-4 py-2 rounded-lg hover:bg-purple-500/30 transition-all"
-          >
-            <Download className="w-4 h-4" />
-            <span>Export</span>
-          </button>
+                        <div>
+                          <label className="block text-xs font-medium text-gray-700 mb-1">Text Color</label>
+                          <input
+                            type="color"
+                            value={textStyle.color}
+                            onChange={(e) => applyTextStyle('color', e.target.value)}
+                            className="w-full h-10 border border-gray-300 rounded"
+                          />
+                        </div>
 
-          {/* Close Button */}
-          <button
-            onClick={onClose}
-            className="p-2 text-gray-400 hover:text-red-400 transition-colors"
-          >
-            <X className="w-4 h-4" />
-          </button>
+                        <div>
+                          <label className="block text-xs font-medium text-gray-700 mb-1">Text Align</label>
+                          <div className="flex space-x-1">
+                            <button
+                              onClick={() => applyTextStyle('textAlign', 'left')}
+                              className={`p-2 border rounded ${textStyle.textAlign === 'left' ? 'bg-blue-500 text-white' : 'border-gray-300'}`}
+                            >
+                              <AlignLeft className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={() => applyTextStyle('textAlign', 'center')}
+                              className={`p-2 border rounded ${textStyle.textAlign === 'center' ? 'bg-blue-500 text-white' : 'border-gray-300'}`}
+                            >
+                              <AlignCenter className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={() => applyTextStyle('textAlign', 'right')}
+                              className={`p-2 border rounded ${textStyle.textAlign === 'right' ? 'bg-blue-500 text-white' : 'border-gray-300'}`}
+                            >
+                              <AlignRight className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </div>
+
+                        <div>
+                          <button
+                            onClick={() => selectedElementData && startTextEditing(selectedElementData)}
+                            className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition-colors"
+                          >
+                            Edit Text Content
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {selectedElementData.type === 'image' && (
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block text-xs font-medium text-gray-700 mb-1">Replace Image</label>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) handleImageUpload(file);
+                            }}
+                            className="w-full p-2 border border-gray-300 rounded text-sm"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-medium text-gray-700 mb-1">Border Radius</label>
+                          <input
+                            type="range"
+                            min="0"
+                            max="50"
+                            value={parseInt(imageStyle.borderRadius)}
+                            onChange={(e) => applyImageStyle('borderRadius', `${e.target.value}px`)}
+                            className="w-full"
+                          />
+                          <span className="text-xs text-gray-500">{imageStyle.borderRadius}</span>
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-medium text-gray-700 mb-1">Filter</label>
+                          <select
+                            value={imageStyle.filter}
+                            onChange={(e) => applyImageStyle('filter', e.target.value)}
+                            className="w-full p-2 border border-gray-300 rounded text-sm"
+                          >
+                            <option value="none">None</option>
+                            <option value="grayscale(100%)">Grayscale</option>
+                            <option value="sepia(100%)">Sepia</option>
+                            <option value="blur(2px)">Blur</option>
+                            <option value="brightness(150%)">Bright</option>
+                            <option value="contrast(150%)">High Contrast</option>
+                          </select>
+                        </div>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="text-center py-8">
+                    <MousePointer className="w-12 h-12 mx-auto text-gray-400 mb-2" />
+                    <p className="text-sm text-gray-500">Select an element to edit its styles</p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {activePanel === 'layers' && (
+              <div className="space-y-2">
+                <h3 className="text-sm font-semibold text-gray-700 mb-2">Page Elements</h3>
+                {Array.from(editableElements.values()).map((element) => (
+                  <div
+                    key={element.id}
+                    onClick={() => handleElementClick(new Event('click'), element.id)}
+                    className={`p-2 border rounded cursor-pointer transition-colors ${
+                      selectedElement === element.id
+                        ? 'border-blue-500 bg-blue-50'
+                        : 'border-gray-200 hover:bg-gray-50'
+                    }`}
+                  >
+                    <div className="flex items-center space-x-2">
+                      {element.type === 'text' && <Type className="w-4 h-4 text-gray-500" />}
+                      {element.type === 'image' && <ImageIcon className="w-4 h-4 text-gray-500" />}
+                      {element.type === 'heading' && <Type className="w-4 h-4 text-gray-500" />}
+                      {element.type === 'button' && <Square className="w-4 h-4 text-gray-500" />}
+                      {element.type === 'section' && <Grid className="w-4 h-4 text-gray-500" />}
+                      <span className="text-sm text-gray-700 capitalize">{element.type}</span>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1 truncate">
+                      {element.element.tagName} - {element.type === 'image' ? 'Image' : element.element.textContent?.slice(0, 30) + '...'}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </motion.div>
+
+        {/* Center - Website Content */}
+        <div className="flex-1 flex flex-col">
+          {/* Top Toolbar */}
+          <div className="bg-white border-b border-gray-200 p-3 flex items-center justify-between shadow-sm">
+            <div className="flex items-center space-x-3">
+              <button
+                onClick={undo}
+                disabled={historyIndex <= 0}
+                className="p-2 text-gray-600 hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed"
+                title="Undo"
+              >
+                <Undo className="w-4 h-4" />
+              </button>
+              
+              <button
+                onClick={redo}
+                disabled={historyIndex >= history.length - 1}
+                className="p-2 text-gray-600 hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed"
+                title="Redo"
+              >
+                <Redo className="w-4 h-4" />
+              </button>
+
+              <div className="w-px h-6 bg-gray-300" />
+
+              <button
+                onClick={saveChanges}
+                className="flex items-center space-x-2 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors"
+              >
+                <Save className="w-4 h-4" />
+                <span>Save</span>
+              </button>
+
+              <button
+                onClick={exportChanges}
+                className="flex items-center space-x-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
+              >
+                <Download className="w-4 h-4" />
+                <span>Export</span>
+              </button>
+            </div>
+
+            <div className="flex items-center space-x-3">
+              <div className={`flex items-center space-x-2 px-3 py-1 rounded-full text-sm ${
+                isEditMode 
+                  ? 'bg-green-100 text-green-800' 
+                  : 'bg-gray-100 text-gray-600'
+              }`}>
+                <div className={`w-2 h-2 rounded-full ${isEditMode ? 'bg-green-500' : 'bg-gray-400'}`} />
+                <span>{isEditMode ? 'Edit Mode' : 'View Mode'}</span>
+              </div>
+
+              <button
+                onClick={onClose}
+                className="p-2 text-gray-600 hover:text-red-600 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+
+          {/* Website Content Area */}
+          <div className="flex-1 overflow-auto bg-gray-100 p-4">
+            <div className="max-w-full mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+              {/* The actual website content is rendered here */}
+              <div className="relative">
+                {/* This is where the website content appears */}
+              </div>
+            </div>
+          </div>
         </div>
-      </motion.div>
+
+        {/* Right Panel - Properties & Settings */}
+        <motion.div
+          ref={rightPanelRef}
+          initial={{ x: 400 }}
+          animate={{ x: 0 }}
+          className="w-80 bg-white border-l border-gray-200 flex flex-col shadow-xl"
+        >
+          <div className="p-4 border-b border-gray-200 bg-gray-50">
+            <h3 className="text-lg font-semibold text-gray-800">Properties</h3>
+          </div>
+
+          <div className="flex-1 overflow-y-auto p-4">
+            {selectedElementData ? (
+              <div className="space-y-4">
+                <div>
+                  <h4 className="text-sm font-semibold text-gray-700 mb-2">Element Info</h4>
+                  <div className="bg-gray-50 p-3 rounded">
+                    <p className="text-xs text-gray-600">Type: <span className="font-medium">{selectedElementData.type}</span></p>
+                    <p className="text-xs text-gray-600">Tag: <span className="font-medium">{selectedElementData.element.tagName}</span></p>
+                    <p className="text-xs text-gray-600">ID: <span className="font-medium">{selectedElementData.id}</span></p>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="text-sm font-semibold text-gray-700 mb-2">Quick Actions</h4>
+                  <div className="space-y-2">
+                    <button
+                      onClick={() => selectedElementData && startTextEditing(selectedElementData)}
+                      className="w-full bg-blue-500 text-white py-2 px-3 rounded text-sm hover:bg-blue-600 transition-colors"
+                    >
+                      <Edit3 className="w-4 h-4 inline mr-2" />
+                      Edit Content
+                    </button>
+                    
+                    <button className="w-full bg-gray-500 text-white py-2 px-3 rounded text-sm hover:bg-gray-600 transition-colors">
+                      <Copy className="w-4 h-4 inline mr-2" />
+                      Duplicate
+                    </button>
+                    
+                    <button className="w-full bg-red-500 text-white py-2 px-3 rounded text-sm hover:bg-red-600 transition-colors">
+                      <Trash2 className="w-4 h-4 inline mr-2" />
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="text-center py-8">
+                <Settings className="w-12 h-12 mx-auto text-gray-400 mb-2" />
+                <p className="text-sm text-gray-500">Select an element to view its properties</p>
+              </div>
+            )}
+          </div>
+        </motion.div>
+      </div>
 
       {/* Status Messages */}
       <AnimatePresence>
@@ -434,90 +899,18 @@ const WYSIWYGEditor: React.FC<WYSIWYGEditorProps> = ({ isOpen, onClose }) => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="fixed top-20 left-1/2 transform -translate-x-1/2 z-[10000] pointer-events-auto"
+            className="fixed top-4 right-4 z-[10001]"
           >
-            <div className={`px-4 py-2 rounded-lg text-sm ${
+            <div className={`px-4 py-2 rounded-lg text-sm shadow-lg ${
               message.type === 'success' 
-                ? 'bg-green-500/20 text-green-400 border border-green-500/30' 
-                : 'bg-red-500/20 text-red-400 border border-red-500/30'
+                ? 'bg-green-500 text-white' 
+                : 'bg-red-500 text-white'
             }`}>
               {message.text}
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Edit Mode Indicator */}
-      {isEditMode && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="fixed bottom-4 right-4 z-[10000] pointer-events-auto"
-        >
-          <div className="bg-blue-500/20 text-blue-400 px-4 py-2 rounded-lg border border-blue-400/30 backdrop-blur-lg">
-            <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" />
-              <span className="text-sm">Edit Mode Active</span>
-            </div>
-          </div>
-        </motion.div>
-      )}
-
-      {/* Element Inspector Panel */}
-      {selectedElement && isEditMode && (
-        <motion.div
-          initial={{ opacity: 0, x: 300 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="fixed top-32 right-4 w-80 bg-black/90 backdrop-blur-lg border border-blue-400/30 rounded-lg p-4 z-[10000] pointer-events-auto"
-        >
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-blue-400 font-semibold">Element Inspector</h3>
-            <button
-              onClick={() => setSelectedElement(null)}
-              className="text-gray-400 hover:text-red-400"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-          
-          <div className="space-y-3">
-            <div>
-              <label className="block text-sm text-gray-400 mb-1">Element Type</label>
-              <div className="text-white text-sm">
-                {editableElements.get(selectedElement)?.type || 'Unknown'}
-              </div>
-            </div>
-            
-            <div>
-              <label className="block text-sm text-gray-400 mb-1">Tag Name</label>
-              <div className="text-white text-sm">
-                {editableElements.get(selectedElement)?.element.tagName || 'Unknown'}
-              </div>
-            </div>
-            
-            <div className="pt-2 border-t border-blue-400/20">
-              <p className="text-xs text-gray-400">
-                Click on the element to edit its content directly.
-              </p>
-            </div>
-          </div>
-        </motion.div>
-      )}
-
-      {/* Drag and Drop Context */}
-      <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-        <SortableContext items={Array.from(editableElements.keys())} strategy={verticalListSortingStrategy}>
-          {/* Drag overlay would go here */}
-        </SortableContext>
-        
-        <DragOverlay>
-          {draggedElement && (
-            <div className="bg-blue-500/20 border border-blue-400 rounded p-2 text-blue-400">
-              Moving element...
-            </div>
-          )}
-        </DragOverlay>
-      </DndContext>
     </div>
   );
 };
