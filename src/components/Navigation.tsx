@@ -72,6 +72,17 @@ const Navigation: React.FC<NavigationProps> = ({ onLoginClick = () => {} }) => {
             Services
           </Link>
           <Link
+            to="faq"
+            spy={true}
+            smooth={true}
+            duration={500}
+            offset={-70}
+            isDynamic={true}
+            className="text-sm hover:text-blue-400 transition-colors cursor-pointer"
+          >
+            FAQ
+          </Link>
+          <Link
             to="portfolio"
             spy={true}
             smooth={true}
@@ -178,6 +189,18 @@ const Navigation: React.FC<NavigationProps> = ({ onLoginClick = () => {} }) => {
                 onClick={() => setIsMenuOpen(false)}
               >
                 Services
+              </Link>
+              <Link
+                to="faq"
+                spy={true}
+                smooth={true}
+                duration={500}
+                offset={-70}
+                isDynamic={true}
+                className="block text-sm hover:text-blue-400 transition-colors cursor-pointer"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                FAQ
               </Link>
               <Link
                 to="portfolio"

@@ -106,8 +106,46 @@ const CustomDesign: React.FC = () => {
   };
 
   return (
-    <section id="custom-design" className="relative py-20 px-6 bg-black">
-      <div className="max-w-7xl mx-auto">
+    <section id="custom-design" className="relative py-20 px-6">
+      {/* Midnight Purple Glassmorphism Background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-purple-950/80 via-black to-black">
+        {/* Glassmorphism overlay */}
+        <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" />
+        
+        {/* Floating geometric shapes */}
+        {[...Array(5)].map((_, i) => (
+          <motion.div
+            key={`custom-shape-${i}`}
+            className="absolute"
+            style={{
+              left: `${20 + i * 20}%`,
+              top: `${30 + (i % 3) * 20}%`,
+              width: `${60 + i * 10}px`,
+              height: `${60 + i * 10}px`,
+            }}
+            animate={{
+              rotate: [0, 360],
+              scale: [1, 1.2, 1],
+              opacity: [0.1, 0.3, 0.1],
+            }}
+            transition={{
+              duration: 10 + i * 2,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+          >
+            <div 
+              className="w-full h-full border border-purple-400/20 rounded-lg"
+              style={{
+                background: 'linear-gradient(45deg, rgba(147, 51, 234, 0.1), rgba(79, 70, 229, 0.1))',
+                backdropFilter: 'blur(10px)',
+              }}
+            />
+          </motion.div>
+        ))}
+      </div>
+
+      <div className="max-w-7xl mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -118,103 +156,110 @@ const CustomDesign: React.FC = () => {
           <p className="text-gray-400">Tell us about your project</p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="space-y-6">
-            <input
-              ref={nameInputRef}
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleInputChange}
-              placeholder="Your Name"
-              className="w-full px-4 py-2 rounded-lg bg-black/50 border border-blue-400/30 focus:border-blue-400 focus:outline-none"
-              aria-label="Your name"
-              required
-            />
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              placeholder="Your Email"
-              className="w-full px-4 py-2 rounded-lg bg-black/50 border border-blue-400/30 focus:border-blue-400 focus:outline-none"
-              aria-label="Your email"
-              required
-            />
-            <textarea
-              name="description"
-              value={formData.description}
-              onChange={handleInputChange}
-              placeholder="Describe your project..."
-              rows={6}
-              className="w-full px-4 py-2 rounded-lg bg-black/50 border border-blue-400/30 focus:border-blue-400 focus:outline-none"
-              aria-label="Project description"
-              required
-            />
-          </div>
-          <div
-            {...getRootProps()}
-            className={`drag-drop-zone h-64 flex flex-col items-center justify-center ${
-              isDragActive ? 'dragging' : ''
-            } ${errorMessage ? 'border-red-400/50' : ''}`}
-            aria-describedby="file-upload-description"
-          >
-            <input {...getInputProps()} aria-label="File upload" />
-            <div className="text-center">
-              <ImageIcon className="w-12 h-12 text-blue-400 mx-auto mb-4" />
-              <p>Drag & drop images here, or click to select files</p>
-              <p id="file-upload-description" className="text-sm text-gray-400 mt-2">
-                Accepted file types: .jpg, .png, .gif. Max size: 10MB
-              </p>
-              {errorMessage && (
-                <p className="text-red-400 text-sm mt-2" role="alert">{errorMessage}</p>
-              )}
-              {uploadedFiles.length > 0 && (
-                <div className="mt-4">
-                  <h4 className="text-sm font-semibold mb-2">Selected Files:</h4>
-                  <ul className="text-sm space-y-2">
-                    {uploadedFiles.map(file => (
-                      <li key={file.name} className="flex items-center space-x-2">
-                        <img
-                          src={URL.createObjectURL(file)}
-                          alt={`Preview of ${file.name}`}
-                          className="w-10 h-10 object-cover rounded"
-                        />
-                        <span className="text-gray-400">
-                          {file.name} ({(file.size / 1024 / 1024).toFixed(2)}MB)
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+        <motion.div 
+          className="bg-black/40 backdrop-blur-lg border border-purple-400/20 rounded-2xl p-8"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-6">
+              <input
+                ref={nameInputRef}
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
+                placeholder="Your Name"
+                className="w-full px-4 py-2 rounded-lg bg-black/50 border border-blue-400/30 focus:border-blue-400 focus:outline-none backdrop-blur-sm"
+                aria-label="Your name"
+                required
+              />
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                placeholder="Your Email"
+                className="w-full px-4 py-2 rounded-lg bg-black/50 border border-blue-400/30 focus:border-blue-400 focus:outline-none backdrop-blur-sm"
+                aria-label="Your email"
+                required
+              />
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleInputChange}
+                placeholder="Describe your project..."
+                rows={6}
+                className="w-full px-4 py-2 rounded-lg bg-black/50 border border-blue-400/30 focus:border-blue-400 focus:outline-none backdrop-blur-sm"
+                aria-label="Project description"
+                required
+              />
+            </div>
+            <div
+              {...getRootProps()}
+              className={`drag-drop-zone h-64 flex flex-col items-center justify-center ${
+                isDragActive ? 'dragging' : ''
+              } ${errorMessage ? 'border-red-400/50' : ''} bg-black/30 backdrop-blur-sm rounded-lg border-2 border-dashed border-blue-400/30 hover:border-blue-400/50 transition-all duration-300`}
+              aria-describedby="file-upload-description"
+            >
+              <input {...getInputProps()} aria-label="File upload" />
+              <div className="text-center">
+                <ImageIcon className="w-12 h-12 text-blue-400 mx-auto mb-4" />
+                <p>Drag & drop images here, or click to select files</p>
+                <p id="file-upload-description" className="text-sm text-gray-400 mt-2">
+                  Accepted file types: .jpg, .png, .gif. Max size: 10MB
+                </p>
+                {errorMessage && (
+                  <p className="text-red-400 text-sm mt-2" role="alert">{errorMessage}</p>
+                )}
+                {uploadedFiles.length > 0 && (
+                  <div className="mt-4">
+                    <h4 className="text-sm font-semibold mb-2">Selected Files:</h4>
+                    <ul className="text-sm space-y-2">
+                      {uploadedFiles.map(file => (
+                        <li key={file.name} className="flex items-center space-x-2">
+                          <img
+                            src={URL.createObjectURL(file)}
+                            alt={`Preview of ${file.name}`}
+                            className="w-10 h-10 object-cover rounded"
+                          />
+                          <span className="text-gray-400">
+                            {file.name} ({(file.size / 1024 / 1024).toFixed(2)}MB)
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-        <div className="mt-8 flex justify-end space-x-4">
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={resetForm}
-            disabled={isSubmitting}
-            className="text-blue-400 px-8 py-3 rounded-lg hover:text-blue-300 transition-all"
-            aria-label="Reset form"
-          >
-            Reset
-          </motion.button>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={handleSubmit}
-            disabled={isSubmitting}
-            className={`bg-blue-500 text-white px-8 py-3 rounded-lg transition-all flex items-center space-x-2 ${
-              isSubmitting ? 'opacity-75 cursor-not-allowed' : 'hover:bg-blue-600'
-            }`}
-            aria-label="Submit design request"
-          >
-            <span>{isSubmitting ? 'Submitting...' : 'Submit Request'}</span>
-          </motion.button>
-        </div>
+          <div className="mt-8 flex justify-end space-x-4">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={resetForm}
+              disabled={isSubmitting}
+              className="text-blue-400 px-8 py-3 rounded-lg hover:text-blue-300 transition-all"
+              aria-label="Reset form"
+            >
+              Reset
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(59, 130, 246, 0.5)" }}
+              whileTap={{ scale: 0.95 }}
+              onClick={handleSubmit}
+              disabled={isSubmitting}
+              className={`bg-blue-500 text-white px-8 py-3 rounded-lg transition-all flex items-center space-x-2 ${
+                isSubmitting ? 'opacity-75 cursor-not-allowed' : 'hover:bg-blue-600'
+              }`}
+              aria-label="Submit design request"
+            >
+              <span>{isSubmitting ? 'Submitting...' : 'Submit Request'}</span>
+            </motion.button>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
