@@ -104,7 +104,9 @@ export default function StaticHomepage() {
           </div>
 
           <p className="text-xl text-gray-300 mt-8 mb-12 max-w-3xl mx-auto text-center">
-            Elevating brands with cutting-edge design and innovative digital marketing strategies
+            What your competitors envy—and your audience can't ignore—we build.
+            Yours will scream conversion.
+            We don't just design—we deploy digital weapons that hijack attention, manipulate desire, and turn first impressions into obsession.
           </p>
 
           <div className="flex justify-center gap-6">
@@ -126,8 +128,8 @@ export default function StaticHomepage() {
       <section id="services" className="relative py-20 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="mb-12">
-            <h2 className="text-4xl font-light text-blue-400 mb-2">Our Services</h2>
-            <p className="text-gray-400">Comprehensive solutions for your brand</p>
+            <h2 className="text-4xl font-light text-blue-400 mb-2">Tools for Total Digital Domination</h2>
+            <p className="text-gray-400">Assets forged to make you unforgettable, untouchable, and unstoppable—precision-crafted tools to obliterate mediocrity.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -137,8 +139,8 @@ export default function StaticHomepage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-blue-400">Product Ad Design</h3>
-              <p className="text-gray-300">Eye-catching visuals for social media, websites, and email marketing campaigns.</p>
+              <h3 className="text-xl font-semibold mb-2 text-blue-400">Visual Warfare: Product Ad Design</h3>
+              <p className="text-gray-300">Not pretty—powerful. These visuals are engineered for dopamine, not decoration. We craft thumb-breaking ad creatives designed to hijack attention, burn into memory, and drive action across all digital fronts.</p>
             </div>
 
             <div className="service-card bg-black/50 backdrop-blur-lg p-6 rounded-lg border border-blue-400/20 hover:border-blue-400/50 transition-all">
@@ -147,8 +149,8 @@ export default function StaticHomepage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a2 2 0 002-2V5z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-blue-400">Brand Identity</h3>
-              <p className="text-gray-300">Complete brand identity design including logos, guidelines, and assets.</p>
+              <h3 className="text-xl font-semibold mb-2 text-blue-400">Brand Identity Engineering</h3>
+              <p className="text-gray-300">More than a logo. We build visual systems that anchor memory, build trust, and command presence. Become unforgettable in a world that forgets everything.</p>
             </div>
 
             <div className="service-card bg-black/50 backdrop-blur-lg p-6 rounded-lg border border-blue-400/20 hover:border-blue-400/50 transition-all">
@@ -157,8 +159,8 @@ export default function StaticHomepage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-blue-400">Clothing Design</h3>
-              <p className="text-gray-300">Custom apparel design and merchandising solutions.</p>
+              <h3 className="text-xl font-semibold mb-2 text-blue-400">Apparel Arsenal: Clothing Design</h3>
+              <p className="text-gray-300">Streetwear meets storytelling. We design clothing that says more than your bio ever could—crafted for conversion, culture, and clout. Full-scale design + merchandising strategies for streetwear, creator drops, and brandwear with meaning.</p>
             </div>
 
             <div className="service-card bg-black/50 backdrop-blur-lg p-6 rounded-lg border border-blue-400/20 hover:border-blue-400/50 transition-all">
@@ -167,8 +169,8 @@ export default function StaticHomepage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-blue-400">AI Model Generation</h3>
-              <p className="text-gray-300">Advanced AI-powered design and content generation.</p>
+              <h3 className="text-xl font-semibold mb-2 text-blue-400">Digital Doppelgänger</h3>
+              <p className="text-gray-300">Unleash hyper-real AI assets and personas—trained and tuned to your niche, look, and message. Influence without hiring. Scale without burnout. Deploy them for content, mockups, storytelling, or complete digital dominance.</p>
             </div>
 
             <div className="service-card bg-black/50 backdrop-blur-lg p-6 rounded-lg border border-blue-400/20 hover:border-blue-400/50 transition-all">
@@ -177,8 +179,8 @@ export default function StaticHomepage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-blue-400">Digital Marketing</h3>
-              <p className="text-gray-300">Comprehensive digital marketing strategies and implementation.</p>
+              <h3 className="text-xl font-semibold mb-2 text-blue-400">Revenue-Driven Digital Warfare</h3>
+              <p className="text-gray-300">This isn't marketing. This is tactical manipulation of attention and conversion. We craft and execute surgical digital operations—ads, funnels, and content—built to seize attention and steal market share.</p>
             </div>
 
             <div className="service-card bg-black/50 backdrop-blur-lg p-6 rounded-lg border border-blue-400/20 hover:border-blue-400/50 transition-all">
@@ -187,8 +189,8 @@ export default function StaticHomepage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3a2 2 0 00-2 2v1c0 8.284 6.716 15 15 15h1a2 2 0 002-2v-3.28a1 1 0 00-.684-.948l-4.493-1.498a1 1 0 00-1.21.502l-1.13 2.257a11.042 11.042 0 01-5.516-5.517l2.257-1.128a1 1 0 00.502-1.21L9.228 3.683A1 1 0 008.279 3H5z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-blue-400">Favicon Creation</h3>
-              <p className="text-gray-300">Custom favicon design to enhance your brand's web presence.</p>
+              <h3 className="text-xl font-semibold mb-2 text-blue-400">Favicon Fingerprints</h3>
+              <p className="text-gray-300">It's not a pixel—it's your presence. Our favicons are iconic, instantly recognizable, and built to brand you on every browser bar, commanding recognition from the corner of their eye.</p>
             </div>
 
             <div className="service-card bg-black/50 backdrop-blur-lg p-6 rounded-lg border border-blue-400/20 hover:border-blue-400/50 transition-all">
@@ -197,8 +199,8 @@ export default function StaticHomepage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-blue-400">Hero Section Creations</h3>
-              <p className="text-gray-300">Compelling hero sections that capture attention and drive conversions.</p>
+              <h3 className="text-xl font-semibold mb-2 text-blue-400">The First Impression Weapon: Hypnotic Hero Sections</h3>
+              <p className="text-gray-300">Your homepage either captivates—or evaporates. Our hero sections are high-performance visuals that stop users and seduce clicks, turning fleeting curiosity into concrete conversions.</p>
             </div>
 
             <div className="service-card bg-black/50 backdrop-blur-lg p-6 rounded-lg border border-blue-400/20 hover:border-blue-400/50 transition-all">
@@ -207,8 +209,8 @@ export default function StaticHomepage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-blue-400">Copywriting</h3>
-              <p className="text-gray-300">Persuasive copy that converts visitors into customers and builds brand voice.</p>
+              <h3 className="text-xl font-semibold mb-2 text-blue-400">Conversion Copy Command</h3>
+              <p className="text-gray-300">Copy should punch. We write psychologically-driven language that manipulates belief, creates urgency, and closes without asking. This isn't just writing—it's tactical persuasion. Every word placed with purpose, every line engineered for decisive results.</p>
             </div>
 
             <div className="service-card bg-black/50 backdrop-blur-lg p-6 rounded-lg border border-blue-400/20 hover:border-blue-400/50 transition-all">
@@ -217,8 +219,8 @@ export default function StaticHomepage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-blue-400">Video Ad Creations</h3>
-              <p className="text-gray-300">Dynamic video advertisements for social media and digital marketing campaigns.</p>
+              <h3 className="text-xl font-semibold mb-2 text-blue-400">Shortform Ad Killshots</h3>
+              <p className="text-gray-300">No fluff. No filler. 15–30 second digital ads designed for short attention spans with long-term memory impact. Optimized for TikTok, Reels, YouTube Shorts, and high-conversion ad platforms.</p>
             </div>
           </div>
         </div>
@@ -276,14 +278,6 @@ export default function StaticHomepage() {
       {/* Contact Section */}
       <section id="contact" className="relative py-20 px-6 bg-black">
         <div className="max-w-7xl mx-auto">
-          <div className="mb-12 text-center">
-            <h2 className="text-4xl font-light text-blue-400 mb-2">Get in Touch</h2>
-            <p className="text-gray-400">
-              Have questions or ready to start your project? Reach out to us and we'll get back to you as
-              soon as possible.
-            </p>
-          </div>
-
           <div className="max-w-2xl mx-auto">
             <div className="space-y-6">
               <h3 className="text-2xl text-blue-400 mb-6 text-center">Send Us a Message</h3>
@@ -331,7 +325,9 @@ export default function StaticHomepage() {
               <span className="text-xl text-blue-400 italic">Manifest Illusions</span>
             </div>
             <p className="text-gray-400 mb-6">
-              Elevating brands with cutting-edge design and innovative digital marketing strategies.
+              What your competitors envy—and your audience can't ignore—we build.
+              Yours will scream conversion.
+              We don't just design—we deploy digital weapons that hijack attention, manipulate desire, and turn first impressions into obsession.
             </p>
             <div className="flex space-x-4">
               <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
@@ -362,47 +358,47 @@ export default function StaticHomepage() {
             <ul className="space-y-2">
               <li>
                 <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
-                  Product Ad Design
+                  Visual Warfare: Product Ad Design
                 </a>
               </li>
               <li>
                 <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
-                  Brand Identity
+                  Brand Identity Engineering
                 </a>
               </li>
               <li>
                 <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
-                  Clothing Design
+                  Apparel Arsenal: Clothing Design
                 </a>
               </li>
               <li>
                 <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
-                  AI Model Generation
+                  Digital Doppelgänger
                 </a>
               </li>
               <li>
                 <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
-                  Digital Marketing
+                  Revenue-Driven Digital Warfare
                 </a>
               </li>
               <li>
                 <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
-                  Favicon Creation
+                  Favicon Fingerprints
                 </a>
               </li>
               <li>
                 <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
-                  Hero Section Creations
+                  The First Impression Weapon: Hypnotic Hero Sections
                 </a>
               </li>
               <li>
                 <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
-                  Copywriting
+                  Conversion Copy Command
                 </a>
               </li>
               <li>
                 <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
-                  Video Ad Creations
+                  Shortform Ad Killshots
                 </a>
               </li>
             </ul>

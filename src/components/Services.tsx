@@ -89,74 +89,74 @@ const Services: React.FC = () => {
           className="mb-12"
         >
           <h2 className="text-4xl font-light text-blue-400 mb-2" data-sb-field-path="sections.1.title">
-            Our Services
+            Tools for Total Digital Domination
           </h2>
           <p className="text-gray-400" data-sb-field-path="sections.1.content">
-            Comprehensive solutions for your brand
+            Assets forged to make you unforgettable, untouchable, and unstoppable—precision-crafted tools to obliterate mediocrity.
           </p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <ServiceCard
             icon={<ImageIcon className="w-8 h-8" />}
-            title="Product Ad Design"
-            description="Eye-catching visuals for social media, websites, and email marketing campaigns."
+            title="Visual Warfare: Product Ad Design"
+            description="Not pretty—powerful. These visuals are engineered for dopamine, not decoration. We craft thumb-breaking ad creatives designed to hijack attention, burn into memory, and drive action across all digital fronts."
             fieldPath="sections.2"
             index={0}
           />
           <ServiceCard
             icon={<Palette className="w-8 h-8" />}
-            title="Brand Identity"
-            description="Complete brand identity design including logos, guidelines, and assets."
+            title="Brand Identity Engineering"
+            description="More than a logo. We build visual systems that anchor memory, build trust, and command presence. Become unforgettable in a world that forgets everything."
             fieldPath="sections.3"
             index={1}
           />
           <ServiceCard
             icon={<ShoppingBag className="w-8 h-8" />}
-            title="Clothing Design"
-            description="Custom apparel design and merchandising solutions."
+            title="Apparel Arsenal: Clothing Design"
+            description="Streetwear meets storytelling. We design clothing that says more than your bio ever could—crafted for conversion, culture, and clout. Full-scale design + merchandising strategies for streetwear, creator drops, and brandwear with meaning."
             fieldPath="sections.4"
             index={2}
           />
           <ServiceCard
             icon={<Brain className="w-8 h-8" />}
-            title="AI Model Generation"
-            description="Advanced AI-powered design and content generation."
+            title="Digital Doppelgänger"
+            description="Unleash hyper-real AI assets and personas—trained and tuned to your niche, look, and message. Influence without hiring. Scale without burnout. Deploy them for content, mockups, storytelling, or complete digital dominance."
             fieldPath="sections.5"
             index={3}
           />
           <ServiceCard
             icon={<BarChart3 className="w-8 h-8" />}
-            title="Digital Marketing"
-            description="Comprehensive digital marketing strategies and implementation."
+            title="Revenue-Driven Digital Warfare"
+            description="This isn't marketing. This is tactical manipulation of attention and conversion. We craft and execute surgical digital operations—ads, funnels, and content—built to seize attention and steal market share."
             fieldPath="sections.6"
             index={4}
           />
           <ServiceCard
             icon={<Sparkles className="w-8 h-8" />}
-            title="Favicon Creation"
-            description="Custom favicon design to enhance your brand's web presence."
+            title="Favicon Fingerprints"
+            description="It's not a pixel—it's your presence. Our favicons are iconic, instantly recognizable, and built to brand you on every browser bar, commanding recognition from the corner of their eye."
             fieldPath="sections.7"
             index={5}
           />
           <ServiceCard
             icon={<FileText className="w-8 h-8" />}
-            title="Hero Section Creations"
-            description="Compelling hero sections that capture attention and drive conversions."
+            title="The First Impression Weapon: Hypnotic Hero Sections"
+            description="Your homepage either captivates—or evaporates. Our hero sections are high-performance visuals that stop users and seduce clicks, turning fleeting curiosity into concrete conversions."
             fieldPath="sections.8"
             index={6}
           />
           <ServiceCard
             icon={<PenTool className="w-8 h-8" />}
-            title="Copywriting"
-            description="Persuasive copy that converts visitors into customers and builds brand voice."
+            title="Conversion Copy Command"
+            description="Copy should punch. We write psychologically-driven language that manipulates belief, creates urgency, and closes without asking. This isn't just writing—it's tactical persuasion. Every word placed with purpose, every line engineered for decisive results."
             fieldPath="sections.9"
             index={7}
           />
           <ServiceCard
             icon={<Video className="w-8 h-8" />}
-            title="Video Ad Creations"
-            description="Dynamic video advertisements for social media and digital marketing campaigns."
+            title="Shortform Ad Killshots"
+            description="No fluff. No filler. 15–30 second digital ads designed for short attention spans with long-term memory impact. Optimized for TikTok, Reels, YouTube Shorts, and high-conversion ad platforms."
             fieldPath="sections.10"
             index={8}
           />

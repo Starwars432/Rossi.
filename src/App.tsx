@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import Hero from './components/Hero';
+import { HeroToServicesDivider, ServicesToFAQDivider, FAQToCTADivider } from './components/ScrollDividers';
 import Services from './components/Services';
 import FAQ from './components/FAQ';
+import CTASection from './components/CTASection';
 import CustomDesign from './components/CustomDesign';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
@@ -35,8 +37,12 @@ const AppContent = () => {
         <Route path="/" element={
           <>
             <Hero />
+            <HeroToServicesDivider />
             <Services />
+            <ServicesToFAQDivider />
             <FAQ />
+            <FAQToCTADivider />
+            <CTASection />
             <CustomDesign />
             <Contact />
             <Footer />
