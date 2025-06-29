@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-scroll';
+import { Link as RouterLink } from 'react-router-dom';
 import { Sparkles, Facebook, Twitter, Instagram, Linkedin, Mail } from 'lucide-react';
 
 const Footer: React.FC = () => {
@@ -137,9 +138,9 @@ const Footer: React.FC = () => {
               </Link>
             </li>
             <li>
-              <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
+              <RouterLink to="/privacy" className="text-gray-400 hover:text-blue-400 transition-colors">
                 Privacy Policy
-              </a>
+              </RouterLink>
             </li>
             <li>
               <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
