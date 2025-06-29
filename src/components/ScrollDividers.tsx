@@ -47,9 +47,6 @@ export const HeroToServicesDivider: React.FC = () => {
           }}
         />
       ))}
-      
-      {/* Backdrop blur overlay */}
-      <div className="absolute inset-0 backdrop-blur-sm" />
     </div>
   );
 };
