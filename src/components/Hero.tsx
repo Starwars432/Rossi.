@@ -396,9 +396,9 @@ const Hero: React.FC = () => {
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
         >
-          What your competitors envy—and your audience can't ignore—we build.
+          What your competitors envy and your audience can't ignore, we build.
           Yours will scream conversion.
-          We don't just design—we deploy digital weapons that hijack attention, manipulate desire, and turn first impressions into obsession.
+          We don't just design, we deploy digital weapons that hijack attention, manipulate desire, and turn first impressions into obsession.
         </motion.p>
 
         <motion.div
