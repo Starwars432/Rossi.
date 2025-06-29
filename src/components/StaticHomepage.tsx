@@ -104,9 +104,9 @@ export default function StaticHomepage() {
           </div>
 
           <p className="text-xl text-gray-300 mt-8 mb-12 max-w-3xl mx-auto text-center">
-            What your competitors envy—and your audience can't ignore—we build.
+            What your competitors envy and your audience can't ignore, we build.
             Yours will scream conversion.
-            We don't just design—we deploy digital weapons that hijack attention, manipulate desire, and turn first impressions into obsession.
+            We don't just design, we deploy digital weapons that hijack attention, manipulate desire, and turn first impressions into obsession.
           </p>
 
           <div className="flex justify-center gap-6">
