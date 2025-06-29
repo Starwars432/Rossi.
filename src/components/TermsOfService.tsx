@@ -1,21 +1,31 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Shield, ArrowLeft } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const TermsOfService: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleReturnHome = () => {
+    navigate('/');
+  };
+
+  const handleContactClick = () => {
+    navigate('/#contact');
+  };
+
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-4xl mx-auto px-6 py-8">
-          <Link 
-            to="/" 
+          <button 
+            onClick={handleReturnHome}
             className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-6 transition-colors"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Return to Homepage
-          </Link>
+          </button>
           
           <div className="flex items-center space-x-3">
             <Shield className="w-8 h-8 text-blue-600" />
@@ -65,12 +75,12 @@ const TermsOfService: React.FC = () => {
               <li>If you experience any issues, please contact support and we will make a reasonable effort to resolve them.</li>
             </ul>
             <div className="my-6">
-              <Link 
-                to="/#contact" 
+              <button 
+                onClick={handleContactClick}
                 className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Contact Support
-              </Link>
+              </button>
             </div>
 
             <h2 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">6. Intellectual Property</h2>
@@ -108,12 +118,12 @@ const TermsOfService: React.FC = () => {
             <h2 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">12. Contact</h2>
             <p className="text-gray-700 mb-4">If you have questions about these terms, contact us:</p>
             <div className="mb-8">
-              <Link 
-                to="/#contact" 
+              <button 
+                onClick={handleContactClick}
                 className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Contact Us
-              </Link>
+              </button>
             </div>
           </div>
         </div>

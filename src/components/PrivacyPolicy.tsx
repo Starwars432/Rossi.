@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Shield, ArrowLeft, Check, X } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -15,6 +15,7 @@ const PrivacyPolicy: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const handleOptOutSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,6 +64,14 @@ const PrivacyPolicy: React.FC = () => {
     }
   };
 
+  const handleReturnHome = () => {
+    navigate('/');
+  };
+
+  const handleContactClick = () => {
+    navigate('/#contact');
+  };
+
   const OptOutModal = () => (
     <motion.div
       initial={{ opacity: 0 }}
@@ -94,6 +103,7 @@ const PrivacyPolicy: React.FC = () => {
             <h4 className="text-lg font-medium text-gray-900 mb-2">Request Submitted</h4>
             <p className="text-gray-600">
               We'll process your opt-out request within 15 business days as required by CCPA/CPRA.
+              When you submit a "Do Not Sell or Share My Information" request, we will flag your data in our systems and exclude you from personalized advertising, behavioral analytics, and any third-party data sharing not essential to providing our services.
             </p>
           </div>
         ) : (
@@ -172,19 +182,19 @@ const PrivacyPolicy: React.FC = () => {
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-4xl mx-auto px-6 py-8">
-          <Link 
-            to="/" 
+          <button 
+            onClick={handleReturnHome}
             className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-6 transition-colors"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Return to Homepage
-          </Link>
+          </button>
           
           <div className="flex items-center space-x-3">
             <Shield className="w-8 h-8 text-blue-600" />
             <div>
               <h1 className="text-3xl font-light text-gray-900">Privacy Policy</h1>
-              <p className="text-sm text-gray-500 mt-1">Last Updated: January 6, 2025</p>
+              <p className="text-sm text-gray-500 mt-1">Last Updated: June 28, 2025</p>
             </div>
           </div>
         </div>
@@ -273,12 +283,12 @@ const PrivacyPolicy: React.FC = () => {
               <li>Opt-out of data sharing for personalized advertising</li>
             </ul>
             <div className="my-6">
-              <Link 
-                to="/#contact" 
+              <button 
+                onClick={handleContactClick}
                 className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Contact Us
-              </Link>
+              </button>
             </div>
             <p className="text-gray-700 mb-6">If you're a California resident, you have additional rights under the CCPA and CPRA.</p>
 
@@ -299,12 +309,12 @@ const PrivacyPolicy: React.FC = () => {
             <h2 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">12. Contact</h2>
             <p className="text-gray-700 mb-4">If you have questions about this Privacy Policy, contact us:</p>
             <div className="mb-8">
-              <Link 
-                to="/#contact" 
+              <button 
+                onClick={handleContactClick}
                 className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Contact
-              </Link>
+              </button>
             </div>
           </div>
 
