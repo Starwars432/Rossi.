@@ -143,9 +143,9 @@ const Footer: React.FC = () => {
               </RouterLink>
             </li>
             <li>
-              <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
+              <RouterLink to="/terms" className="text-gray-400 hover:text-blue-400 transition-colors">
                 Terms of Service
-              </a>
+              </RouterLink>
             </li>
             <li>
               <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
