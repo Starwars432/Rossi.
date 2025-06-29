@@ -13,9 +13,9 @@ const Footer: React.FC = () => {
             <span className="text-xl text-blue-400 italic">Manifest Illusions</span>
           </div>
           <p className="text-gray-400 mb-6">
-            What your competitors envy—and your audience can't ignore—we build.
+            What your competitors envy and your audience can't ignore, we build.
             Yours will scream conversion.
-            We don't just design—we deploy digital weapons that hijack attention, manipulate desire, and turn first impressions into obsession.
+            We don't just design, we deploy digital weapons that hijack attention, manipulate desire, and turn first impressions into obsession.
           </p>
           <div className="flex space-x-4">
             <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors" aria-label="Facebook">
