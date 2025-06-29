@@ -66,31 +66,31 @@ const Hero: React.FC = () => {
         whileHover={{ 
           scale: 1.1,
           y: -3,
-          boxShadow: "0 0 20px rgba(255, 255, 255, 0.6)"
+          filter: "drop-shadow(0 0 20px rgba(255, 255, 255, 0.6))"
         }}
       >
-        <motion.div
-          className="w-10 h-10 bg-white rounded-lg flex items-center justify-center cursor-pointer"
+        <motion.img
+          src="/favicon.svg"
+          alt="Manifest Illusions"
+          className="w-10 h-10 cursor-pointer"
           style={{
-            boxShadow: "0 0 15px rgba(255, 255, 255, 0.3)"
+            filter: "drop-shadow(0 0 15px rgba(255, 255, 255, 0.3))"
           }}
           animate={{
-            boxShadow: [
-              "0 0 15px rgba(255, 255, 255, 0.3)",
-              "0 0 25px rgba(255, 255, 255, 0.5)",
-              "0 0 15px rgba(255, 255, 255, 0.3)"
+            filter: [
+              "drop-shadow(0 0 15px rgba(255, 255, 255, 0.3))",
+              "drop-shadow(0 0 25px rgba(255, 255, 255, 0.5))",
+              "drop-shadow(0 0 15px rgba(255, 255, 255, 0.3))"
             ]
           }}
           transition={{
-            boxShadow: {
+            filter: {
               duration: 3,
               repeat: Infinity,
               ease: "easeInOut"
             }
           }}
-        >
-          <span className="text-black font-bold text-lg italic">MI</span>
-        </motion.div>
+        />
       </motion.div>
 
       {/* Cosmic Background */}
