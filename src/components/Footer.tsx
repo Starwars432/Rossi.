@@ -148,9 +148,9 @@ const Footer: React.FC = () => {
               </RouterLink>
             </li>
             <li>
-              <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
+              <RouterLink to="/cookies" className="text-gray-400 hover:text-blue-400 transition-colors">
                 Cookie Policy
-              </a>
+              </RouterLink>
             </li>
           </ul>
         </div>

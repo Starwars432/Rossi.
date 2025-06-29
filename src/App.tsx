@@ -13,6 +13,7 @@ import LoginModal from './components/LoginModal';
 import ProfilePage from './components/ProfilePage';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsOfService from './components/TermsOfService';
+import CookiePolicy from './components/CookiePolicy';
 import { AuthProvider } from './contexts/AuthContext';
 import { CartProvider } from './contexts/CartContext';
 
@@ -54,6 +55,7 @@ const AppContent = () => {
         <Route path="/purchases" element={<ProfilePage />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<TermsOfService />} />
+        <Route path="/cookies" element={<CookiePolicy />} />
       </Routes>
       
       <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
