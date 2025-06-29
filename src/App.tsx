@@ -14,6 +14,7 @@ import ProfilePage from './components/ProfilePage';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsOfService from './components/TermsOfService';
 import CookiePolicy from './components/CookiePolicy';
+import Cipher from './components/Cipher';
 import { AuthProvider } from './contexts/AuthContext';
 import { CartProvider } from './contexts/CartContext';
 
@@ -57,6 +58,9 @@ const AppContent = () => {
       </Routes>
       
       <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
+      
+      {/* Cipher AI Assistant - Global */}
+      <Cipher />
     </div>
   );
 };
