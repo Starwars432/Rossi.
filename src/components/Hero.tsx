@@ -57,6 +57,42 @@ const Hero: React.FC = () => {
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
       data-sb-field-path="sections.0"
     >
+      {/* Favicon in top-left */}
+      <motion.div
+        className="absolute top-8 left-8 z-20"
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 1, delay: 0.3 }}
+        whileHover={{ 
+          scale: 1.1,
+          y: -3,
+          boxShadow: "0 0 20px rgba(255, 255, 255, 0.6)"
+        }}
+      >
+        <motion.div
+          className="w-10 h-10 bg-white rounded-lg flex items-center justify-center cursor-pointer"
+          style={{
+            boxShadow: "0 0 15px rgba(255, 255, 255, 0.3)"
+          }}
+          animate={{
+            boxShadow: [
+              "0 0 15px rgba(255, 255, 255, 0.3)",
+              "0 0 25px rgba(255, 255, 255, 0.5)",
+              "0 0 15px rgba(255, 255, 255, 0.3)"
+            ]
+          }}
+          transition={{
+            boxShadow: {
+              duration: 3,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }
+          }}
+        >
+          <span className="text-black font-bold text-lg italic">MI</span>
+        </motion.div>
+      </motion.div>
+
       {/* Cosmic Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-indigo-950 via-purple-950 to-black">
         {/* Animated Gradient Overlay */}
