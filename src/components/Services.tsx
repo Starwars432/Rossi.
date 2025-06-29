@@ -92,7 +92,7 @@ const Services: React.FC = () => {
             Tools for Total Digital Domination
           </h2>
           <p className="text-gray-400" data-sb-field-path="sections.1.content">
-            Assets forged to make you unforgettable, untouchable, and unstoppable—precision-crafted tools to obliterate mediocrity.
+            Assets forged to make you unforgettable, untouchable, and unstoppable. Precision-crafted tools to obliterate mediocrity.
           </p>
         </motion.div>
 
@@ -100,7 +100,7 @@ const Services: React.FC = () => {
           <ServiceCard
             icon={<ImageIcon className="w-8 h-8" />}
             title="Visual Warfare: Product Ad Design"
-            description="Not pretty—powerful. These visuals are engineered for dopamine, not decoration. We craft thumb-breaking ad creatives designed to hijack attention, burn into memory, and drive action across all digital fronts."
+            description="Not pretty, powerful. These visuals are engineered for dopamine, not decoration. We craft thumb-breaking ad creatives designed to hijack attention, burn into memory, and drive action across all digital fronts."
             fieldPath="sections.2"
             index={0}
           />
@@ -114,14 +114,14 @@ const Services: React.FC = () => {
           <ServiceCard
             icon={<ShoppingBag className="w-8 h-8" />}
             title="Apparel Arsenal: Clothing Design"
-            description="Streetwear meets storytelling. We design clothing that says more than your bio ever could—crafted for conversion, culture, and clout. Full-scale design + merchandising strategies for streetwear, creator drops, and brandwear with meaning."
+            description="Streetwear meets storytelling. We design clothing that says more than your bio ever could. Crafted for conversion, culture, and clout. Full-scale design + merchandising strategies for streetwear, creator drops, and brandwear with meaning."
             fieldPath="sections.4"
             index={2}
           />
           <ServiceCard
             icon={<Brain className="w-8 h-8" />}
             title="Digital Doppelgänger"
-            description="Unleash hyper-real AI assets and personas—trained and tuned to your niche, look, and message. Influence without hiring. Scale without burnout. Deploy them for content, mockups, storytelling, or complete digital dominance."
+            description="Unleash hyper-real AI assets and personas, trained and tuned to your niche, look, and message. Influence without hiring. Scale without burnout. Deploy them for content, mockups, storytelling, or complete digital dominance."
             fieldPath="sections.5"
             index={3}
           />
@@ -135,14 +135,14 @@ const Services: React.FC = () => {
           <ServiceCard
             icon={<Sparkles className="w-8 h-8" />}
             title="Favicon Fingerprints"
-            description="It's not a pixel—it's your presence. Our favicons are iconic, instantly recognizable, and built to brand you on every browser bar, commanding recognition from the corner of their eye."
+            description="It's not a pixel, it's your presence. Our favicons are iconic, instantly recognizable, and built to brand you on every browser bar, commanding recognition from the corner of their eye."
             fieldPath="sections.7"
             index={5}
           />
           <ServiceCard
             icon={<FileText className="w-8 h-8" />}
             title="The First Impression Weapon: Hypnotic Hero Sections"
-            description="Your homepage either captivates—or evaporates. Our hero sections are high-performance visuals that stop users and seduce clicks, turning fleeting curiosity into concrete conversions."
+            description="Your homepage either captivates, or evaporates. Our hero sections are high-performance visuals that stop users and seduce clicks, turning fleeting curiosity into concrete conversions."
             fieldPath="sections.8"
             index={6}
           />
