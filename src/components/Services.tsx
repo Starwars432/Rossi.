@@ -149,7 +149,7 @@ const Services: React.FC = () => {
           <ServiceCard
             icon={<PenTool className="w-8 h-8" />}
             title="Conversion Copy Command"
-            description="Copy should punch. We write psychologically-driven language that manipulates belief, creates urgency, and closes without asking. This isn't just writing—it's tactical persuasion. Every word placed with purpose, every line engineered for decisive results."
+            description="Copy should punch. We write psychologically-driven language that manipulates belief, creates urgency, and closes without asking. This isn't just writing, it's tactical persuasion. Every word placed with purpose, every line engineered for decisive results."
             fieldPath="sections.9"
             index={7}
           />
