@@ -1,7 +1,7 @@
-// src/components/HeroCinematic.tsx
 import React from 'react';
 import { motion } from 'framer-motion';
 
+// Generate shards with subtle randomness
 const shards = Array.from({ length: 24 }, (_, i) => ({
   id: i,
   x: 10 + Math.random() * 80,
@@ -12,48 +12,49 @@ const shards = Array.from({ length: 24 }, (_, i) => ({
   delay: Math.random() * 4,
 }));
 
-const HeroCinematic: React.FC = () => {
+const DeltaVeilDesign: React.FC = () => {
   return (
-    <div className="relative h-screen w-full overflow-hidden bg-gradient-to-br from-black via-gray-900 to-slate-900">
-      {/* Atmospheric Depth */}
+    <div className="relative w-full h-full overflow-hidden bg-gradient-to-br from-[#111] via-[#1a1a1a] to-[#0f0f0f]">
+      {/* Ambient glow background */}
       <motion.div
-        className="absolute inset-0"
+        className="absolute inset-0 z-0"
         animate={{
           backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'],
         }}
         style={{
           backgroundImage:
-            'radial-gradient(circle at 30% 40%, rgba(59,130,246,0.15), transparent 60%), radial-gradient(circle at 70% 60%, rgba(168,85,247,0.12), transparent 60%)',
+            'radial-gradient(circle at 30% 40%, rgba(255,255,255,0.05), transparent 60%), radial-gradient(circle at 70% 60%, rgba(168,85,247,0.08), transparent 60%)',
           backgroundSize: '200% 200%',
         }}
         transition={{
-          duration: 20,
+          duration: 24,
           repeat: Infinity,
           ease: 'easeInOut',
         }}
       />
 
-      {/* Floating Glassy Shards */}
+      {/* Floating translucent shards */}
       {shards.map((shard) => (
         <motion.div
           key={shard.id}
-          className="absolute rounded-md"
+          className="absolute rounded-sm pointer-events-none"
           style={{
             left: `${shard.x}%`,
             top: `${shard.y}%`,
             width: `${shard.size}px`,
             height: `${shard.size}px`,
             background: `linear-gradient(135deg, ${shard.color}33, ${shard.color}11)`,
-            backdropFilter: 'blur(3px)',
-            boxShadow: `0 0 20px ${shard.color}44`,
-            opacity: 0.8,
+            backdropFilter: `blur(${shard.blur}px)`,
+            boxShadow: `0 0 30px ${shard.color}33`,
+            border: `1px solid ${shard.color}22`,
+            opacity: 0.9,
           }}
           animate={{
             y: [0, -15, 0],
-            rotate: [0, 360],
+            rotate: [0, 180, 360],
           }}
           transition={{
-            duration: 10 + Math.random() * 4,
+            duration: 10 + Math.random() * 5,
             repeat: Infinity,
             ease: 'easeInOut',
             delay: shard.delay,
@@ -61,36 +62,13 @@ const HeroCinematic: React.FC = () => {
         />
       ))}
 
-      {/* Light Rays */}
-      {[...Array(5)].map((_, i) => (
-        <motion.div
-          key={`ray-${i}`}
-          className="absolute left-1/2 top-1/2 w-1 h-[200px] bg-gradient-to-b from-white/70 via-blue-500/40 to-transparent"
-          style={{
-            transform: `rotate(${i * 36}deg) translateX(-50%)`,
-            transformOrigin: 'top center',
-            filter: 'blur(1px)',
-          }}
-          animate={{
-            opacity: [0.2, 0.8, 0.2],
-            scaleY: [0.8, 1.2, 0.8],
-          }}
-          transition={{
-            duration: 6,
-            repeat: Infinity,
-            ease: 'easeInOut',
-            delay: i * 0.6,
-          }}
-        />
-      ))}
-
-      {/* Hero Title Content */}
-      <div className="absolute top-1/2 left-1/2 z-10 transform -translate-x-1/2 -translate-y-1/2 text-center px-4">
+      {/* Hero title and tagline */}
+      <div className="absolute top-1/2 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2 text-center px-6">
         <motion.h1
           className="text-5xl md:text-7xl font-bold text-white tracking-wide"
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.5, ease: 'easeOut' }}
+          transition={{ duration: 1.6, ease: 'easeOut' }}
         >
           Manifest Illusions
         </motion.h1>
@@ -98,25 +76,48 @@ const HeroCinematic: React.FC = () => {
           className="mt-4 text-lg md:text-2xl text-slate-300"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 1.5 }}
+          transition={{ delay: 0.4, duration: 1.4 }}
         >
-          Crafting Visual Futures
+          Where design becomes mythology.
         </motion.p>
       </div>
 
-      {/* Soft Glow Center Orb */}
+      {/* Soft center glow */}
       <motion.div
-        className="absolute left-1/2 top-1/2 w-[400px] h-[400px] rounded-full"
+        className="absolute left-1/2 top-1/2 w-[500px] h-[500px] rounded-full z-10 pointer-events-none"
         style={{
-          background: 'radial-gradient(circle, rgba(59,130,246,0.15), transparent 70%)',
+          background: 'radial-gradient(circle, rgba(168,85,247,0.1), transparent 70%)',
           transform: 'translate(-50%, -50%)',
-          filter: 'blur(40px)',
+          filter: 'blur(50px)',
         }}
-        animate={{ scale: [1, 1.3, 1], opacity: [0.4, 0.8, 0.4] }}
-        transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+        animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
+        transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
       />
+
+      {/* Subtle radial light rays */}
+      {[...Array(6)].map((_, i) => (
+        <motion.div
+          key={`ray-${i}`}
+          className="absolute left-1/2 top-1/2 w-1 h-[200px] bg-gradient-to-b from-white/60 via-purple-400/30 to-transparent"
+          style={{
+            transform: `rotate(${i * 60}deg) translateX(-50%)`,
+            transformOrigin: 'top center',
+            filter: 'blur(2px)',
+          }}
+          animate={{
+            opacity: [0.1, 0.5, 0.1],
+            scaleY: [0.8, 1.2, 0.8],
+          }}
+          transition={{
+            duration: 6,
+            repeat: Infinity,
+            ease: 'easeInOut',
+            delay: i * 0.5,
+          }}
+        />
+      ))}
     </div>
   );
 };
 
-export default HeroCinematic;
+export default DeltaVeilDesign;
