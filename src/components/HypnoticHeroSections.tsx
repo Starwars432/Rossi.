@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import LuminousCurrentsDesign from './LuminousCurrentsDesign';
 import BioluminescentBloomDesign from './BioluminescentBloomDesign';
 import ShatteredGeometryDesign from './ShatteredGeometryDesign';
+import DeltaVeilDesign from './DeltaVeilDesign';
 
 interface HeroProduct {
   id: string;
@@ -63,13 +64,14 @@ const HypnoticHeroSections: React.FC = () => {
     {
       id: 'delta-veil',
       name: 'Delta Veil',
-      tagline: 'Minimalist conversion focus',
-      description: 'Clean, minimal design that focuses purely on conversion with subtle animations and clear value propositions.',
+      tagline: 'Old-world luxury and opulence',
+      description: 'Museum-quality design featuring impeccable marble textures, burnished gold details, and fine silk elements. Embodies timeless sophistication of old money estates with photorealistic luxury materials.',
       preview: '/api/placeholder/400/300',
-      category: 'Startup',
-      price: 129,
+      category: 'Luxury',
+      price: 299,
       formats: ['Figma', 'HTML/CSS'],
-      features: ['Minimal design', 'Clear CTAs', 'Fast loading', 'Mobile first']
+      features: ['Marble textures', 'Gold accents', 'Silk effects', 'Luxury aesthetics'],
+      designComponent: DeltaVeilDesign
     },
     {
       id: 'nexus-prime',
