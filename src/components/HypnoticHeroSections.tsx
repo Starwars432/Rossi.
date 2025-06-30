@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, X, Check, Star, Download, Code, Figma } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import LuminousCurrentsDesign from './LuminousCurrentsDesign';
+import BioluminescentBloomDesign from './BioluminescentBloomDesign';
 
 interface HeroProduct {
   id: string;
@@ -37,13 +38,14 @@ const HypnoticHeroSections: React.FC = () => {
     {
       id: 'reactor-x',
       name: 'Reactor-X',
-      tagline: 'High-energy conversion engine',
-      description: 'E-commerce weapon designed to eliminate hesitation with pulsing energy effects and urgency triggers.',
+      tagline: 'Bio-luminescent organic growth',
+      description: 'Organic, asymmetrical shapes that bloom from central points with soft, pulsating bioluminescent glow. Perfect for innovative tech and natural futurism brands.',
       preview: '/api/placeholder/400/300',
       category: 'E-commerce',
       price: 179,
       formats: ['Figma', 'HTML/CSS', 'Shopify'],
-      features: ['Energy animations', 'Trust signals', 'Urgency elements', 'A/B tested copy']
+      features: ['Organic animations', 'Bioluminescent effects', 'Growth patterns', 'A/B tested copy'],
+      designComponent: BioluminescentBloomDesign
     },
     {
       id: 'arc-7',
