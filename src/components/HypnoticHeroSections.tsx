@@ -13,6 +13,7 @@ import {
   Crosshair,
   Brain
 } from 'lucide-react';
+import CrystalHeroDesign from './CrystalHeroDesign';
 
 interface HeroPreview {
   id: string;
@@ -21,6 +22,7 @@ interface HeroPreview {
   preview: string;
   category: string;
   features: string[];
+  designComponent?: React.ComponentType<{ isVisible: boolean }>;
 }
 
 interface Package {
@@ -37,6 +39,7 @@ const HypnoticHeroSections: React.FC = () => {
   const [openFAQ, setOpenFAQ] = useState<number | null>(null);
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
   const [isTargeting, setIsTargeting] = useState(false);
+  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
 
   // Mouse tracking for crosshair effect
   useEffect(() => {
@@ -50,12 +53,13 @@ const HypnoticHeroSections: React.FC = () => {
 
   const heroPreviewsData: HeroPreview[] = [
     {
-      id: 'reactor-x',
-      name: 'REACTOR-X',
+      id: 'crystal',
+      name: 'CRYSTAL',
       description: 'Built for SaaS launches. Fast. Direct. Emotionally loaded.',
       preview: '/api/placeholder/600/400',
       category: 'SaaS',
-      features: ['Animated CTAs', 'Scroll Triggers', 'Mobile Optimized', 'Conversion Focused']
+      features: ['Animated CTAs', 'Scroll Triggers', 'Mobile Optimized', 'Conversion Focused'],
+      designComponent: CrystalHeroDesign
     },
     {
       id: 'arc-7',
@@ -401,15 +405,22 @@ const HypnoticHeroSections: React.FC = () => {
                 whileHover={{ scale: 1.05, y: -10 }}
                 className="group cursor-pointer"
                 onClick={() => setSelectedPreview(preview)}
+                onMouseEnter={() => setHoveredCard(preview.id)}
+                onMouseLeave={() => setHoveredCard(null)}
               >
                 <div className="relative bg-black border border-blue-400/30 rounded-lg overflow-hidden group-hover:border-red-500/60 transition-all">
-                  <div className="aspect-video bg-gradient-to-br from-blue-900/20 to-purple-900/20 flex items-center justify-center">
-                    <div className="text-center">
-                      <Play className="w-16 h-16 text-blue-400 mx-auto mb-4 group-hover:text-red-400 transition-colors" />
-                      <h3 className="text-2xl font-bold text-blue-400 group-hover:text-red-400 transition-colors">
-                        {preview.name}
-                      </h3>
-                    </div>
+                  <div className="aspect-video bg-gradient-to-br from-blue-900/20 to-purple-900/20 flex items-center justify-center relative">
+                    {/* Show CRYSTAL design for the first card */}
+                    {preview.designComponent && hoveredCard === preview.id ? (
+                      <preview.designComponent isVisible={true} />
+                    ) : (
+                      <div className="text-center">
+                        <Play className="w-16 h-16 text-blue-400 mx-auto mb-4 group-hover:text-red-400 transition-colors" />
+                        <h3 className="text-2xl font-bold text-blue-400 group-hover:text-red-400 transition-colors">
+                          {preview.name}
+                        </h3>
+                      </div>
+                    )}
                   </div>
                   
                   <div className="p-6">
@@ -564,11 +575,15 @@ const HypnoticHeroSections: React.FC = () => {
               </div>
 
               <div className="p-6">
-                <div className="aspect-video bg-gradient-to-br from-blue-900/20 to-purple-900/20 rounded-lg mb-6 flex items-center justify-center">
-                  <div className="text-center">
-                    <Play className="w-24 h-24 text-blue-400 mx-auto mb-4" />
-                    <p className="text-gray-300">Live Preview Animation</p>
-                  </div>
+                <div className="aspect-video bg-gradient-to-br from-blue-900/20 to-purple-900/20 rounded-lg mb-6 flex items-center justify-center relative">
+                  {selectedPreview.designComponent ? (
+                    <selectedPreview.designComponent isVisible={true} />
+                  ) : (
+                    <div className="text-center">
+                      <Play className="w-24 h-24 text-blue-400 mx-auto mb-4" />
+                      <p className="text-gray-300">Live Preview Animation</p>
+                    </div>
+                  )}
                 </div>
 
                 <p className="text-gray-300 mb-6">{selectedPreview.description}</p>
