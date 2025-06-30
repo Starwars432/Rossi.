@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import { useNavigate } from 'react-router-dom';
 import { ImageIcon, FileText, Palette, Brain, ShoppingBag, BarChart3, Sparkles, Video, PenTool } from 'lucide-react';
 
 interface ServiceCardProps {
@@ -9,9 +10,19 @@ interface ServiceCardProps {
   description: string;
   fieldPath?: string;
   index: number;
+  onClick?: () => void;
+  isClickable?: boolean;
 }
 
-const ServiceCard: React.FC<ServiceCardProps> = ({ icon, title, description, fieldPath, index }) => {
+const ServiceCard: React.FC<ServiceCardProps> = ({ 
+  icon, 
+  title, 
+  description, 
+  fieldPath, 
+  index, 
+  onClick,
+  isClickable = false 
+}) => {
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
@@ -27,8 +38,11 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ icon, title, description, fie
         scale: 1.05,
         boxShadow: "0 20px 40px rgba(96, 165, 250, 0.15)"
       }}
-      className="service-card bg-black/50 backdrop-blur-lg p-6 rounded-lg border border-blue-400/20 hover:border-blue-400/50 transition-all duration-300 group"
+      className={`service-card bg-black/50 backdrop-blur-lg p-6 rounded-lg border border-blue-400/20 hover:border-blue-400/50 transition-all duration-300 group ${
+        isClickable ? 'cursor-pointer hover:bg-blue-500/10' : ''
+      }`}
       data-sb-field-path={fieldPath}
+      onClick={onClick}
     >
       <motion.div 
         className="mb-4 text-blue-400"
@@ -43,11 +57,22 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ icon, title, description, fie
       <p className="text-gray-300 group-hover:text-gray-200 transition-colors">
         {description}
       </p>
+      {isClickable && (
+        <div className="mt-4 opacity-0 group-hover:opacity-100 transition-opacity">
+          <span className="text-sm text-blue-400 font-medium">Click to explore →</span>
+        </div>
+      )}
     </motion.div>
   );
 };
 
 const Services: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleHeroSectionsClick = () => {
+    navigate('/products/hypnotic-hero-sections');
+  };
+
   return (
     <section id="services" className="relative py-20 px-6" data-sb-field-path="sections.1">
       {/* Enhanced Background with Gradient and Floating Elements */}
@@ -145,6 +170,8 @@ const Services: React.FC = () => {
             description="Your homepage either captivates, or evaporates. Our hero sections are high-performance visuals that stop users and seduce clicks, turning fleeting curiosity into concrete conversions."
             fieldPath="sections.8"
             index={6}
+            onClick={handleHeroSectionsClick}
+            isClickable={true}
           />
           <ServiceCard
             icon={<PenTool className="w-8 h-8" />}

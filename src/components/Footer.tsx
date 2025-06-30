@@ -1,9 +1,18 @@
 import React from 'react';
 import { Link } from 'react-scroll';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Sparkles, Facebook, Twitter, Instagram, Linkedin, Mail } from 'lucide-react';
 
 const Footer: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleServiceClick = (serviceName: string) => {
+    if (serviceName === 'The First Impression Weapon: Hypnotic Hero Sections') {
+      navigate('/products/hypnotic-hero-sections');
+    }
+    // Add more service navigation here as you build more product pages
+  };
+
   return (
     <footer className="bg-black/50 backdrop-blur-lg py-16 px-6">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
@@ -67,9 +76,12 @@ const Footer: React.FC = () => {
               </a>
             </li>
             <li>
-              <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
+              <button 
+                onClick={() => handleServiceClick('The First Impression Weapon: Hypnotic Hero Sections')}
+                className="text-gray-400 hover:text-blue-400 transition-colors text-left"
+              >
                 The First Impression Weapon: Hypnotic Hero Sections
-              </a>
+              </button>
             </li>
             <li>
               <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
