@@ -1,53 +1,55 @@
-import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
+import { motion, useMotionValue, useTransform } from "framer-motion";
 
 export default function ShatteredGeometryDesign() {
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const { innerWidth, innerHeight } = window;
+      mouseX.set(e.clientX / innerWidth);
+      mouseY.set(e.clientY / innerHeight);
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
+  const rotateX = useTransform(mouseY, [0, 1], [8, -8]);
+  const rotateY = useTransform(mouseX, [0, 1], [-8, 8]);
+
   return (
-    <div className="relative h-screen w-full overflow-hidden bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e] text-white">
-      
-      {/* Spline 3D Scene */}
-      <iframe
-        src="https://my.spline.design/abstractfloating" // Replace with your Spline scene
-        className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-40"
-      ></iframe>
+    <div
+      ref={ref}
+      className="relative h-screen w-full overflow-hidden bg-[#0e0d0a]"
+    >
+      {/* Gold Ripple Background */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,#2e2b25_0%,#0e0d0a_100%)] pointer-events-none z-0" />
 
-      {/* Animated Blobs */}
-      <div className="absolute top-[20%] left-[25%] w-96 h-96 bg-purple-400 rounded-full blur-[100px] opacity-30 animate-pulse" />
-      <div className="absolute bottom-[10%] right-[10%] w-72 h-72 bg-indigo-500 rounded-full blur-[80px] opacity-25 animate-pulse" />
-
-      {/* Hero Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
-        <motion.h1
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          className="text-5xl md:text-7xl font-extrabold tracking-tight"
-        >
-          Shape the Impossible
-        </motion.h1>
-
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 1 }}
-          className="mt-6 text-lg md:text-xl max-w-2xl text-white/80"
-        >
-          A fusion of geometry, creativity, and motion — built to wow across all industries.
-        </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 1 }}
-          className="mt-8 flex flex-col md:flex-row gap-4"
-        >
-          <button className="bg-white text-black px-6 py-3 rounded-full font-semibold hover:bg-gray-200 transition">
-            Launch Experience
-          </button>
-          <button className="border border-white px-6 py-3 rounded-full font-semibold hover:bg-white hover:text-black transition">
-            Explore Designs
-          </button>
-        </motion.div>
+      {/* Animated Ripple / Shine Effect */}
+      <div className="absolute inset-0 z-10 pointer-events-none">
+        <div className="w-full h-full bg-[url('/luxury-texture.gif')] bg-cover bg-center mix-blend-soft-light opacity-20" />
       </div>
+
+      {/* Parallax Ornamental Shapes */}
+      <motion.div
+        style={{ rotateX, rotateY }}
+        className="absolute top-1/4 left-1/4 w-72 h-72 bg-[url('/ornament-gold.svg')] bg-contain bg-no-repeat opacity-30"
+      />
+      <motion.div
+        style={{ rotateX, rotateY }}
+        className="absolute bottom-10 right-1/5 w-64 h-64 bg-[url('/ornament-gold.svg')] bg-contain bg-no-repeat opacity-20"
+      />
+
+      {/* Gold Frame Border */}
+      <div className="absolute inset-0 border-2 border-[#c1a875] rounded-[30px] m-4 pointer-events-none z-20" />
+
+      {/* Central Glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-[#c1a875] rounded-full blur-[150px] opacity-10 pointer-events-none" />
+
+      {/* Reserved Space (no content) */}
+      <div className="relative z-10 h-full w-full" />
     </div>
   );
 }
