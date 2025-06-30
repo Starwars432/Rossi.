@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Play, X, Check, Star, Download, Code, Figma } from 'lucide-react';
+import { ArrowLeft, X, Check, Star, Download, Code, Figma } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import CrystalHeroDesign from './CrystalHeroDesign';
+import LuminousCurrentsDesign from './LuminousCurrentsDesign';
 
 interface HeroProduct {
   id: string;
@@ -20,20 +20,19 @@ interface HeroProduct {
 const HypnoticHeroSections: React.FC = () => {
   const navigate = useNavigate();
   const [selectedProduct, setSelectedProduct] = useState<HeroProduct | null>(null);
-  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
 
   const products: HeroProduct[] = [
     {
-      id: 'crystal',
-      name: 'Crystal',
-      tagline: 'Crystalline precision for SaaS launches',
-      description: 'Built for SaaS launches. Fast. Direct. Emotionally loaded with animated glass panels that form perfect symmetry.',
+      id: 'luminous-currents',
+      name: 'Luminous Currents',
+      tagline: 'Serene, innovative fluid dynamics',
+      description: 'A soft, flowing, translucent wave design with gentle currents that move elegantly across the screen. Perfect for innovative brands seeking sophisticated, fluid aesthetics.',
       preview: '/api/placeholder/400/300',
-      category: 'SaaS',
-      price: 149,
-      formats: ['Figma', 'HTML/CSS', 'React'],
-      features: ['Animated glass panels', 'Mobile responsive', 'Copy included', '3 color variants'],
-      designComponent: CrystalHeroDesign
+      category: 'Innovation',
+      price: 189,
+      formats: ['Figma', 'HTML/CSS', 'React', 'SVG'],
+      features: ['Fluid animations', 'CSS gradients', 'Parallax effects', 'Mobile responsive', 'Copy included'],
+      designComponent: LuminousCurrentsDesign
     },
     {
       id: 'reactor-x',
@@ -139,25 +138,26 @@ const HypnoticHeroSections: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden cursor-pointer group hover:shadow-lg transition-all duration-300"
+              className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden cursor-pointer group hover:shadow-lg transition-all duration-300"
               onClick={() => handleProductClick(product)}
-              onMouseEnter={() => setHoveredCard(product.id)}
-              onMouseLeave={() => setHoveredCard(null)}
             >
-              {/* Preview Area */}
-              <div className="aspect-video bg-gray-100 relative overflow-hidden">
-                {product.designComponent && hoveredCard === product.id ? (
+              {/* Preview Area - Always Visible */}
+              <div className="aspect-video bg-gray-50 relative overflow-hidden">
+                {product.designComponent ? (
                   <product.designComponent isVisible={true} />
                 ) : (
-                  <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
-                    <Play className="w-12 h-12 text-gray-400 group-hover:text-gray-600 transition-colors" />
+                  <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
+                    <div className="text-center">
+                      <div className="w-16 h-16 bg-gray-200 rounded-lg mx-auto mb-3"></div>
+                      <p className="text-sm text-gray-500">Preview Loading</p>
+                    </div>
                   </div>
                 )}
                 
                 {/* Hover Overlay */}
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300 flex items-center justify-center">
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-all duration-300 flex items-center justify-center">
                   <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                    <div className="bg-white/90 backdrop-blur-sm px-4 py-2 rounded-lg">
+                    <div className="bg-white/95 backdrop-blur-sm px-4 py-2 rounded-lg shadow-sm">
                       <span className="text-sm font-medium text-gray-900">View Details</span>
                     </div>
                   </div>
@@ -168,11 +168,11 @@ const HypnoticHeroSections: React.FC = () => {
               <div className="p-6">
                 <div className="flex items-start justify-between mb-2">
                   <h3 className="text-lg font-semibold text-gray-900">{product.name}</h3>
-                  <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                  <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
                     {product.category}
                   </span>
                 </div>
-                <p className="text-gray-600 text-sm mb-4">{product.tagline}</p>
+                <p className="text-gray-600 text-sm mb-4 leading-relaxed">{product.tagline}</p>
                 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-1">
@@ -203,7 +203,7 @@ const HypnoticHeroSections: React.FC = () => {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+              className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Modal Header */}
@@ -214,31 +214,34 @@ const HypnoticHeroSections: React.FC = () => {
                 </div>
                 <button
                   onClick={() => setSelectedProduct(null)}
-                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                  className="text-gray-400 hover:text-gray-600 transition-colors p-2 hover:bg-gray-100 rounded-lg"
                 >
-                  <X className="w-6 h-6" />
+                  <X className="w-5 h-5" />
                 </button>
               </div>
 
               <div className="grid md:grid-cols-2 gap-8 p-6">
                 {/* Preview */}
                 <div className="space-y-4">
-                  <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden relative">
+                  <div className="aspect-video bg-gray-50 rounded-lg overflow-hidden relative">
                     {selectedProduct.designComponent ? (
                       <selectedProduct.designComponent isVisible={true} />
                     ) : (
-                      <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
-                        <Play className="w-16 h-16 text-gray-400" />
+                      <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
+                        <div className="text-center">
+                          <div className="w-20 h-20 bg-gray-200 rounded-lg mx-auto mb-4"></div>
+                          <p className="text-gray-500">Preview Loading</p>
+                        </div>
                       </div>
                     )}
                   </div>
                   
-                  <div className="flex space-x-2">
+                  <div className="flex flex-wrap gap-2">
                     {selectedProduct.formats.map((format) => (
                       <span key={format} className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
                         {format === 'Figma' && <Figma className="w-3 h-3 mr-1" />}
-                        {format === 'HTML/CSS' && <Code className="w-3 h-3 mr-1" />}
-                        {format === 'React' && <Code className="w-3 h-3 mr-1" />}
+                        {(format === 'HTML/CSS' || format === 'React' || format === 'Vue') && <Code className="w-3 h-3 mr-1" />}
+                        {format === 'SVG' && <Download className="w-3 h-3 mr-1" />}
                         {format}
                       </span>
                     ))}
@@ -249,15 +252,15 @@ const HypnoticHeroSections: React.FC = () => {
                 <div className="space-y-6">
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">Description</h3>
-                    <p className="text-gray-600">{selectedProduct.description}</p>
+                    <p className="text-gray-600 leading-relaxed">{selectedProduct.description}</p>
                   </div>
 
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-3">Features</h3>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-3">What's Included</h3>
                     <ul className="space-y-2">
                       {selectedProduct.features.map((feature, index) => (
                         <li key={index} className="flex items-center text-gray-600">
-                          <Check className="w-4 h-4 text-green-500 mr-2" />
+                          <Check className="w-4 h-4 text-green-500 mr-3 flex-shrink-0" />
                           {feature}
                         </li>
                       ))}
@@ -266,7 +269,7 @@ const HypnoticHeroSections: React.FC = () => {
 
                   <div className="border-t border-gray-200 pt-6">
                     <div className="flex items-center justify-between mb-4">
-                      <span className="text-2xl font-bold text-gray-900">${selectedProduct.price}</span>
+                      <span className="text-3xl font-bold text-gray-900">${selectedProduct.price}</span>
                       <div className="flex items-center space-x-1">
                         {[...Array(5)].map((_, i) => (
                           <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
