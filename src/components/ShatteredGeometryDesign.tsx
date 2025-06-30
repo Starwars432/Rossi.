@@ -1,110 +1,92 @@
-import React, { useRef, useEffect } from 'react';
-import { motion, useAnimation } from 'framer-motion';
+// src/components/ShatteredGeometryDesign.tsx
+import React from 'react';
+import { motion } from 'framer-motion';
 
-interface HyperspaceHeroProps {
-  isVisible: boolean;
-}
+const streaks = Array.from({ length: 300 }, (_, i) => ({
+  id: i,
+  angle: Math.random() * 360,
+  distance: Math.random() * 100,
+  speed: 1 + Math.random() * 2,
+  color: ['#A3E4FF', '#E3D1FF', '#FFFFFF', '#B0FFFA'][i % 4],
+  length: 40 + Math.random() * 60,
+  delay: Math.random() * 4,
+}));
 
-const generateStars = (count: number) => {
-  return Array.from({ length: count }, (_, i) => ({
-    id: i,
-    angle: Math.random() * 360,
-    speed: 0.5 + Math.random() * 1.5,
-    size: 1 + Math.random() * 2,
-    delay: Math.random() * 3,
-    color: ['#A5F3FC', '#FACC15', '#C084FC', '#FFFFFF'][i % 4]
-  }));
-};
-
-const stars = generateStars(200);
-
-const HyperspaceHero: React.FC<HyperspaceHeroProps> = ({ isVisible }) => {
-  const controls = useAnimation();
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (isVisible) {
-      controls.start({
-        scale: [1, 1.2, 1],
-        transition: {
-          duration: 10,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        },
-      });
-    }
-  }, [isVisible, controls]);
-
+const ShatteredGeometryDesign: React.FC<{ isVisible: boolean }> = ({ isVisible }) => {
   if (!isVisible) return null;
 
   return (
-    <div ref={containerRef} className="absolute inset-0 overflow-hidden bg-black">
+    <div className="absolute inset-0 overflow-hidden bg-black">
+      {/* Tunnel glow */}
+      <motion.div
+        className="absolute left-1/2 top-1/2 w-[800px] h-[800px] rounded-full"
+        style={{
+          transform: 'translate(-50%, -50%)',
+          background: 'radial-gradient(circle, rgba(255,255,255,0.1), transparent 70%)',
+          filter: 'blur(80px)',
+        }}
+        animate={{ scale: [1, 1.4, 1], opacity: [0.2, 0.6, 0.2] }}
+        transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+      />
+
       {/* Star streaks */}
-      {stars.map((star) => (
+      {streaks.map((streak) => {
+        const angleRad = (streak.angle * Math.PI) / 180;
+        const x = Math.cos(angleRad) * streak.distance;
+        const y = Math.sin(angleRad) * streak.distance;
+
+        return (
+          <motion.div
+            key={streak.id}
+            className="absolute left-1/2 top-1/2"
+            style={{
+              width: `1px`,
+              height: `${streak.length}px`,
+              backgroundColor: streak.color,
+              transform: `translate(-50%, -50%) rotate(${streak.angle}deg)`
+            }}
+            animate={{
+              y: [0, -500],
+              opacity: [0, 1, 0],
+              scaleY: [0.5, 1.5, 0.5],
+            }}
+            transition={{
+              duration: 2 + streak.speed,
+              repeat: Infinity,
+              ease: 'easeInOut',
+              delay: streak.delay,
+            }}
+          />
+        );
+      })}
+
+      {/* Background starfield sparkles */}
+      {Array.from({ length: 100 }).map((_, i) => (
         <motion.div
-          key={star.id}
+          key={`spark-${i}`}
           className="absolute rounded-full"
           style={{
-            width: `${star.size}px`,
-            height: `${star.size}px`,
-            backgroundColor: star.color,
-            left: '50%',
-            top: '50%',
-            transformOrigin: 'center center',
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+            width: '1px',
+            height: '1px',
+            backgroundColor: '#FFFFFF',
+            opacity: 0.2 + Math.random() * 0.4,
           }}
           animate={{
-            x: [0, Math.cos((star.angle * Math.PI) / 180) * 2000],
-            y: [0, Math.sin((star.angle * Math.PI) / 180) * 2000],
-            opacity: [1, 0],
-            scaleX: [1, 6],
+            opacity: [0.1, 0.7, 0.1],
+            scale: [0.5, 1.2, 0.5],
           }}
           transition={{
-            duration: 3 + star.speed,
+            duration: 6 + Math.random() * 4,
             repeat: Infinity,
-            repeatType: 'loop',
-            ease: 'easeIn',
-            delay: star.delay,
+            ease: 'easeInOut',
+            delay: Math.random() * 4,
           }}
         />
       ))}
-
-      {/* Light tunnel core glow */}
-      <motion.div
-        className="absolute left-1/2 top-1/2 w-[300px] h-[300px] rounded-full"
-        style={{
-          transform: 'translate(-50%, -50%)',
-          background: 'radial-gradient(circle, rgba(255,255,255,0.2), transparent 70%)',
-          filter: 'blur(30px)',
-        }}
-        animate={{
-          scale: [1, 1.2, 1],
-          opacity: [0.4, 0.8, 0.4],
-        }}
-        transition={{
-          duration: 6,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-      />
-
-      {/* Dim atmospheric stars in the background */}
-      <div className="absolute inset-0">
-        {[...Array(100)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute rounded-full"
-            style={{
-              width: '1px',
-              height: '1px',
-              backgroundColor: '#ffffff22',
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-          />
-        ))}
-      </div>
     </div>
   );
 };
 
-export default HyperspaceHero;
+export default ShatteredGeometryDesign;
