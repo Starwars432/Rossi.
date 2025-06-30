@@ -1,122 +1,51 @@
-// src/components/ShatteredGeometryDesign.tsx
-import React from 'react';
-import { motion } from 'framer-motion';
+// Hero.tsx
+import { motion } from "framer-motion";
 
-const streaks = Array.from({ length: 300 }, (_, i) => ({
-  id: i,
-  angle: Math.random() * 360,
-  distance: Math.random() * 100,
-  speed: 1 + Math.random() * 2,
-  color: ['#A3E4FF', '#E3D1FF', '#FFFFFF', '#B0FFFA'][i % 4],
-  length: 40 + Math.random() * 60,
-  delay: Math.random() * 4,
-}));
-
-const ShatteredGeometryDesign: React.FC<{ isVisible: boolean }> = ({ isVisible }) => {
-  if (!isVisible) return null;
-
+export default function Hero() {
   return (
-    <div className="absolute inset-0 overflow-hidden bg-black">
-      {/* Central flare */}
-      <motion.div
-        className="absolute left-1/2 top-1/2 w-[800px] h-[800px] rounded-full"
-        style={{
-          transform: 'translate(-50%, -50%)',
-          background: 'radial-gradient(circle, rgba(255,255,255,0.1), transparent 70%)',
-          filter: 'blur(80px)',
-        }}
-        animate={{ scale: [1, 1.4, 1], opacity: [0.2, 0.6, 0.2] }}
-        transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
-      />
+    <div className="relative h-screen w-full overflow-hidden bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e] text-white">
+      {/* Spline 3D Embed */}
+      <iframe
+        src="https://my.spline.design/abstractshapeembedlink"
+        className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-30"
+      ></iframe>
 
-      {/* Star streaks with motion blur */}
-      {streaks.map((streak) => {
-        const angleRad = (streak.angle * Math.PI) / 180;
-        const x = Math.cos(angleRad) * streak.distance;
-        const y = Math.sin(angleRad) * streak.distance;
+      {/* Floating Blobs */}
+      <div className="absolute top-1/4 left-1/3 w-96 h-96 bg-pink-400 rounded-full blur-3xl opacity-20 animate-pulse" />
+      <div className="absolute bottom-10 right-10 w-72 h-72 bg-blue-400 rounded-full blur-2xl opacity-25 animate-pulse" />
 
-        return (
-          <motion.div
-            key={streak.id}
-            className="absolute left-1/2 top-1/2"
-            style={{
-              width: `2px`,
-              height: `${streak.length}px`,
-              background: `linear-gradient(to bottom, ${streak.color}AA, transparent)`,
-              transform: `translate(-50%, -50%) rotate(${streak.angle}deg) translate(${x}px, ${y}px)`
-            }}
-            animate={{
-              y: [0, -500],
-              opacity: [0, 1, 0],
-              scaleY: [0.5, 1.5, 0.5],
-            }}
-            transition={{
-              duration: 2 + streak.speed,
-              repeat: Infinity,
-              ease: 'easeInOut',
-              delay: streak.delay,
-            }}
-          />
-        );
-      })}
-
-      {/* 3D depth sparkle stars */}
-      {Array.from({ length: 100 }).map((_, i) => {
-        const depth = Math.random() * 300;
-        const xOffset = Math.random() * 100 - 50;
-        const yOffset = Math.random() * 100 - 50;
-        return (
-          <motion.div
-            key={`spark-${i}`}
-            className="absolute rounded-full"
-            style={{
-              left: `50%`,
-              top: `50%`,
-              transform: `translate(${xOffset}%, ${yOffset}%) translateZ(-${depth}px)`,
-              width: '1.5px',
-              height: '1.5px',
-              backgroundColor: '#FFFFFF',
-              opacity: 0.3,
-              boxShadow: '0 0 6px #FFFFFFAA',
-            }}
-            animate={{
-              opacity: [0.1, 0.7, 0.1],
-              scale: [0.6, 1.3, 0.6],
-            }}
-            transition={{
-              duration: 6 + Math.random() * 4,
-              repeat: Infinity,
-              ease: 'easeInOut',
-              delay: Math.random() * 4,
-            }}
-          />
-        );
-      })}
-
-      {/* Lens flare gradient overlay */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: 'radial-gradient(circle at center, rgba(255,255,255,0.02), transparent 80%)',
-          mixBlendMode: 'screen',
-        }}
-      />
-
-      {/* Camera shake effect */}
-      <motion.div
-        className="absolute inset-0"
-        animate={{
-          x: [0, 1, -1, 0.5, -0.5, 0],
-          y: [0, -1, 1, -0.5, 0.5, 0],
-        }}
-        transition={{
-          duration: 0.6,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-      />
+      {/* Content */}
+      <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-4">
+        <motion.h1
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+          className="text-5xl md:text-7xl font-extrabold tracking-tight"
+        >
+          Create Beyond Limits
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 1 }}
+          className="mt-6 text-lg md:text-xl max-w-2xl"
+        >
+          Design. Animate. Build. Everything your imagination can touch — now live.
+        </motion.p>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1, duration: 1 }}
+          className="mt-8 flex space-x-4"
+        >
+          <button className="bg-white text-black px-6 py-3 rounded-full font-medium hover:bg-gray-200 transition">
+            Get Started
+          </button>
+          <button className="border border-white px-6 py-3 rounded-full font-medium hover:bg-white hover:text-black transition">
+            See It In Action
+          </button>
+        </motion.div>
+      </div>
     </div>
   );
-};
-
-export default ShatteredGeometryDesign;
+}
