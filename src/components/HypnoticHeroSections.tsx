@@ -4,6 +4,7 @@ import { ArrowLeft, X, Check, Star, Download, Code, Figma } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import LuminousCurrentsDesign from './LuminousCurrentsDesign';
 import BioluminescentBloomDesign from './BioluminescentBloomDesign';
+import BioluminescentBeachDesign from './BioluminescentBeachDesign';
 
 interface HeroProduct {
   id: string;
@@ -50,13 +51,14 @@ const HypnoticHeroSections: React.FC = () => {
     {
       id: 'arc-7',
       name: 'Arc-7',
-      tagline: 'Sophisticated agency presence',
-      description: 'Agency stealth mode. Sophisticated and commanding with portfolio integration and authority building elements.',
+      tagline: 'Bioluminescent beach paradise',
+      description: 'Breathtaking beach scene with electric blue bioluminescent waves against a golden sunset. Perfect for luxury brands and sophisticated agency presence.',
       preview: '/api/placeholder/400/300',
       category: 'Agency',
       price: 199,
       formats: ['Figma', 'HTML/CSS', 'Webflow'],
-      features: ['Portfolio showcase', 'Case studies', 'Client logos', 'Authority building']
+      features: ['Beach animations', 'Sunset effects', 'Wave dynamics', 'Authority building'],
+      designComponent: BioluminescentBeachDesign
     },
     {
       id: 'delta-veil',
