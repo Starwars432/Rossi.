@@ -245,26 +245,6 @@ const LuminousCurrentsDesign: React.FC<LuminousCurrentsDesignProps> = ({ isVisib
           background: 'linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.02) 100%)',
         }}
       />
-
-      {/* Demo Content Overlay */}
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="text-center z-10">
-          <motion.h1 
-            className="text-4xl font-light text-gray-800 mb-4"
-            animate={{ opacity: [0.7, 1, 0.7] }}
-            transition={{ duration: 3, repeat: Infinity }}
-          >
-            Luminous Currents
-          </motion.h1>
-          <motion.p 
-            className="text-lg text-gray-600 max-w-md"
-            animate={{ opacity: [0.6, 0.9, 0.6] }}
-            transition={{ duration: 3, repeat: Infinity, delay: 0.5 }}
-          >
-            Serene, innovative, fluid dynamics that flow with elegant precision
-          </motion.p>
-        </div>
-      </div>
     </div>
   );
 };
