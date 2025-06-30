@@ -70,6 +70,7 @@ const Services: React.FC = () => {
   const navigate = useNavigate();
 
   const handleHeroSectionsClick = () => {
+    console.log('Navigating to hero sections page...');
     navigate('/products/hypnotic-hero-sections');
   };
 
