@@ -14,11 +14,6 @@ interface DesignInfo {
 }
 
 const designs: Record<string, DesignInfo> = {
-  'luminous-currents': {
-    id: 'luminous-currents',
-    name: 'Luminous Currents',
-    tagline: 'Serene, innovative fluid dynamics',
-    description: 'A soft, flowing, translucent wave design with gentle currents that move elegantly across the screen. Perfect for innovative brands seeking sophisticated, fluid aesthetics.',
     imageUrl: '/src/assets/@manifestillusions.png',
     colors: ['#FFD700', '#FFA500', '#FF6B35', '#8A2BE2', '#4169E1'],
     techniques: ['Fluid SVG animations', 'Cosmic particle systems', 'Multi-layer gradients', 'Flowing current paths']
