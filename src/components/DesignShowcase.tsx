@@ -20,7 +20,6 @@ const designs: Record<string, DesignInfo> = {
   'reactor-x': {
     id: 'reactor-x',
     name: 'Reactor-X',
-    tagline: 'Bio-luminescent organic growth',
     description: 'Organic, asymmetrical shapes that bloom from central points with soft, pulsating bioluminescent glow. Perfect for innovative tech and natural futurism brands.',
     colors: ['#00FFFF', '#0080FF', '#8A2BE2', '#00CED1', '#34D399'],
     techniques: ['Organic growth patterns', 'Bioluminescent effects', 'SVG morphing paths', 'Pulsating animations']
