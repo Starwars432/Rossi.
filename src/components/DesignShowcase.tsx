@@ -2,18 +2,13 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Maximize2, Download, Code } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
-import LuminousCurrentsDesign from './LuminousCurrentsDesign';
-import BioluminescentBloomDesign from './BioluminescentBloomDesign';
-import ShatteredGeometryDesign from './ShatteredGeometryDesign';
-import DeltaVeilDesign from './DeltaVeilDesign';
-import BioluminescentBeachDesign from './BioluminescentBeachDesign';
 
 interface DesignInfo {
   id: string;
   name: string;
   tagline: string;
   description: string;
-  component: React.ComponentType<{ isVisible: boolean }>;
+  imageUrl?: string;
   colors: string[];
   techniques: string[];
 }
@@ -24,7 +19,7 @@ const designs: Record<string, DesignInfo> = {
     name: 'Luminous Currents',
     tagline: 'Serene, innovative fluid dynamics',
     description: 'A soft, flowing, translucent wave design with gentle currents that move elegantly across the screen. Perfect for innovative brands seeking sophisticated, fluid aesthetics.',
-    component: LuminousCurrentsDesign,
+    imageUrl: '/src/assets/@manifestillusions.png',
     colors: ['#FFD700', '#FFA500', '#FF6B35', '#8A2BE2', '#4169E1'],
     techniques: ['Fluid SVG animations', 'Cosmic particle systems', 'Multi-layer gradients', 'Flowing current paths']
   },
@@ -33,7 +28,6 @@ const designs: Record<string, DesignInfo> = {
     name: 'Reactor-X',
     tagline: 'Bio-luminescent organic growth',
     description: 'Organic, asymmetrical shapes that bloom from central points with soft, pulsating bioluminescent glow. Perfect for innovative tech and natural futurism brands.',
-    component: BioluminescentBloomDesign,
     colors: ['#00FFFF', '#0080FF', '#8A2BE2', '#00CED1', '#34D399'],
     techniques: ['Organic growth patterns', 'Bioluminescent effects', 'SVG morphing paths', 'Pulsating animations']
   },
@@ -42,7 +36,6 @@ const designs: Record<string, DesignInfo> = {
     name: 'Arc-7',
     tagline: 'Shattered geometry precision',
     description: 'Premium 3D glass shards suspended in space with realistic light reflections and refractions. Perfect for luxury brands and sophisticated agency presence.',
-    component: ShatteredGeometryDesign,
     colors: ['#3B82F6', '#A855F7', '#0EA5E9', '#FFFFFF'],
     techniques: ['3D glass effects', 'Light reflections', 'Precision geometry', 'Crystal formations']
   },
@@ -51,7 +44,6 @@ const designs: Record<string, DesignInfo> = {
     name: 'Delta Veil',
     tagline: 'Old-world luxury and opulence',
     description: 'Museum-quality design featuring impeccable marble textures, burnished gold details, and fine silk elements. Embodies timeless sophistication of old money estates.',
-    component: DeltaVeilDesign,
     colors: ['#C1A875', '#F8E2B5', '#B99762', '#2E2B25'],
     techniques: ['Marble textures', 'Gold accents', 'Silk effects', 'Luxury aesthetics']
   },
@@ -60,7 +52,6 @@ const designs: Record<string, DesignInfo> = {
     name: 'Bioluminescent Beach',
     tagline: 'Magical coastal bioluminescence',
     description: 'Breathtaking sunset beach scene with glowing bioluminescent waves. Creates an otherworldly coastal experience with realistic wave animations.',
-    component: BioluminescentBeachDesign,
     colors: ['#00FFFF', '#0080FF', '#FF6B35', '#FFD700'],
     techniques: ['Wave animations', 'Sunset gradients', 'Bioluminescent effects', 'Beach textures']
   }
@@ -72,29 +63,44 @@ const DesignShowcase: React.FC = () => {
   
   const design = designId ? designs[designId] : null;
 
+  const handleBackToHome = () => {
+    navigate('/#home');
+  };
+
   if (!design) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl text-white mb-4">Design not found</h1>
           <button
-            onClick={() => navigate('/products/hypnotic-hero-sections')}
+            onClick={handleBackToHome}
             className="text-blue-400 hover:text-blue-300 transition-colors"
           >
-            ← Back to Hero Sections
+            ← Back to Home
           </button>
         </div>
       </div>
     );
   }
 
-  const DesignComponent = design.component;
-
   return (
     <div className="min-h-screen bg-black relative overflow-hidden">
-      {/* Full-Screen Design Animation */}
+      {/* Full-Screen Design Image */}
       <div className="absolute inset-0">
-        <DesignComponent isVisible={true} />
+        {design.imageUrl ? (
+          <img 
+            src={design.imageUrl} 
+            alt={design.name}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-gray-900 to-black flex items-center justify-center">
+            <div className="text-center">
+              <div className="w-32 h-32 bg-gray-700 rounded-lg mx-auto mb-4"></div>
+              <p className="text-white">Design Preview</p>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Overlay Controls */}
@@ -102,13 +108,13 @@ const DesignShowcase: React.FC = () => {
         {/* Top Bar */}
         <div className="flex items-center justify-between p-6 pointer-events-auto">
           <motion.button
-            onClick={() => navigate('/products/hypnotic-hero-sections')}
+            onClick={handleBackToHome}
             className="flex items-center space-x-2 bg-black/80 backdrop-blur-sm text-white px-4 py-2 rounded-lg hover:bg-black/90 transition-all"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>Back to Gallery</span>
+            <span>Back to Home</span>
           </motion.button>
 
           <div className="flex items-center space-x-3">

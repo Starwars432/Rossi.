@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Shield, ArrowLeft, Check, X } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -65,7 +65,7 @@ const PrivacyPolicy: React.FC = () => {
   };
 
   const handleReturnHome = () => {
-    navigate('/');
+    navigate('/#home');
   };
 
   const handleContactClick = () => {

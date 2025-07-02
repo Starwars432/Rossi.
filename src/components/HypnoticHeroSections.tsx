@@ -2,11 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, X, Check, Star, Download, Code, Figma, Eye } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import LuminousCurrentsDesign from './LuminousCurrentsDesign';
-import BioluminescentBloomDesign from './BioluminescentBloomDesign';
-import ShatteredGeometryDesign from './ShatteredGeometryDesign';
-import DeltaVeilDesign from './DeltaVeilDesign';
-import BioluminescentBeachDesign from './BioluminescentBeachDesign';
 
 interface HeroProduct {
   id: string;
@@ -18,7 +13,7 @@ interface HeroProduct {
   price: number;
   formats: string[];
   features: string[];
-  designComponent?: React.ComponentType<{ isVisible: boolean }>;
+  imageUrl?: string;
 }
 
 const HypnoticHeroSections: React.FC = () => {
@@ -36,7 +31,7 @@ const HypnoticHeroSections: React.FC = () => {
       price: 189,
       formats: ['Figma', 'HTML/CSS', 'React', 'SVG'],
       features: ['Fluid animations', 'CSS gradients', 'Parallax effects', 'Mobile responsive', 'Copy included'],
-      designComponent: LuminousCurrentsDesign
+      imageUrl: '/src/assets/@manifestillusions.png'
     },
     {
       id: 'reactor-x',
@@ -47,8 +42,7 @@ const HypnoticHeroSections: React.FC = () => {
       category: 'E-commerce',
       price: 179,
       formats: ['Figma', 'HTML/CSS', 'Shopify'],
-      features: ['Organic animations', 'Bioluminescent effects', 'Growth patterns', 'A/B tested copy'],
-      designComponent: BioluminescentBloomDesign
+      features: ['Organic animations', 'Bioluminescent effects', 'Growth patterns', 'A/B tested copy']
     },
     {
       id: 'arc-7',
@@ -59,8 +53,7 @@ const HypnoticHeroSections: React.FC = () => {
       category: 'Agency',
       price: 199,
       formats: ['Figma', 'HTML/CSS', 'Webflow'],
-      features: ['3D glass effects', 'Light reflections', 'Precision geometry', 'Authority building'],
-      designComponent: ShatteredGeometryDesign
+      features: ['3D glass effects', 'Light reflections', 'Precision geometry', 'Authority building']
     },
     {
       id: 'delta-veil',
@@ -71,8 +64,7 @@ const HypnoticHeroSections: React.FC = () => {
       category: 'Luxury',
       price: 299,
       formats: ['Figma', 'HTML/CSS'],
-      features: ['Marble textures', 'Gold accents', 'Silk effects', 'Luxury aesthetics'],
-      designComponent: DeltaVeilDesign
+      features: ['Marble textures', 'Gold accents', 'Silk effects', 'Luxury aesthetics']
     },
     {
       id: 'bioluminescent-beach',
@@ -83,8 +75,7 @@ const HypnoticHeroSections: React.FC = () => {
       category: 'Nature',
       price: 219,
       formats: ['Figma', 'HTML/CSS', 'React', 'Vue'],
-      features: ['Wave animations', 'Sunset gradients', 'Bioluminescent effects', 'Beach textures'],
-      designComponent: BioluminescentBeachDesign
+      features: ['Wave animations', 'Sunset gradients', 'Bioluminescent effects', 'Beach textures']
     },
     {
       id: 'nexus-prime',
@@ -111,21 +102,21 @@ const HypnoticHeroSections: React.FC = () => {
   ];
 
   const handleBackToHome = () => {
-    navigate('/');
+    navigate('/#home');
   };
 
   const handleProductClick = (product: HeroProduct) => {
     setSelectedProduct(product);
   };
 
+  const handleViewShowcase = (productId: string) => {
+    navigate(`/showcase/${productId}`);
+  };
+
   const handlePurchase = (product: HeroProduct) => {
     // Handle purchase logic here
     console.log('Purchasing:', product.name);
     // This would integrate with Stripe/PayPal
-  };
-
-  const handleViewShowcase = (productId: string) => {
-    navigate(`/showcase/${productId}`);
   };
 
   return (
@@ -163,10 +154,14 @@ const HypnoticHeroSections: React.FC = () => {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden group hover:shadow-lg transition-all duration-300"
             >
-              {/* Preview Area - Always Visible */}
+              {/* Preview Area - Static Image */}
               <div className="aspect-video bg-gray-50 relative overflow-hidden">
-                {product.designComponent ? (
-                  <product.designComponent isVisible={true} />
+                {product.imageUrl ? (
+                  <img 
+                    src={product.imageUrl} 
+                    alt={product.name}
+                    className="w-full h-full object-cover"
+                  />
                 ) : (
                   <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
                     <div className="text-center">
@@ -260,8 +255,12 @@ const HypnoticHeroSections: React.FC = () => {
                 {/* Preview */}
                 <div className="space-y-4">
                   <div className="aspect-video bg-gray-50 rounded-lg overflow-hidden relative">
-                    {selectedProduct.designComponent ? (
-                      <selectedProduct.designComponent isVisible={true} />
+                    {selectedProduct.imageUrl ? (
+                      <img 
+                        src={selectedProduct.imageUrl} 
+                        alt={selectedProduct.name}
+                        className="w-full h-full object-cover"
+                      />
                     ) : (
                       <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
                         <div className="text-center">

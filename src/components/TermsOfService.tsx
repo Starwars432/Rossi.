@@ -7,7 +7,7 @@ const TermsOfService: React.FC = () => {
   const navigate = useNavigate();
 
   const handleReturnHome = () => {
-    navigate('/');
+    navigate('/#home');
   };
 
   const handleContactClick = () => {
