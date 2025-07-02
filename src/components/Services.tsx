@@ -74,6 +74,11 @@ const Services: React.FC = () => {
     navigate('/products/hypnotic-hero-sections');
   };
 
+  const handleCopyCommandClick = () => {
+    console.log('Navigating to conversion copy command page...');
+    navigate('/services/conversion-copy-command');
+  };
+
   return (
     <section id="services" className="relative py-20 px-6" data-sb-field-path="sections.1">
       {/* Enhanced Background with Gradient and Floating Elements */}
@@ -180,6 +185,8 @@ const Services: React.FC = () => {
             description="Copy should punch. We write psychologically-driven language that manipulates belief, creates urgency, and closes without asking. This isn't just writing, it's tactical persuasion. Every word placed with purpose, every line engineered for decisive results."
             fieldPath="sections.9"
             index={7}
+            onClick={handleCopyCommandClick}
+            isClickable={true}
           />
           <ServiceCard
             icon={<Video className="w-8 h-8" />}

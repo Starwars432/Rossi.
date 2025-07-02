@@ -9,6 +9,8 @@ const Footer: React.FC = () => {
   const handleServiceClick = (serviceName: string) => {
     if (serviceName === 'The First Impression Weapon: Hypnotic Hero Sections') {
       navigate('/products/hypnotic-hero-sections');
+    } else if (serviceName === 'Conversion Copy Command') {
+      navigate('/services/conversion-copy-command');
     }
     // Add more service navigation here as you build more product pages
   };
@@ -84,9 +86,12 @@ const Footer: React.FC = () => {
               </button>
             </li>
             <li>
-              <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
+              <button 
+                onClick={() => handleServiceClick('Conversion Copy Command')}
+                className="text-gray-400 hover:text-blue-400 transition-colors text-left"
+              >
                 Conversion Copy Command
-              </a>
+              </button>
             </li>
             <li>
               <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
