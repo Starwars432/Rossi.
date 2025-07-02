@@ -12,7 +12,6 @@ interface DesignInfo {
   colors: string[];
   techniques: string[];
 }
-
 const designs: Record<string, DesignInfo> = {
     imageUrl: '/src/assets/@manifestillusions.png',
     colors: ['#FFD700', '#FFA500', '#FF6B35', '#8A2BE2', '#4169E1'],
