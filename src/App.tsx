@@ -15,7 +15,6 @@ import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsOfService from './components/TermsOfService';
 import CookiePolicy from './components/CookiePolicy';
 import HypnoticHeroSections from './components/HypnoticHeroSections';
-import DesignShowcase from './components/DesignShowcase';
 import Cipher from './components/Cipher';
 import { AuthProvider } from './contexts/AuthContext';
 import { CartProvider } from './contexts/CartContext';
@@ -58,7 +57,6 @@ const AppContent = () => {
         <Route path="/terms" element={<TermsOfService />} />
         <Route path="/cookies" element={<CookiePolicy />} />
         <Route path="/products/hypnotic-hero-sections" element={<HypnoticHeroSections />} />
-        <Route path="/showcase/:designId" element={<DesignShowcase />} />
       </Routes>
       
       <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, X, Check, Star, Download, Code, Figma, Eye } from 'lucide-react';
+import { ArrowLeft, X, Check, Star, Download, Code, Figma } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface HeroProduct {
@@ -109,10 +109,6 @@ const HypnoticHeroSections: React.FC = () => {
     setSelectedProduct(product);
   };
 
-  const handleViewShowcase = (productId: string) => {
-    navigate(`/showcase/${productId}`);
-  };
-
   const handlePurchase = (product: HeroProduct) => {
     // Handle purchase logic here
     console.log('Purchasing:', product.name);
@@ -171,32 +167,18 @@ const HypnoticHeroSections: React.FC = () => {
                   </div>
                 )}
                 
-                {/* Hover Overlay with Actions */}
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
-                  <div className="opacity-0 group-hover:opacity-100 transition-opacity flex space-x-3">
-                    <motion.button
-                      onClick={() => handleViewShowcase(product.id)}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="bg-white/95 backdrop-blur-sm px-4 py-2 rounded-lg shadow-sm flex items-center space-x-2 text-gray-900 hover:bg-white transition-colors"
-                    >
-                      <Eye className="w-4 h-4" />
-                      <span className="text-sm font-medium">View Showcase</span>
-                    </motion.button>
-                    <motion.button
-                      onClick={() => handleProductClick(product)}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="bg-blue-600/95 backdrop-blur-sm px-4 py-2 rounded-lg shadow-sm flex items-center space-x-2 text-white hover:bg-blue-700 transition-colors"
-                    >
-                      <span className="text-sm font-medium">Details</span>
-                    </motion.button>
+                {/* Hover Overlay */}
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-all duration-300 flex items-center justify-center">
+                  <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="bg-white/95 backdrop-blur-sm px-4 py-2 rounded-lg shadow-sm">
+                      <span className="text-sm font-medium text-gray-900">View Details</span>
+                    </div>
                   </div>
                 </div>
               </div>
 
               {/* Product Info */}
-              <div className="p-6">
+              <div className="p-6" onClick={() => handleProductClick(product)}>
                 <div className="flex items-start justify-between mb-2">
                   <h3 className="text-lg font-semibold text-gray-900">{product.name}</h3>
                   <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
@@ -269,16 +251,6 @@ const HypnoticHeroSections: React.FC = () => {
                         </div>
                       </div>
                     )}
-                  </div>
-                  
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={() => handleViewShowcase(selectedProduct.id)}
-                      className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg transition-colors flex items-center justify-center space-x-2"
-                    >
-                      <Eye className="w-4 h-4" />
-                      <span>Full Showcase</span>
-                    </button>
                   </div>
                   
                   <div className="flex flex-wrap gap-2">
