@@ -99,6 +99,11 @@ const Services: React.FC = () => {
     navigate('/services/brand-identity-engineering');
   };
 
+  const handleDigitalDoppelgangerClick = () => {
+    console.log('Navigating to digital doppelganger page...');
+    navigate('/services/digital-doppelganger');
+  };
+
   return (
     <section id="services" className="relative py-20 px-6" data-sb-field-path="sections.1">
       {/* Enhanced Background with Gradient and Floating Elements */}
@@ -181,6 +186,8 @@ const Services: React.FC = () => {
             description="Unleash hyper-real AI assets and personas, trained and tuned to your niche, look, and message. Influence without hiring. Scale without burnout. Deploy them for content, mockups, storytelling, or complete digital dominance."
             fieldPath="sections.5"
             index={3}
+            onClick={handleDigitalDoppelgangerClick}
+            isClickable={true}
           />
           <ServiceCard
             icon={<BarChart3 className="w-8 h-8" />}
@@ -210,7 +217,7 @@ const Services: React.FC = () => {
           <ServiceCard
             icon={<PenTool className="w-8 h-8" />}
             title="Conversion Copy Command"
-            description="Copy should punch. We write psychologically-driven language that manipulates belief, creates urgency, and closes without asking. This isn't just writing, it's tactical persuasion. Every word placed with purpose, every line engineered for decisive results."
+            description="Copy should punch. We write psychologically-driven language that manipulates belief, creates urgency, and closes without asking. This isn't just writing—it's tactical persuasion. Every word placed with purpose, every line engineered for decisive results."
             fieldPath="sections.9"
             index={7}
             onClick={handleCopyCommandClick}

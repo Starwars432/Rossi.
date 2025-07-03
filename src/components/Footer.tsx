@@ -19,6 +19,8 @@ const Footer: React.FC = () => {
       navigate('/services/visual-warfare');
     } else if (serviceName === 'Brand Identity Engineering') {
       navigate('/services/brand-identity-engineering');
+    } else if (serviceName === 'Digital Doppelgänger') {
+      navigate('/services/digital-doppelganger');
     }
     // Add more service navigation here as you build more product pages
   };
@@ -80,9 +82,12 @@ const Footer: React.FC = () => {
               </button>
             </li>
             <li>
-              <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
+              <button 
+                onClick={() => handleServiceClick('Digital Doppelgänger')}
+                className="text-gray-400 hover:text-blue-400 transition-colors text-left"
+              >
                 Digital Doppelgänger
-              </a>
+              </button>
             </li>
             <li>
               <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
