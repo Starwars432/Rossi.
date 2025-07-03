@@ -1,8 +1,14 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
+
 import Navigation from './components/Navigation';
 import Hero from './components/Hero';
-import { ServicesToFAQDivider } from './components/ScrollDividers';
 import Services from './components/Services';
 import FAQ from './components/FAQ';
 import CTASection from './components/CTASection';
@@ -24,14 +30,26 @@ import DigitalDoppelganger from './components/DigitalDoppelganger';
 import ShortformAdKillshots from './components/ShortformAdKillshots';
 import RevenueDigitalWarfare from './components/RevenueDigitalWarfare';
 import Cipher from './components/Cipher';
+
+import { ServicesToFAQDivider } from './components/ScrollDividers';
 import { AuthProvider } from './contexts/AuthContext';
 import { CartProvider } from './contexts/CartContext';
 
 const ScrollToTop = () => {
   const location = useLocation();
-  
+
   useEffect(() => {
-    window.scrollTo(0, 0);
+    if (location.hash) {
+      // Scroll to anchor on hash navigation
+      setTimeout(() => {
+        const el = document.querySelector(location.hash);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 0);
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }, [location]);
 
   return null;
@@ -42,23 +60,24 @@ const AppContent = () => {
 
   return (
     <div className="min-h-screen bg-black text-white relative font-serif overflow-x-hidden">
-      <Navigation 
-        onLoginClick={() => setIsLoginOpen(true)}
-      />
-      
+      <Navigation onLoginClick={() => setIsLoginOpen(true)} />
+
       <Routes>
-        <Route path="/" element={
-          <>
-            <Hero />
-            <Services />
-            <ServicesToFAQDivider />
-            <FAQ />
-            <CTASection />
-            <CustomDesign />
-            <Contact />
-            <Footer />
-          </>
-        } />
+        <Route
+          path="/"
+          element={
+            <>
+              <Hero />
+              <Services />
+              <ServicesToFAQDivider />
+              <FAQ />
+              <CTASection />
+              <CustomDesign />
+              <Contact />
+              <Footer />
+            </>
+          }
+        />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/purchases" element={<ProfilePage />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
@@ -74,16 +93,16 @@ const AppContent = () => {
         <Route path="/services/shortform-ad-killshots" element={<ShortformAdKillshots />} />
         <Route path="/services/revenue-digital-warfare" element={<RevenueDigitalWarfare />} />
       </Routes>
-      
+
       <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
-      
-      {/* Cipher AI Assistant - Global */}
+
+      {/* Global AI Assistant */}
       <Cipher />
     </div>
   );
 };
 
-function App() {
+const App = () => {
   return (
     <Router>
       <AuthProvider>
@@ -94,6 +113,6 @@ function App() {
       </AuthProvider>
     </Router>
   );
-}
+};
 
 export default App;
