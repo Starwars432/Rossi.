@@ -17,6 +17,7 @@ import CookiePolicy from './components/CookiePolicy';
 import HypnoticHeroSections from './components/HypnoticHeroSections';
 import ConversionCopyCommand from './components/ConversionCopyCommand';
 import ApparelArsenal from './components/ApparelArsenal';
+import FaviconFingerprints from './components/FaviconFingerprints';
 import Cipher from './components/Cipher';
 import { AuthProvider } from './contexts/AuthContext';
 import { CartProvider } from './contexts/CartContext';
@@ -61,6 +62,7 @@ const AppContent = () => {
         <Route path="/products/hypnotic-hero-sections" element={<HypnoticHeroSections />} />
         <Route path="/services/conversion-copy-command" element={<ConversionCopyCommand />} />
         <Route path="/services/apparel-arsenal" element={<ApparelArsenal />} />
+        <Route path="/services/favicon-fingerprints" element={<FaviconFingerprints />} />
       </Routes>
       
       <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />

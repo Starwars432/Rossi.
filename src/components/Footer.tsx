@@ -13,6 +13,8 @@ const Footer: React.FC = () => {
       navigate('/services/conversion-copy-command');
     } else if (serviceName === 'Apparel Arsenal: Clothing Design') {
       navigate('/services/apparel-arsenal');
+    } else if (serviceName === 'Favicon Fingerprints') {
+      navigate('/services/favicon-fingerprints');
     }
     // Add more service navigation here as you build more product pages
   };
@@ -78,9 +80,12 @@ const Footer: React.FC = () => {
               </a>
             </li>
             <li>
-              <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
+              <button 
+                onClick={() => handleServiceClick('Favicon Fingerprints')}
+                className="text-gray-400 hover:text-blue-400 transition-colors text-left"
+              >
                 Favicon Fingerprints
-              </a>
+              </button>
             </li>
             <li>
               <button 

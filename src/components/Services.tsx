@@ -84,6 +84,11 @@ const Services: React.FC = () => {
     navigate('/services/apparel-arsenal');
   };
 
+  const handleFaviconFingerprintsClick = () => {
+    console.log('Navigating to favicon fingerprints page...');
+    navigate('/services/favicon-fingerprints');
+  };
+
   return (
     <section id="services" className="relative py-20 px-6" data-sb-field-path="sections.1">
       {/* Enhanced Background with Gradient and Floating Elements */}
@@ -176,11 +181,13 @@ const Services: React.FC = () => {
             description="It's not a pixel, it's your presence. Our favicons are iconic, instantly recognizable, and built to brand you on every browser bar, commanding recognition from the corner of their eye."
             fieldPath="sections.7"
             index={5}
+            onClick={handleFaviconFingerprintsClick}
+            isClickable={true}
           />
           <ServiceCard
             icon={<FileText className="w-8 h-8" />}
             title="The First Impression Weapon: Hypnotic Hero Sections"
-            description="Your homepage either captivates, or evaporates. Our hero sections are high-performance visuals that stop users and seduce clicks, turning fleeting curiosity into concrete conversions."
+            description="Your homepage either captivates or evaporates. Our hero sections are high-performance visuals that stop users and seduce clicks, turning fleeting curiosity into concrete conversions."
             fieldPath="sections.8"
             index={6}
             onClick={handleHeroSectionsClick}
