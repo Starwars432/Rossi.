@@ -94,11 +94,6 @@ const Services: React.FC = () => {
     navigate('/services/visual-warfare');
   };
   
-  const handleBrandIdentityClick = () => {
-    console.log('Navigating to brand identity engineering page...');
-    navigate('/services/brand-identity-engineering');
-  };
-
   const handleDigitalDoppelgangerClick = () => {
     console.log('Navigating to digital doppelganger page...');
     navigate('/services/digital-doppelganger');
@@ -178,8 +173,6 @@ const Services: React.FC = () => {
             description="More than a logo. We build visual systems that anchor memory, build trust, and command presence. Become unforgettable in a world that forgets everything."
             fieldPath="sections.3"
             index={1}
-            onClick={handleBrandIdentityClick}
-            isClickable={true}
           />
           <ServiceCard
             icon={<ShoppingBag className="w-8 h-8" />}
