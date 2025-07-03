@@ -191,7 +191,6 @@ const ApparelArsenal: React.FC = () => {
         <div className="max-w-7xl mx-auto px-8 py-12">
           <div className="text-center">
             <p className="text-gray-400 text-sm font-light tracking-wide">
-              © 2024 • Design Studio
             </p>
           </div>
         </div>
