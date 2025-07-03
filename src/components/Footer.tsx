@@ -23,6 +23,8 @@ const Footer: React.FC = () => {
       navigate('/services/digital-doppelganger');
     } else if (serviceName === 'Shortform Ad Killshots') {
       navigate('/services/shortform-ad-killshots');
+    } else if (serviceName === 'Revenue-Driven Digital Warfare') {
+      navigate('/services/revenue-digital-warfare');
     }
     // Add more service navigation here as you build more product pages
   };
@@ -92,9 +94,12 @@ const Footer: React.FC = () => {
               </button>
             </li>
             <li>
-              <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
+              <button 
+                onClick={() => handleServiceClick('Revenue-Driven Digital Warfare')}
+                className="text-gray-400 hover:text-blue-400 transition-colors text-left"
+              >
                 Revenue-Driven Digital Warfare
-              </a>
+              </button>
             </li>
             <li>
               <button 

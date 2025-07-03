@@ -109,6 +109,11 @@ const Services: React.FC = () => {
     navigate('/services/shortform-ad-killshots');
   };
 
+  const handleRevenueWarfareClick = () => {
+    console.log('Navigating to revenue digital warfare page...');
+    navigate('/services/revenue-digital-warfare');
+  };
+
   return (
     <section id="services" className="relative py-20 px-6" data-sb-field-path="sections.1">
       {/* Enhanced Background with Gradient and Floating Elements */}
@@ -200,6 +205,8 @@ const Services: React.FC = () => {
             description="This isn't marketing. This is tactical manipulation of attention and conversion. We craft and execute surgical digital operations—ads, funnels, and content—built to seize attention and steal market share."
             fieldPath="sections.6"
             index={4}
+            onClick={handleRevenueWarfareClick}
+            isClickable={true}
           />
           <ServiceCard
             icon={<Sparkles className="w-8 h-8" />}
