@@ -452,7 +452,7 @@ const ConversionCopyCommand: React.FC = () => {
             className="text-gray-600"
           >
             We'll audit your current copy and return a short report — free, no obligation.
-          </p>
+          </motion.p>
         </div>
       </section>
     </div>
