@@ -93,6 +93,11 @@ const Services: React.FC = () => {
     console.log('Navigating to visual warfare page...');
     navigate('/services/visual-warfare');
   };
+  
+  const handleBrandIdentityClick = () => {
+    console.log('Navigating to brand identity engineering page...');
+    navigate('/services/brand-identity-engineering');
+  };
 
   return (
     <section id="services" className="relative py-20 px-6" data-sb-field-path="sections.1">
@@ -158,6 +163,8 @@ const Services: React.FC = () => {
             description="More than a logo. We build visual systems that anchor memory, build trust, and command presence. Become unforgettable in a world that forgets everything."
             fieldPath="sections.3"
             index={1}
+            onClick={handleBrandIdentityClick}
+            isClickable={true}
           />
           <ServiceCard
             icon={<ShoppingBag className="w-8 h-8" />}

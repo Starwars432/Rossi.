@@ -17,6 +17,8 @@ const Footer: React.FC = () => {
       navigate('/services/favicon-fingerprints');
     } else if (serviceName === 'Visual Warfare: Product Ad Design') {
       navigate('/services/visual-warfare');
+    } else if (serviceName === 'Brand Identity Engineering') {
+      navigate('/services/brand-identity-engineering');
     }
     // Add more service navigation here as you build more product pages
   };
@@ -62,9 +64,12 @@ const Footer: React.FC = () => {
               </button>
             </li>
             <li>
-              <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
+              <button 
+                onClick={() => handleServiceClick('Brand Identity Engineering')}
+                className="text-gray-400 hover:text-blue-400 transition-colors text-left"
+              >
                 Brand Identity Engineering
-              </a>
+              </button>
             </li>
             <li>
               <button 
