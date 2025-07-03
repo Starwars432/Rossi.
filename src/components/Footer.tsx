@@ -15,6 +15,8 @@ const Footer: React.FC = () => {
       navigate('/services/apparel-arsenal');
     } else if (serviceName === 'Favicon Fingerprints') {
       navigate('/services/favicon-fingerprints');
+    } else if (serviceName === 'Visual Warfare: Product Ad Design') {
+      navigate('/services/visual-warfare');
     }
     // Add more service navigation here as you build more product pages
   };
@@ -52,9 +54,12 @@ const Footer: React.FC = () => {
           <h3 className="text-lg font-semibold mb-4">Services</h3>
           <ul className="space-y-2">
             <li>
-              <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
+              <button 
+                onClick={() => handleServiceClick('Visual Warfare: Product Ad Design')}
+                className="text-gray-400 hover:text-blue-400 transition-colors text-left"
+              >
                 Visual Warfare: Product Ad Design
-              </a>
+              </button>
             </li>
             <li>
               <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">

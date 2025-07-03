@@ -89,6 +89,11 @@ const Services: React.FC = () => {
     navigate('/services/favicon-fingerprints');
   };
 
+  const handleVisualWarfareClick = () => {
+    console.log('Navigating to visual warfare page...');
+    navigate('/services/visual-warfare');
+  };
+
   return (
     <section id="services" className="relative py-20 px-6" data-sb-field-path="sections.1">
       {/* Enhanced Background with Gradient and Floating Elements */}
@@ -144,6 +149,8 @@ const Services: React.FC = () => {
             description="Not pretty, powerful. These visuals are engineered for dopamine, not decoration. We craft thumb-breaking ad creatives designed to hijack attention, burn into memory, and drive action across all digital fronts."
             fieldPath="sections.2"
             index={0}
+            onClick={handleVisualWarfareClick}
+            isClickable={true}
           />
           <ServiceCard
             icon={<Palette className="w-8 h-8" />}

@@ -18,6 +18,7 @@ import HypnoticHeroSections from './components/HypnoticHeroSections';
 import ConversionCopyCommand from './components/ConversionCopyCommand';
 import ApparelArsenal from './components/ApparelArsenal';
 import FaviconFingerprints from './components/FaviconFingerprints';
+import VisualWarfare from './components/VisualWarfare';
 import Cipher from './components/Cipher';
 import { AuthProvider } from './contexts/AuthContext';
 import { CartProvider } from './contexts/CartContext';
@@ -63,6 +64,7 @@ const AppContent = () => {
         <Route path="/services/conversion-copy-command" element={<ConversionCopyCommand />} />
         <Route path="/services/apparel-arsenal" element={<ApparelArsenal />} />
         <Route path="/services/favicon-fingerprints" element={<FaviconFingerprints />} />
+        <Route path="/services/visual-warfare" element={<VisualWarfare />} />
       </Routes>
       
       <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
