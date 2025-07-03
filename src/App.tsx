@@ -21,6 +21,7 @@ import FaviconFingerprints from './components/FaviconFingerprints';
 import VisualWarfare from './components/VisualWarfare';
 import BrandIdentityEngineering from './components/BrandIdentityEngineering';
 import DigitalDoppelganger from './components/DigitalDoppelganger';
+import ShortformAdKillshots from './components/ShortformAdKillshots';
 import Cipher from './components/Cipher';
 import { AuthProvider } from './contexts/AuthContext';
 import { CartProvider } from './contexts/CartContext';
@@ -69,6 +70,7 @@ const AppContent = () => {
         <Route path="/services/visual-warfare" element={<VisualWarfare />} />
         <Route path="/services/brand-identity-engineering" element={<BrandIdentityEngineering />} />
         <Route path="/services/digital-doppelganger" element={<DigitalDoppelganger />} />
+        <Route path="/services/shortform-ad-killshots" element={<ShortformAdKillshots />} />
       </Routes>
       
       <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />

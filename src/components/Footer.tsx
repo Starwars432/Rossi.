@@ -21,6 +21,8 @@ const Footer: React.FC = () => {
       navigate('/services/brand-identity-engineering');
     } else if (serviceName === 'Digital Doppelgänger') {
       navigate('/services/digital-doppelganger');
+    } else if (serviceName === 'Shortform Ad Killshots') {
+      navigate('/services/shortform-ad-killshots');
     }
     // Add more service navigation here as you build more product pages
   };
@@ -119,9 +121,12 @@ const Footer: React.FC = () => {
               </button>
             </li>
             <li>
-              <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
+              <button 
+                onClick={() => handleServiceClick('Shortform Ad Killshots')}
+                className="text-gray-400 hover:text-blue-400 transition-colors text-left"
+              >
                 Shortform Ad Killshots
-              </a>
+              </button>
             </li>
           </ul>
         </div>

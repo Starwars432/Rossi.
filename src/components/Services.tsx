@@ -103,6 +103,11 @@ const Services: React.FC = () => {
     console.log('Navigating to digital doppelganger page...');
     navigate('/services/digital-doppelganger');
   };
+  
+  const handleShortformAdClick = () => {
+    console.log('Navigating to shortform ad killshots page...');
+    navigate('/services/shortform-ad-killshots');
+  };
 
   return (
     <section id="services" className="relative py-20 px-6" data-sb-field-path="sections.1">
@@ -229,6 +234,8 @@ const Services: React.FC = () => {
             description="No fluff. No filler. 15–30 second digital ads designed for short attention spans with long-term memory impact. Optimized for TikTok, Reels, YouTube Shorts, and high-conversion ad platforms."
             fieldPath="sections.10"
             index={8}
+            onClick={handleShortformAdClick}
+            isClickable={true}
           />
         </div>
       </div>
