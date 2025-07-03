@@ -79,6 +79,11 @@ const Services: React.FC = () => {
     navigate('/services/conversion-copy-command');
   };
 
+  const handleApparelArsenalClick = () => {
+    console.log('Navigating to apparel arsenal page...');
+    navigate('/services/apparel-arsenal');
+  };
+
   return (
     <section id="services" className="relative py-20 px-6" data-sb-field-path="sections.1">
       {/* Enhanced Background with Gradient and Floating Elements */}
@@ -148,6 +153,8 @@ const Services: React.FC = () => {
             description="Streetwear meets storytelling. We design clothing that says more than your bio ever could. Crafted for conversion, culture, and clout. Full-scale design + merchandising strategies for streetwear, creator drops, and brandwear with meaning."
             fieldPath="sections.4"
             index={2}
+            onClick={handleApparelArsenalClick}
+            isClickable={true}
           />
           <ServiceCard
             icon={<Brain className="w-8 h-8" />}

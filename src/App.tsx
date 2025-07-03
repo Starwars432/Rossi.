@@ -16,6 +16,7 @@ import TermsOfService from './components/TermsOfService';
 import CookiePolicy from './components/CookiePolicy';
 import HypnoticHeroSections from './components/HypnoticHeroSections';
 import ConversionCopyCommand from './components/ConversionCopyCommand';
+import ApparelArsenal from './components/ApparelArsenal';
 import Cipher from './components/Cipher';
 import { AuthProvider } from './contexts/AuthContext';
 import { CartProvider } from './contexts/CartContext';
@@ -59,6 +60,7 @@ const AppContent = () => {
         <Route path="/cookies" element={<CookiePolicy />} />
         <Route path="/products/hypnotic-hero-sections" element={<HypnoticHeroSections />} />
         <Route path="/services/conversion-copy-command" element={<ConversionCopyCommand />} />
+        <Route path="/services/apparel-arsenal" element={<ApparelArsenal />} />
       </Routes>
       
       <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />

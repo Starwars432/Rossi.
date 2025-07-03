@@ -11,6 +11,8 @@ const Footer: React.FC = () => {
       navigate('/products/hypnotic-hero-sections');
     } else if (serviceName === 'Conversion Copy Command') {
       navigate('/services/conversion-copy-command');
+    } else if (serviceName === 'Apparel Arsenal: Clothing Design') {
+      navigate('/services/apparel-arsenal');
     }
     // Add more service navigation here as you build more product pages
   };
@@ -58,9 +60,12 @@ const Footer: React.FC = () => {
               </a>
             </li>
             <li>
-              <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
+              <button 
+                onClick={() => handleServiceClick('Apparel Arsenal: Clothing Design')}
+                className="text-gray-400 hover:text-blue-400 transition-colors text-left"
+              >
                 Apparel Arsenal: Clothing Design
-              </a>
+              </button>
             </li>
             <li>
               <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
