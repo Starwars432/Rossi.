@@ -169,8 +169,8 @@ const Services: React.FC = () => {
           />
           <ServiceCard
             icon={<Palette className="w-8 h-8" />}
-            title="Brand Identity Engineering"
-            description="More than a logo. We build visual systems that anchor memory, build trust, and command presence. Become unforgettable in a world that forgets everything."
+            title="Custom Ai chatbot"
+            description=Coming Soon"
             fieldPath="sections.3"
             index={1}
           />
