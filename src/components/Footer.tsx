@@ -69,7 +69,7 @@ const Footer: React.FC = () => {
             </li>
             <li>
               <span className="text-gray-400">
-                Brand Identity Engineering
+                Custom AI Chatbot
               </span>
             </li>
             <li>
