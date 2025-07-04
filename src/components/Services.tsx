@@ -160,7 +160,7 @@ const Services: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <ServiceCard
             icon={<ImageIcon className="w-8 h-8" />}
-            title="Visual Warfare: Product Ad Design"
+            title="Visual Warfare: Product Ad Photoshoot"
             description="Not pretty, powerful. These visuals are engineered for dopamine, not decoration. We craft thumb-breaking ad creatives designed to hijack attention, burn into memory, and drive action across all digital fronts."
             fieldPath="sections.2"
             index={0}
