@@ -17,8 +17,6 @@ const Footer: React.FC = () => {
       navigate('/services/favicon-fingerprints');
     } else if (serviceName === 'Visual Warfare: Product Ad Design') {
       navigate('/services/visual-warfare');
-    } else if (serviceName === 'Brand Identity Engineering') {
-      navigate('/services/brand-identity-engineering');
     } else if (serviceName === 'Digital Doppelgänger') {
       navigate('/services/digital-doppelganger');
     } else if (serviceName === 'Shortform Ad Killshots') {
@@ -70,12 +68,9 @@ const Footer: React.FC = () => {
               </button>
             </li>
             <li>
-              <button 
-                onClick={() => handleServiceClick('Brand Identity Engineering')}
-                className="text-gray-400 hover:text-blue-400 transition-colors text-left"
-              >
+              <span className="text-gray-400">
                 Brand Identity Engineering
-              </button>
+              </span>
             </li>
             <li>
               <button 

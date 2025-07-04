@@ -25,7 +25,6 @@ import ConversionCopyCommand from './components/ConversionCopyCommand';
 import ApparelArsenal from './components/ApparelArsenal';
 import FaviconFingerprints from './components/FaviconFingerprints';
 import VisualWarfare from './components/VisualWarfare';
-import BrandIdentityEngineering from './components/BrandIdentityEngineering';
 import ShortformAdKillshots from './components/ShortformAdKillshots';
 import RevenueDigitalWarfare from './components/RevenueDigitalWarfare';
 import Cipher from './components/Cipher';
@@ -87,7 +86,6 @@ const AppContent = () => {
         <Route path="/services/apparel-arsenal" element={<ApparelArsenal />} />
         <Route path="/services/favicon-fingerprints" element={<FaviconFingerprints />} />
         <Route path="/services/visual-warfare" element={<VisualWarfare />} />
-        <Route path="/services/brand-identity-engineering" element={<BrandIdentityEngineering />} />
         <Route path="/services/shortform-ad-killshots" element={<ShortformAdKillshots />} />
         <Route path="/services/revenue-digital-warfare" element={<RevenueDigitalWarfare />} />
       </Routes>
