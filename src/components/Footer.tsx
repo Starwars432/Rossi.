@@ -64,7 +64,7 @@ const Footer: React.FC = () => {
                 onClick={() => handleServiceClick('Visual Warfare: Product Ad Design')}
                 className="text-gray-400 hover:text-blue-400 transition-colors text-left"
               >
-                Visual Warfare: Product Ad Photoshot
+                Visual Warfare: Product Ad Photoshoot
               </button>
             </li>
             <li>
