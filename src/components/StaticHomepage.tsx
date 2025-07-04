@@ -149,8 +149,8 @@ export default function StaticHomepage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a2 2 0 002-2V5z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-blue-400">Brand Identity Engineering</h3>
-              <p className="text-gray-300">More than a logo. We build visual systems that anchor memory, build trust, and command presence. Become unforgettable in a world that forgets everything.</p>
+              <h3 className="text-xl font-semibold mb-2 text-blue-400">Custom Ai Chatbot</h3>
+              <p className="text-gray-300">Coming Soon!.</p>
             </div>
 
             <div className="service-card bg-black/50 backdrop-blur-lg p-6 rounded-lg border border-blue-400/20 hover:border-blue-400/50 transition-all">
