@@ -139,7 +139,7 @@ export default function StaticHomepage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-blue-400">Visual Warfare: Product Ad Design</h3>
+              <h3 className="text-xl font-semibold mb-2 text-blue-400">Visual Warfare: Product Ad Photoshoot</h3>
               <p className="text-gray-300">Not pretty—powerful. These visuals are engineered for dopamine, not decoration. We craft thumb-breaking ad creatives designed to hijack attention, burn into memory, and drive action across all digital fronts.</p>
             </div>
 
