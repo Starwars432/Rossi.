@@ -170,7 +170,7 @@ const Services: React.FC = () => {
           <ServiceCard
             icon={<Palette className="w-8 h-8" />}
             title="Custom Ai chatbot"
-            description=Coming Soon"
+            description="Coming Soon"
             fieldPath="sections.3"
             index={1}
           />
