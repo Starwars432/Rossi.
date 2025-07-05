@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Upload, Zap, Star, CheckCircle, Camera, Palette, Sparkles, Send } from 'lucide-react';
+import { Upload, Zap, Star, CheckCircle, Camera, Palette, Sparkles, Send, ArrowRight } from 'lucide-react';
 
 const VisualWarfare = () => {
   const [formData, setFormData] = useState({
@@ -14,11 +14,8 @@ const VisualWarfare = () => {
     timeline: '',
     additionalRequests: ''
   });
-  const [selectedFiles, setSelectedFiles] = useState([]);
 
-  const handleBackToHome = () => {
-    window.location.href = '/#home';
-  };
+  const [selectedFiles, setSelectedFiles] = useState([]);
 
   const handleInputChange = (e) => {
     setFormData({
@@ -117,19 +114,6 @@ const VisualWarfare = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
-      {/* Header */}
-      <header className="bg-black border-b border-gray-800">
-        <div className="max-w-7xl mx-auto px-6 py-6">
-          <button 
-            onClick={handleBackToHome}
-            className="inline-flex items-center text-gray-400 hover:text-white transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Home
-          </button>
-        </div>
-      </header>
-
       {/* Hero Section */}
       <section className="py-20 px-6 bg-gradient-to-br from-purple-900/20 via-gray-900 to-blue-900/20">
         <div className="max-w-6xl mx-auto text-center">
@@ -172,37 +156,49 @@ const VisualWarfare = () => {
             </p>
           </div>
 
+          {/* Product Showcase Grid with Arrows */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {exampleProjects.map((project, index) => (
-              <div key={index} className="bg-gray-800 rounded-xl overflow-hidden border border-gray-700 hover:border-purple-500/50 transition-all group">
-                <div className="relative h-48 bg-gradient-to-br from-gray-700 to-gray-600 flex items-center justify-center">
-                  <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-pink-600/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                  <Camera className="w-12 h-12 text-gray-400 group-hover:text-purple-400 transition-colors" />
-                  <div className="absolute top-4 right-4 bg-purple-600 text-white text-xs px-2 py-1 rounded">
-                    {project.category}
-                  </div>
-                </div>
-                
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold mb-3 text-white">{project.title}</h3>
-                  
-                  <div className="space-y-2 mb-4">
-                    <div className="flex items-start">
-                      <span className="text-red-400 text-sm mr-2">Before:</span>
-                      <span className="text-gray-400 text-sm">{project.beforeStyle}</span>
-                    </div>
-                    <div className="flex items-start">
-                      <span className="text-green-400 text-sm mr-2">After:</span>
-                      <span className="text-gray-300 text-sm">{project.afterStyle}</span>
+              <React.Fragment key={index}>
+                <div className="bg-gray-800 rounded-xl overflow-hidden border border-gray-700 hover:border-purple-500/50 transition-all group">
+                  <div className="relative h-48 bg-gradient-to-br from-gray-700 to-gray-600 flex items-center justify-center">
+                    <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-pink-600/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <Camera className="w-12 h-12 text-gray-400 group-hover:text-purple-400 transition-colors" />
+                    <div className="absolute top-4 right-4 bg-purple-600 text-white text-xs px-2 py-1 rounded">
+                      {project.category}
                     </div>
                   </div>
                   
-                  <div className="flex items-center text-sm text-purple-400">
-                    <Zap className="w-4 h-4 mr-1" />
-                    {project.impact}
+                  <div className="p-6">
+                    <h3 className="text-xl font-semibold mb-3 text-white">{project.title}</h3>
+                    
+                    <div className="space-y-2 mb-4">
+                      <div className="flex items-start">
+                        <span className="text-red-400 text-sm mr-2">Before:</span>
+                        <span className="text-gray-400 text-sm">{project.beforeStyle}</span>
+                      </div>
+                      <div className="flex items-start">
+                        <span className="text-green-400 text-sm mr-2">After:</span>
+                        <span className="text-gray-300 text-sm">{project.afterStyle}</span>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center text-sm text-purple-400">
+                      <Zap className="w-4 h-4 mr-1" />
+                      {project.impact}
+                    </div>
                   </div>
                 </div>
-              </div>
+
+                {/* Add arrows between specific pairs */}
+                {(index === 0 || index === 2 || index === 4) && index < exampleProjects.length - 1 && (
+                  <div className="hidden lg:flex items-center justify-center">
+                    <div className="bg-gradient-to-r from-purple-600 to-pink-600 p-3 rounded-full">
+                      <ArrowRight className="w-6 h-6 text-white" />
+                    </div>
+                  </div>
+                )}
+              </React.Fragment>
             ))}
           </div>
         </div>
@@ -215,7 +211,6 @@ const VisualWarfare = () => {
             <h2 className="text-4xl font-bold mb-4 text-white">How It Works</h2>
             <p className="text-xl text-gray-400">Simple process, stunning results</p>
           </div>
-
           <div className="grid md:grid-cols-3 gap-8">
             {processSteps.map((step, index) => (
               <div key={index} className="text-center">
@@ -237,8 +232,7 @@ const VisualWarfare = () => {
             <h2 className="text-4xl font-bold mb-4 text-white">Submit Your Product</h2>
             <p className="text-xl text-gray-400">Tell us about your project and we'll create something amazing</p>
           </div>
-
-          <div onSubmit={handleSubmit} className="bg-gray-800 rounded-xl p-8 border border-gray-700">
+          <form onSubmit={handleSubmit} className="bg-gray-800 rounded-xl p-8 border border-gray-700">
             <div className="grid md:grid-cols-2 gap-6 mb-6">
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">Product Name</label>
@@ -409,7 +403,7 @@ const VisualWarfare = () => {
               <Send className="w-5 h-5 mr-2" />
               Submit Your Project
             </button>
-          </div>
+          </form>
         </div>
       </section>
 
