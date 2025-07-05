@@ -31,7 +31,6 @@ const VisualWarfare = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission logic here
     console.log('Form submitted:', formData, selectedFiles);
     alert('Your project has been submitted! We\'ll get back to you within 24 hours.');
   };
@@ -114,6 +113,7 @@ const VisualWarfare = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
+
       {/* Hero Section */}
       <section className="py-20 px-6 bg-gradient-to-br from-purple-900/20 via-gray-900 to-blue-900/20">
         <div className="max-w-6xl mx-auto text-center">
@@ -126,15 +126,14 @@ const VisualWarfare = () => {
           <p className="text-lg text-gray-400 mb-12 max-w-3xl mx-auto">
             We create eye-catching product backgrounds that make your items stand out in any market. From e-commerce to social media, we've got you covered.
           </p>
-          
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button 
+            <button
               onClick={() => document.getElementById('examples').scrollIntoView({ behavior: 'smooth' })}
               className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 rounded-lg text-lg font-medium hover:from-purple-700 hover:to-pink-700 transition-all shadow-lg transform hover:scale-105"
             >
               View Our Work
             </button>
-            <button 
+            <button
               onClick={() => document.getElementById('submit-form').scrollIntoView({ behavior: 'smooth' })}
               className="bg-gray-800 text-white px-8 py-4 rounded-lg text-lg font-medium hover:bg-gray-700 transition-all border border-gray-700 hover:border-gray-600"
             >
@@ -156,7 +155,6 @@ const VisualWarfare = () => {
             </p>
           </div>
 
-          {/* Product Showcase Grid with Arrows */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {exampleProjects.map((project, index) => (
               <React.Fragment key={index}>
@@ -168,10 +166,9 @@ const VisualWarfare = () => {
                       {project.category}
                     </div>
                   </div>
-                  
+
                   <div className="p-6">
                     <h3 className="text-xl font-semibold mb-3 text-white">{project.title}</h3>
-                    
                     <div className="space-y-2 mb-4">
                       <div className="flex items-start">
                         <span className="text-red-400 text-sm mr-2">Before:</span>
@@ -182,7 +179,6 @@ const VisualWarfare = () => {
                         <span className="text-gray-300 text-sm">{project.afterStyle}</span>
                       </div>
                     </div>
-                    
                     <div className="flex items-center text-sm text-purple-400">
                       <Zap className="w-4 h-4 mr-1" />
                       {project.impact}
@@ -190,7 +186,6 @@ const VisualWarfare = () => {
                   </div>
                 </div>
 
-                {/* Add arrows between specific pairs */}
                 {(index === 0 || index === 2 || index === 4) && index < exampleProjects.length - 1 && (
                   <div className="hidden lg:flex items-center justify-center">
                     <div className="bg-gradient-to-r from-purple-600 to-pink-600 p-3 rounded-full">
@@ -204,13 +199,14 @@ const VisualWarfare = () => {
         </div>
       </section>
 
-      {/* Process Section */}
+     {/* Process Section */}
       <section className="py-20 px-6 bg-black">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4 text-white">How It Works</h2>
             <p className="text-xl text-gray-400">Simple process, stunning results</p>
           </div>
+
           <div className="grid md:grid-cols-3 gap-8">
             {processSteps.map((step, index) => (
               <div key={index} className="text-center">
@@ -232,7 +228,8 @@ const VisualWarfare = () => {
             <h2 className="text-4xl font-bold mb-4 text-white">Submit Your Product</h2>
             <p className="text-xl text-gray-400">Tell us about your project and we'll create something amazing</p>
           </div>
-          <form onSubmit={handleSubmit} className="bg-gray-800 rounded-xl p-8 border border-gray-700">
+
+          <div onSubmit={handleSubmit} className="bg-gray-800 rounded-xl p-8 border border-gray-700">
             <div className="grid md:grid-cols-2 gap-6 mb-6">
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">Product Name</label>
@@ -403,7 +400,7 @@ const VisualWarfare = () => {
               <Send className="w-5 h-5 mr-2" />
               Submit Your Project
             </button>
-          </form>
+          </div>
         </div>
       </section>
 
