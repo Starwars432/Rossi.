@@ -1,128 +1,117 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { ArrowLeft, ChevronDown, ChevronUp, CheckCircle, Monitor, Smartphone, Layers, Target, Zap } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { ArrowLeft, Upload, Zap, Star, CheckCircle, Camera, Palette, Sparkles, Send } from 'lucide-react';
 
-const VisualWarfare: React.FC = () => {
-  const navigate = useNavigate();
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
+const VisualWarfare = () => {
+  const [formData, setFormData] = useState({
+    productName: '',
+    email: '',
+    phone: '',
+    backgroundStyle: '',
+    brandColors: '',
+    targetAudience: '',
+    productDescription: '',
+    inspiration: '',
+    timeline: '',
+    additionalRequests: ''
+  });
+  const [selectedFiles, setSelectedFiles] = useState([]);
 
   const handleBackToHome = () => {
-    navigate('/#home');
+    window.location.href = '/#home';
   };
 
-  const deliverables = [
-    {
-      icon: '🧠',
-      title: 'Conversion Ad Design',
-      description: 'Scroll-stopping visuals for Facebook, TikTok, YouTube, Google'
-    },
-    {
-      icon: '📱',
-      title: 'Mobile-First Design',
-      description: 'Native ratios, platform-optimized layouts (9:16, 1:1, 16:9)'
-    },
-    {
-      icon: '✏️',
-      title: 'Headline & Hook Copy',
-      description: 'Shortform psychological copy embedded into the ad design'
-    },
-    {
-      icon: '🎨',
-      title: 'Brand-Aligned Style',
-      description: 'Seamlessly integrates with your identity + product visuals'
-    },
-    {
-      icon: '🧪',
-      title: 'A/B Variant Creatives',
-      description: 'Two options for split-testing visual strategy (optional tier)'
-    }
+  const handleInputChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleFileSelect = (e) => {
+    const files = Array.from(e.target.files);
+    setSelectedFiles(prev => [...prev, ...files]);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Handle form submission logic here
+    console.log('Form submitted:', formData, selectedFiles);
+    alert('Your project has been submitted! We\'ll get back to you within 24 hours.');
+  };
+
+  const backgroundStyles = [
+    'Minimal Studio',
+    'Luxury Gradient',
+    'Neon/Cyberpunk',
+    'Natural/Organic',
+    'Abstract Geometric',
+    'Vintage/Retro',
+    'Dark/Moody',
+    'Bright/Colorful',
+    'Textured/Grunge',
+    'Custom (describe below)'
   ];
 
-  const mockupShowcase = [
+  const exampleProjects = [
     {
-      title: 'Deodorant Redesign',
-      metric: 'CTR +178%',
-      platform: 'Facebook',
-      type: 'Static Ad'
+      title: 'Luxury Skincare',
+      beforeStyle: 'Plain white background',
+      afterStyle: 'Marble texture with gold accents',
+      impact: 'Increased premium perception',
+      category: 'Beauty'
     },
     {
-      title: 'AI SaaS App',
-      metric: '$24k revenue in 2 days',
-      platform: 'TikTok',
-      type: 'Video Frame'
+      title: 'Tech Gadget',
+      beforeStyle: 'Basic product photo',
+      afterStyle: 'Futuristic neon environment',
+      impact: 'Boosted modern appeal',
+      category: 'Electronics'
     },
     {
-      title: 'Jewelry Rebrand',
-      metric: 'Scroll rate dropped by 48%',
-      platform: 'YouTube',
-      type: 'Thumbnail'
-    }
-  ];
-
-  const differentiators = [
-    {
-      title: 'Conversion First',
-      description: 'Designed for results, not for aesthetics'
+      title: 'Fitness Supplement',
+      beforeStyle: 'Generic background',
+      afterStyle: 'Dynamic energy burst effect',
+      impact: 'Enhanced energy perception',
+      category: 'Health'
     },
     {
-      title: 'Platform-Specific',
-      description: 'Built for Facebook, TikTok, Reels, Shorts, etc.'
+      title: 'Artisan Coffee',
+      beforeStyle: 'Simple product shot',
+      afterStyle: 'Rustic wood with steam effects',
+      impact: 'Strengthened artisan brand',
+      category: 'Food & Beverage'
     },
     {
-      title: 'Scroll-Interruptive',
-      description: 'Uses asymmetry, motion triggers, and optical rhythm'
+      title: 'Fashion Accessory',
+      beforeStyle: 'Standard catalog style',
+      afterStyle: 'Abstract colorful backdrop',
+      impact: 'Increased style appeal',
+      category: 'Fashion'
     },
     {
-      title: 'Copy-Integrated',
-      description: 'No guessing. Every design includes optimized hook text'
+      title: 'Home Decor',
+      beforeStyle: 'Plain background',
+      afterStyle: 'Lifestyle room setting',
+      impact: 'Better context visualization',
+      category: 'Home'
     }
   ];
 
   const processSteps = [
     {
-      title: 'Brand/Product Brief',
-      description: 'You upload visual assets, links, or raw text'
+      icon: <Upload className="w-6 h-6" />,
+      title: 'Submit Your Product',
+      description: 'Upload product photos and tell us your vision'
     },
     {
-      title: 'Strategy + Mockup',
-      description: 'We draft visual wireframes & 2–3 hook concepts'
+      icon: <Palette className="w-6 h-6" />,
+      title: 'Design Magic',
+      description: 'We create stunning backgrounds that make your product pop'
     },
     {
-      title: 'Final Delivery',
-      description: 'You receive web-ready ad designs + copy, in native formats'
-    }
-  ];
-
-  const testimonials = [
-    {
-      name: 'M.P.',
-      title: 'DTC Brand Owner',
-      quote: "We dropped one ad set from them and broke our previous record in 48 hours."
-    },
-    {
-      name: 'J.T.',
-      title: 'Performance Marketer',
-      quote: "They think like a strategist, design like a killer. Clean, tight, and results-focused."
-    }
-  ];
-
-  const faqs = [
-    {
-      question: "What platforms do you design for?",
-      answer: "TikTok, Instagram, Facebook, YouTube, Google Display, and more."
-    },
-    {
-      question: "What formats do I receive?",
-      answer: "PNG, JPG, optional layered PSD or Figma. Mobile + desktop formats."
-    },
-    {
-      question: "Do I need to supply a product photo?",
-      answer: "It helps, but we can work with references or render one for you."
-    },
-    {
-      question: "Do you offer animated versions?",
-      answer: "Not yet — but it's coming. Static high-converting ads only for now."
+      icon: <Sparkles className="w-6 h-6" />,
+      title: 'Delivery',
+      description: 'Receive high-resolution files ready for marketing'
     }
   ];
 
@@ -142,403 +131,340 @@ const VisualWarfare: React.FC = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="py-20 px-6 bg-gradient-to-b from-black to-gray-900 relative overflow-hidden">
-        {/* Subtle grid background */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="w-full h-full" style={{ 
-            backgroundImage: 'linear-gradient(#444 1px, transparent 1px), linear-gradient(90deg, #444 1px, transparent 1px)',
-            backgroundSize: '20px 20px'
-          }}></div>
-        </div>
-
-        <div className="max-w-5xl mx-auto relative z-10">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
+      <section className="py-20 px-6 bg-gradient-to-br from-purple-900/20 via-gray-900 to-blue-900/20">
+        <div className="max-w-6xl mx-auto text-center">
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent">
+            Visual Warfare
+          </h1>
+          <p className="text-2xl md:text-3xl text-gray-300 mb-4 font-light">
+            Transform Your Products with Stunning Backgrounds
+          </p>
+          <p className="text-lg text-gray-400 mb-12 max-w-3xl mx-auto">
+            We create eye-catching product backgrounds that make your items stand out in any market. From e-commerce to social media, we've got you covered.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <button 
+              onClick={() => document.getElementById('examples').scrollIntoView({ behavior: 'smooth' })}
+              className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 rounded-lg text-lg font-medium hover:from-purple-700 hover:to-pink-700 transition-all shadow-lg transform hover:scale-105"
             >
-              <h1 className="text-5xl md:text-6xl font-light mb-6 leading-tight"
-                style={{ fontFamily: 'Playfair Display, serif' }}
-              >
-                Design That Commands Attention. And Action.
-              </h1>
-              
-              <p className="text-xl text-gray-300 mb-8 leading-relaxed">
-                Our ad creatives aren't made to decorate — they're built to disrupt scrolls, spike dopamine, and drive response across every channel.
-              </p>
-              
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-red-600 text-white px-8 py-4 rounded-lg text-lg font-medium hover:bg-red-700 transition-all shadow-lg"
-              >
-                🔘 Get Ad Creatives That Convert
-              </motion.button>
-            </motion.div>
-
-            {/* 3D-style screen stack mockup */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              whileHover={{ y: -5, x: -5 }}
-              className="relative"
+              View Our Work
+            </button>
+            <button 
+              onClick={() => document.getElementById('submit-form').scrollIntoView({ behavior: 'smooth' })}
+              className="bg-gray-800 text-white px-8 py-4 rounded-lg text-lg font-medium hover:bg-gray-700 transition-all border border-gray-700 hover:border-gray-600"
             >
-              <div className="relative">
-                {/* TikTok mockup */}
-                <div className="absolute top-0 right-0 w-48 h-80 bg-gray-800 rounded-lg shadow-2xl transform rotate-3 translate-x-4 -translate-y-2 overflow-hidden border border-gray-700">
-                  <div className="h-full w-full bg-gradient-to-br from-purple-900 to-pink-800 opacity-70"></div>
-                  <div className="absolute bottom-4 left-4 text-xs text-white">TikTok Ad</div>
-                </div>
-                
-                {/* Facebook mockup */}
-                <div className="absolute top-10 right-10 w-64 h-48 bg-gray-800 rounded-lg shadow-2xl transform -rotate-2 translate-x-2 translate-y-2 overflow-hidden border border-gray-700">
-                  <div className="h-full w-full bg-gradient-to-br from-blue-900 to-blue-700 opacity-70"></div>
-                  <div className="absolute bottom-4 left-4 text-xs text-white">Facebook Ad</div>
-                </div>
-                
-                {/* YouTube mockup */}
-                <div className="relative w-72 h-40 bg-gray-800 rounded-lg shadow-2xl overflow-hidden border border-gray-700">
-                  <div className="h-full w-full bg-gradient-to-br from-red-900 to-red-700 opacity-70"></div>
-                  <div className="absolute bottom-4 left-4 text-xs text-white">YouTube Thumbnail</div>
-                </div>
-              </div>
-            </motion.div>
+              Submit Your Product
+            </button>
           </div>
         </div>
       </section>
 
-      {/* What We Deliver Section */}
-      <section className="py-20 px-6 bg-gray-900">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl font-light mb-4 text-white" style={{ fontFamily: 'Playfair Display, serif' }}>
-              Engineered for Attention, Built for Performance
+      {/* Examples Section */}
+      <section id="examples" className="py-20 px-6 bg-gray-900">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4 text-white">
+              Before & After Transformations
             </h2>
-          </motion.div>
+            <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+              See how we transform ordinary product photos into extraordinary marketing assets
+            </p>
+          </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {deliverables.map((deliverable, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                whileHover={{ y: -5 }}
-                className="bg-gray-800 p-8 rounded-lg border border-gray-700 hover:border-red-500/30 transition-all"
-              >
-                <div className="text-3xl mb-4">{deliverable.icon}</div>
-                <h3 className="text-xl font-semibold mb-3 text-white" style={{ fontFamily: 'Playfair Display, serif' }}>
-                  {deliverable.title}
-                </h3>
-                <p className="text-gray-300 leading-relaxed">
-                  {deliverable.description}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Ad Mockup Showcase */}
-      <section className="py-20 px-6 bg-black">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl font-light mb-4 text-white" style={{ fontFamily: 'Playfair Display, serif' }}>
-              This Is What Disruption Looks Like
-            </h2>
-          </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {mockupShowcase.map((mockup, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                whileHover={{ scale: 1.05 }}
-                className="relative group"
-              >
-                <div className="aspect-video bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg overflow-hidden border border-gray-700 group-hover:border-red-500/50 transition-all">
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    {mockup.platform === 'Facebook' && <Monitor className="w-12 h-12 text-blue-500/30" />}
-                    {mockup.platform === 'TikTok' && <Smartphone className="w-12 h-12 text-pink-500/30" />}
-                    {mockup.platform === 'YouTube' && <Layers className="w-12 h-12 text-red-500/30" />}
-                  </div>
-                  
-                  {/* Metric Badge */}
-                  <div className="absolute top-4 right-4 bg-red-600/90 text-white text-xs font-bold px-2 py-1 rounded">
-                    {mockup.metric}
-                  </div>
-                  
-                  {/* Platform Badge */}
-                  <div className="absolute bottom-4 left-4 bg-gray-800/90 text-white text-xs px-2 py-1 rounded flex items-center">
-                    <span className="mr-1">{mockup.platform}</span>
-                    <span className="text-gray-400">• {mockup.type}</span>
+            {exampleProjects.map((project, index) => (
+              <div key={index} className="bg-gray-800 rounded-xl overflow-hidden border border-gray-700 hover:border-purple-500/50 transition-all group">
+                <div className="relative h-48 bg-gradient-to-br from-gray-700 to-gray-600 flex items-center justify-center">
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-pink-600/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  <Camera className="w-12 h-12 text-gray-400 group-hover:text-purple-400 transition-colors" />
+                  <div className="absolute top-4 right-4 bg-purple-600 text-white text-xs px-2 py-1 rounded">
+                    {project.category}
                   </div>
                 </div>
                 
-                <h3 className="text-lg font-semibold mt-4 text-white" style={{ fontFamily: 'Playfair Display, serif' }}>
-                  {mockup.title}
-                </h3>
-              </motion.div>
+                <div className="p-6">
+                  <h3 className="text-xl font-semibold mb-3 text-white">{project.title}</h3>
+                  
+                  <div className="space-y-2 mb-4">
+                    <div className="flex items-start">
+                      <span className="text-red-400 text-sm mr-2">Before:</span>
+                      <span className="text-gray-400 text-sm">{project.beforeStyle}</span>
+                    </div>
+                    <div className="flex items-start">
+                      <span className="text-green-400 text-sm mr-2">After:</span>
+                      <span className="text-gray-300 text-sm">{project.afterStyle}</span>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center text-sm text-purple-400">
+                    <Zap className="w-4 h-4 mr-1" />
+                    {project.impact}
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* Differentiator Section */}
-      <section className="py-20 px-6 bg-gray-900">
-        <div className="max-w-5xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mb-16"
-          >
-            <h2 className="text-4xl font-light mb-8 text-white text-center" style={{ fontFamily: 'Playfair Display, serif' }}>
-              You Don't Need a Graphic Designer. You Need a Visual Strategist.
-            </h2>
-            
-            <div className="max-w-3xl mx-auto mb-12">
-              <p className="text-xl text-gray-300 mb-6 leading-relaxed">
-                Our ad designs aren't built in Canva.<br />
-                Every line, shape, and shadow is placed with intention — to make the viewer stop, feel something, and click.
-              </p>
-              
-              <p className="text-lg text-gray-400 leading-relaxed">
-                This is performance-focused creative. Trained on high-converting patterns, movement psychology, and fast-scroll behavior.
-              </p>
-            </div>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            {differentiators.map((diff, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="flex items-start space-x-4"
-              >
-                <div className="bg-red-600/20 p-3 rounded-lg">
-                  {index === 0 && <Target className="w-6 h-6 text-red-500" />}
-                  {index === 1 && <Smartphone className="w-6 h-6 text-red-500" />}
-                  {index === 2 && <Zap className="w-6 h-6 text-red-500" />}
-                  {index === 3 && <Layers className="w-6 h-6 text-red-500" />}
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold mb-2 text-white" style={{ fontFamily: 'Playfair Display, serif' }}>
-                    {diff.title}
-                  </h3>
-                  <p className="text-gray-400 leading-relaxed">
-                    {diff.description}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-            className="text-center mt-16"
-          >
-            <blockquote className="text-xl italic text-gray-300">
-              "The goal isn't to be seen. It's to be remembered."
-            </blockquote>
-          </motion.div>
         </div>
       </section>
 
       {/* Process Section */}
       <section className="py-20 px-6 bg-black">
-        <div className="max-w-4xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl font-light mb-4 text-white" style={{ fontFamily: 'Playfair Display, serif' }}>
-              Our 3-Day Ad Design Turnaround
-            </h2>
-          </motion.div>
-
-          <div className="relative">
-            {/* Connecting line */}
-            <div className="absolute left-4 top-4 bottom-4 w-px bg-gray-700 md:hidden"></div>
-            <div className="absolute left-1/2 top-4 w-px h-[calc(100%-32px)] bg-gray-700 hidden md:block"></div>
-
-            <div className="space-y-12 md:space-y-0">
-              {processSteps.map((step, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.2 }}
-                  className="relative"
-                >
-                  <div className={`md:flex items-center ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
-                    {/* Number circle */}
-                    <div className="absolute left-0 top-0 md:static">
-                      <div className="w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-semibold z-10 relative">
-                        {index + 1}
-                      </div>
-                    </div>
-                    
-                    {/* Content */}
-                    <div className={`pl-16 md:pl-0 ${index % 2 === 0 ? 'md:pr-12 md:text-right' : 'md:pl-12'} md:w-1/2`}>
-                      <h3 className="text-xl font-semibold mb-2 text-white" style={{ fontFamily: 'Playfair Display, serif' }}>
-                        {step.title}
-                      </h3>
-                      <p className="text-gray-400 leading-relaxed">
-                        {step.description}
-                      </p>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4 text-white">How It Works</h2>
+            <p className="text-xl text-gray-400">Simple process, stunning results</p>
           </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-            className="text-center mt-16"
-          >
-            <div className="inline-block bg-red-600/20 text-red-500 px-4 py-2 rounded-full text-sm font-medium">
-              Delivered in 72 hours or less
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section className="py-20 px-6 bg-gray-900">
-        <div className="max-w-4xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="bg-gray-800 p-8 rounded-lg border border-gray-700"
-              >
-                <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center font-semibold text-gray-300">
-                    {testimonial.name}
-                  </div>
-                  <div className="ml-4">
-                    <div className="font-semibold text-white">{testimonial.name}</div>
-                    <div className="text-sm text-gray-400">{testimonial.title}</div>
-                  </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            {processSteps.map((step, index) => (
+              <div key={index} className="text-center">
+                <div className="bg-gradient-to-r from-purple-600 to-pink-600 w-16 h-16 rounded-full flex items-center justify-center text-white mb-6 mx-auto">
+                  {step.icon}
                 </div>
-                <p className="text-gray-300 italic leading-relaxed">"{testimonial.quote}"</p>
-              </motion.div>
+                <h3 className="text-xl font-semibold mb-3 text-white">{step.title}</h3>
+                <p className="text-gray-400">{step.description}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <section className="py-20 px-6 bg-black">
+      {/* Submit Form Section */}
+      <section id="submit-form" className="py-20 px-6 bg-gray-900">
         <div className="max-w-4xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl font-light mb-4 text-white" style={{ fontFamily: 'Playfair Display, serif' }}>
-              Tactical Questions, Precise Answers
-            </h2>
-          </motion.div>
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold mb-4 text-white">Submit Your Product</h2>
+            <p className="text-xl text-gray-400">Tell us about your project and we'll create something amazing</p>
+          </div>
 
-          <div className="space-y-4">
-            {faqs.map((faq, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden"
-              >
-                <button
-                  onClick={() => setOpenFaq(openFaq === index ? null : index)}
-                  className="w-full px-8 py-6 text-left flex items-center justify-between hover:bg-gray-700/50 transition-colors"
+          <div onSubmit={handleSubmit} className="bg-gray-800 rounded-xl p-8 border border-gray-700">
+            <div className="grid md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Product Name</label>
+                <input
+                  type="text"
+                  name="productName"
+                  value={formData.productName}
+                  onChange={handleInputChange}
+                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500"
+                  placeholder="e.g., Luxury Face Cream"
+                  required
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Email Address</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500"
+                  placeholder="your@email.com"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Phone Number</label>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500"
+                  placeholder="(555) 123-4567"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Background Style</label>
+                <select
+                  name="backgroundStyle"
+                  value={formData.backgroundStyle}
+                  onChange={handleInputChange}
+                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500"
+                  required
                 >
-                  <span className="text-lg font-medium text-white">{faq.question}</span>
-                  {openFaq === index ? (
-                    <ChevronUp className="w-5 h-5 text-gray-400" />
-                  ) : (
-                    <ChevronDown className="w-5 h-5 text-gray-400" />
-                  )}
-                </button>
-                
-                {openFaq === index && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="px-8 pb-6"
-                  >
-                    <p className="text-gray-300 leading-relaxed">{faq.answer}</p>
-                  </motion.div>
-                )}
-              </motion.div>
-            ))}
+                  <option value="">Select a style...</option>
+                  {backgroundStyles.map((style) => (
+                    <option key={style} value={style}>{style}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Brand Colors</label>
+                <input
+                  type="text"
+                  name="brandColors"
+                  value={formData.brandColors}
+                  onChange={handleInputChange}
+                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500"
+                  placeholder="e.g., Blue, Gold, White"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Target Audience</label>
+                <input
+                  type="text"
+                  name="targetAudience"
+                  value={formData.targetAudience}
+                  onChange={handleInputChange}
+                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500"
+                  placeholder="e.g., Young professionals, Luxury buyers"
+                />
+              </div>
+            </div>
+
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-300 mb-2">Product Description</label>
+              <textarea
+                name="productDescription"
+                value={formData.productDescription}
+                onChange={handleInputChange}
+                rows="3"
+                className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500"
+                placeholder="Tell us about your product - what it does, key features, etc."
+                required
+              ></textarea>
+            </div>
+
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-300 mb-2">Inspiration/References</label>
+              <textarea
+                name="inspiration"
+                value={formData.inspiration}
+                onChange={handleInputChange}
+                rows="3"
+                className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500"
+                placeholder="Share any inspiration images, competitor examples, or specific ideas you have in mind"
+              ></textarea>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Timeline</label>
+                <select
+                  name="timeline"
+                  value={formData.timeline}
+                  onChange={handleInputChange}
+                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500"
+                  required
+                >
+                  <option value="">Select timeline...</option>
+                  <option value="24-48 hours">Rush (24-48 hours)</option>
+                  <option value="3-5 days">Standard (3-5 days)</option>
+                  <option value="1-2 weeks">Flexible (1-2 weeks)</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Upload Product Photos</label>
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={handleFileSelect}
+                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-600 file:text-white hover:file:bg-purple-700"
+                />
+              </div>
+            </div>
+
+            <div className="mb-8">
+              <label className="block text-sm font-medium text-gray-300 mb-2">Additional Requests</label>
+              <textarea
+                name="additionalRequests"
+                value={formData.additionalRequests}
+                onChange={handleInputChange}
+                rows="3"
+                className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500"
+                placeholder="Any specific requirements, multiple angles needed, file formats, etc."
+              ></textarea>
+            </div>
+
+            {selectedFiles.length > 0 && (
+              <div className="mb-6">
+                <h4 className="text-sm font-medium text-gray-300 mb-2">Selected Files:</h4>
+                <div className="flex flex-wrap gap-2">
+                  {selectedFiles.map((file, index) => (
+                    <span key={index} className="bg-purple-600/20 text-purple-400 px-3 py-1 rounded-full text-sm">
+                      {file.name}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <button
+              type="submit"
+              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 rounded-lg text-lg font-medium hover:from-purple-700 hover:to-pink-700 transition-all shadow-lg transform hover:scale-105 flex items-center justify-center"
+            >
+              <Send className="w-5 h-5 mr-2" />
+              Submit Your Project
+            </button>
           </div>
         </div>
       </section>
 
-      {/* Final CTA Section */}
-      <section className="py-20 px-6 bg-gradient-to-b from-gray-900 to-black">
+      {/* Pricing & Contact */}
+      <section className="py-20 px-6 bg-black">
         <div className="max-w-4xl mx-auto text-center">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-4xl font-light mb-4 text-white"
-            style={{ fontFamily: 'Playfair Display, serif' }}
-          >
-            Pretty Doesn't Perform. Precision Does.
-          </motion.h2>
+          <h2 className="text-4xl font-bold mb-8 text-white">Ready to Transform Your Products?</h2>
           
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-xl text-gray-300 mb-8"
-          >
-            Let's turn your product into a scroll-stopping machine.
-          </motion.p>
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
+            <div className="bg-gray-800 p-6 rounded-xl border border-gray-700">
+              <h3 className="text-xl font-semibold mb-2 text-white">Basic</h3>
+              <p className="text-gray-400 mb-4">Single product, simple background</p>
+              <div className="text-3xl font-bold text-purple-400 mb-4">$49</div>
+              <ul className="text-sm text-gray-300 space-y-2">
+                <li className="flex items-center"><CheckCircle className="w-4 h-4 mr-2 text-green-400" />1 Product image</li>
+                <li className="flex items-center"><CheckCircle className="w-4 h-4 mr-2 text-green-400" />Custom background</li>
+                <li className="flex items-center"><CheckCircle className="w-4 h-4 mr-2 text-green-400" />High-res delivery</li>
+              </ul>
+            </div>
+            
+            <div className="bg-gradient-to-b from-purple-600/20 to-pink-600/20 p-6 rounded-xl border border-purple-500/50">
+              <h3 className="text-xl font-semibold mb-2 text-white">Professional</h3>
+              <p className="text-gray-400 mb-4">Multiple angles, premium effects</p>
+              <div className="text-3xl font-bold text-purple-400 mb-4">$149</div>
+              <ul className="text-sm text-gray-300 space-y-2">
+                <li className="flex items-center"><CheckCircle className="w-4 h-4 mr-2 text-green-400" />Up to 5 images</li>
+                <li className="flex items-center"><CheckCircle className="w-4 h-4 mr-2 text-green-400" />Premium backgrounds</li>
+                <li className="flex items-center"><CheckCircle className="w-4 h-4 mr-2 text-green-400" />Multiple formats</li>
+                <li className="flex items-center"><CheckCircle className="w-4 h-4 mr-2 text-green-400" />2 revisions</li>
+              </ul>
+            </div>
+            
+            <div className="bg-gray-800 p-6 rounded-xl border border-gray-700">
+              <h3 className="text-xl font-semibold mb-2 text-white">Enterprise</h3>
+              <p className="text-gray-400 mb-4">Full product line, custom branding</p>
+              <div className="text-3xl font-bold text-purple-400 mb-4">Custom</div>
+              <ul className="text-sm text-gray-300 space-y-2">
+                <li className="flex items-center"><CheckCircle className="w-4 h-4 mr-2 text-green-400" />Unlimited images</li>
+                <li className="flex items-center"><CheckCircle className="w-4 h-4 mr-2 text-green-400" />Brand guidelines</li>
+                <li className="flex items-center"><CheckCircle className="w-4 h-4 mr-2 text-green-400" />Priority support</li>
+                <li className="flex items-center"><CheckCircle className="w-4 h-4 mr-2 text-green-400" />Unlimited revisions</li>
+              </ul>
+            </div>
+          </div>
           
-          <motion.button
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-red-600 text-white px-8 py-4 rounded-lg text-lg font-medium hover:bg-red-700 transition-all shadow-lg"
+          <p className="text-gray-400 mb-8">
+            All packages include 48-72 hour delivery and satisfaction guarantee
+          </p>
+          
+          <button 
+            onClick={() => document.getElementById('submit-form').scrollIntoView({ behavior: 'smooth' })}
+            className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-12 py-4 rounded-lg text-xl font-medium hover:from-purple-700 hover:to-pink-700 transition-all shadow-lg transform hover:scale-105"
           >
-            🔘 Start Your Visual Warfare Campaign
-          </motion.button>
+            Get Started Today
+          </button>
         </div>
       </section>
     </div>
