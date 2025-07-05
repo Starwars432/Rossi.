@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Upload, Zap, Star, CheckCircle, Camera, Palette, Sparkles, Send } from 'lucide-react';
+import { Upload, Zap, Star, CheckCircle, Camera, Palette, Sparkles, Send, ArrowRight } from 'lucide-react';
 
 const VisualWarfare = () => {
   const [formData, setFormData] = useState({
@@ -15,10 +15,6 @@ const VisualWarfare = () => {
     additionalRequests: ''
   });
   const [selectedFiles, setSelectedFiles] = useState([]);
-
-  const handleBackToHome = () => {
-    window.location.href = '/#home';
-  };
 
   const handleInputChange = (e) => {
     setFormData({
@@ -117,21 +113,35 @@ const VisualWarfare = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
-      {/* Header */}
+      {/* Header with Navigation */}
       <header className="bg-black border-b border-gray-800">
-        <div className="max-w-7xl mx-auto px-6 py-6">
-          <button 
-            onClick={handleBackToHome}
-            className="inline-flex items-center text-gray-400 hover:text-white transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Home
-          </button>
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <nav className="flex items-center justify-between">
+            <div className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+              Visual Warfare
+            </div>
+            <div className="hidden md:flex space-x-8">
+              <a href="#home" className="text-gray-300 hover:text-white transition-colors">Home</a>
+              <a href="#services" className="text-gray-300 hover:text-white transition-colors">Services</a>
+              <a href="#faq" className="text-gray-300 hover:text-white transition-colors">FAQ</a>
+              <a href="#portfolio" className="text-gray-300 hover:text-white transition-colors">Portfolio</a>
+              <a href="#custom-design" className="text-gray-300 hover:text-white transition-colors">Custom Design</a>
+              <a href="#contact" className="text-gray-300 hover:text-white transition-colors">Contact</a>
+              <a href="#login" className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">Login</a>
+            </div>
+            <div className="md:hidden">
+              <button className="text-gray-300 hover:text-white">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+            </div>
+          </nav>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="py-20 px-6 bg-gradient-to-br from-purple-900/20 via-gray-900 to-blue-900/20">
+      <section id="home" className="py-20 px-6 bg-gradient-to-br from-purple-900/20 via-gray-900 to-blue-900/20">
         <div className="max-w-6xl mx-auto text-center">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent">
             Visual Warfare
@@ -171,51 +181,201 @@ const VisualWarfare = () => {
               See how we transform ordinary product photos into extraordinary marketing assets
             </p>
           </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {exampleProjects.map((project, index) => (
-              <div key={index} className="bg-gray-800 rounded-xl overflow-hidden border border-gray-700 hover:border-purple-500/50 transition-all group">
+          
+          <div className="space-y-12">
+            {/* First Row with Arrow */}
+            <div className="flex flex-col lg:flex-row items-center gap-8">
+              <div className="flex-1 bg-gray-800 rounded-xl overflow-hidden border border-gray-700 hover:border-purple-500/50 transition-all group">
                 <div className="relative h-48 bg-gradient-to-br from-gray-700 to-gray-600 flex items-center justify-center">
                   <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-pink-600/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   <Camera className="w-12 h-12 text-gray-400 group-hover:text-purple-400 transition-colors" />
                   <div className="absolute top-4 right-4 bg-purple-600 text-white text-xs px-2 py-1 rounded">
-                    {project.category}
+                    {exampleProjects[0].category}
                   </div>
                 </div>
-                
                 <div className="p-6">
-                  <h3 className="text-xl font-semibold mb-3 text-white">{project.title}</h3>
-                  
+                  <h3 className="text-xl font-semibold mb-3 text-white">{exampleProjects[0].title}</h3>
                   <div className="space-y-2 mb-4">
                     <div className="flex items-start">
                       <span className="text-red-400 text-sm mr-2">Before:</span>
-                      <span className="text-gray-400 text-sm">{project.beforeStyle}</span>
+                      <span className="text-gray-400 text-sm">{exampleProjects[0].beforeStyle}</span>
                     </div>
                     <div className="flex items-start">
                       <span className="text-green-400 text-sm mr-2">After:</span>
-                      <span className="text-gray-300 text-sm">{project.afterStyle}</span>
+                      <span className="text-gray-300 text-sm">{exampleProjects[0].afterStyle}</span>
                     </div>
                   </div>
-                  
                   <div className="flex items-center text-sm text-purple-400">
                     <Zap className="w-4 h-4 mr-1" />
-                    {project.impact}
+                    {exampleProjects[0].impact}
                   </div>
                 </div>
               </div>
-            ))}
+              
+              <div className="flex-shrink-0 bg-gradient-to-r from-purple-600 to-pink-600 p-3 rounded-full">
+                <ArrowRight className="w-6 h-6 text-white" />
+              </div>
+              
+              <div className="flex-1 bg-gray-800 rounded-xl overflow-hidden border border-gray-700 hover:border-purple-500/50 transition-all group">
+                <div className="relative h-48 bg-gradient-to-br from-gray-700 to-gray-600 flex items-center justify-center">
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-pink-600/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  <Camera className="w-12 h-12 text-gray-400 group-hover:text-purple-400 transition-colors" />
+                  <div className="absolute top-4 right-4 bg-purple-600 text-white text-xs px-2 py-1 rounded">
+                    {exampleProjects[1].category}
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-semibold mb-3 text-white">{exampleProjects[1].title}</h3>
+                  <div className="space-y-2 mb-4">
+                    <div className="flex items-start">
+                      <span className="text-red-400 text-sm mr-2">Before:</span>
+                      <span className="text-gray-400 text-sm">{exampleProjects[1].beforeStyle}</span>
+                    </div>
+                    <div className="flex items-start">
+                      <span className="text-green-400 text-sm mr-2">After:</span>
+                      <span className="text-gray-300 text-sm">{exampleProjects[1].afterStyle}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center text-sm text-purple-400">
+                    <Zap className="w-4 h-4 mr-1" />
+                    {exampleProjects[1].impact}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Second Row with Arrow */}
+            <div className="flex flex-col lg:flex-row items-center gap-8">
+              <div className="flex-1 bg-gray-800 rounded-xl overflow-hidden border border-gray-700 hover:border-purple-500/50 transition-all group">
+                <div className="relative h-48 bg-gradient-to-br from-gray-700 to-gray-600 flex items-center justify-center">
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-pink-600/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  <Camera className="w-12 h-12 text-gray-400 group-hover:text-purple-400 transition-colors" />
+                  <div className="absolute top-4 right-4 bg-purple-600 text-white text-xs px-2 py-1 rounded">
+                    {exampleProjects[2].category}
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-semibold mb-3 text-white">{exampleProjects[2].title}</h3>
+                  <div className="space-y-2 mb-4">
+                    <div className="flex items-start">
+                      <span className="text-red-400 text-sm mr-2">Before:</span>
+                      <span className="text-gray-400 text-sm">{exampleProjects[2].beforeStyle}</span>
+                    </div>
+                    <div className="flex items-start">
+                      <span className="text-green-400 text-sm mr-2">After:</span>
+                      <span className="text-gray-300 text-sm">{exampleProjects[2].afterStyle}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center text-sm text-purple-400">
+                    <Zap className="w-4 h-4 mr-1" />
+                    {exampleProjects[2].impact}
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex-shrink-0 bg-gradient-to-r from-purple-600 to-pink-600 p-3 rounded-full">
+                <ArrowRight className="w-6 h-6 text-white" />
+              </div>
+              
+              <div className="flex-1 bg-gray-800 rounded-xl overflow-hidden border border-gray-700 hover:border-purple-500/50 transition-all group">
+                <div className="relative h-48 bg-gradient-to-br from-gray-700 to-gray-600 flex items-center justify-center">
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-pink-600/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  <Camera className="w-12 h-12 text-gray-400 group-hover:text-purple-400 transition-colors" />
+                  <div className="absolute top-4 right-4 bg-purple-600 text-white text-xs px-2 py-1 rounded">
+                    {exampleProjects[3].category}
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-semibold mb-3 text-white">{exampleProjects[3].title}</h3>
+                  <div className="space-y-2 mb-4">
+                    <div className="flex items-start">
+                      <span className="text-red-400 text-sm mr-2">Before:</span>
+                      <span className="text-gray-400 text-sm">{exampleProjects[3].beforeStyle}</span>
+                    </div>
+                    <div className="flex items-start">
+                      <span className="text-green-400 text-sm mr-2">After:</span>
+                      <span className="text-gray-300 text-sm">{exampleProjects[3].afterStyle}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center text-sm text-purple-400">
+                    <Zap className="w-4 h-4 mr-1" />
+                    {exampleProjects[3].impact}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Third Row with Arrow */}
+            <div className="flex flex-col lg:flex-row items-center gap-8">
+              <div className="flex-1 bg-gray-800 rounded-xl overflow-hidden border border-gray-700 hover:border-purple-500/50 transition-all group">
+                <div className="relative h-48 bg-gradient-to-br from-gray-700 to-gray-600 flex items-center justify-center">
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-pink-600/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  <Camera className="w-12 h-12 text-gray-400 group-hover:text-purple-400 transition-colors" />
+                  <div className="absolute top-4 right-4 bg-purple-600 text-white text-xs px-2 py-1 rounded">
+                    {exampleProjects[4].category}
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-semibold mb-3 text-white">{exampleProjects[4].title}</h3>
+                  <div className="space-y-2 mb-4">
+                    <div className="flex items-start">
+                      <span className="text-red-400 text-sm mr-2">Before:</span>
+                      <span className="text-gray-400 text-sm">{exampleProjects[4].beforeStyle}</span>
+                    </div>
+                    <div className="flex items-start">
+                      <span className="text-green-400 text-sm mr-2">After:</span>
+                      <span className="text-gray-300 text-sm">{exampleProjects[4].afterStyle}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center text-sm text-purple-400">
+                    <Zap className="w-4 h-4 mr-1" />
+                    {exampleProjects[4].impact}
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex-shrink-0 bg-gradient-to-r from-purple-600 to-pink-600 p-3 rounded-full">
+                <ArrowRight className="w-6 h-6 text-white" />
+              </div>
+              
+              <div className="flex-1 bg-gray-800 rounded-xl overflow-hidden border border-gray-700 hover:border-purple-500/50 transition-all group">
+                <div className="relative h-48 bg-gradient-to-br from-gray-700 to-gray-600 flex items-center justify-center">
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-pink-600/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  <Camera className="w-12 h-12 text-gray-400 group-hover:text-purple-400 transition-colors" />
+                  <div className="absolute top-4 right-4 bg-purple-600 text-white text-xs px-2 py-1 rounded">
+                    {exampleProjects[5].category}
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-semibold mb-3 text-white">{exampleProjects[5].title}</h3>
+                  <div className="space-y-2 mb-4">
+                    <div className="flex items-start">
+                      <span className="text-red-400 text-sm mr-2">Before:</span>
+                      <span className="text-gray-400 text-sm">{exampleProjects[5].beforeStyle}</span>
+                    </div>
+                    <div className="flex items-start">
+                      <span className="text-green-400 text-sm mr-2">After:</span>
+                      <span className="text-gray-300 text-sm">{exampleProjects[5].afterStyle}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center text-sm text-purple-400">
+                    <Zap className="w-4 h-4 mr-1" />
+                    {exampleProjects[5].impact}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Process Section */}
-      <section className="py-20 px-6 bg-black">
+      <section id="services" className="py-20 px-6 bg-black">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4 text-white">How It Works</h2>
             <p className="text-xl text-gray-400">Simple process, stunning results</p>
           </div>
-
           <div className="grid md:grid-cols-3 gap-8">
             {processSteps.map((step, index) => (
               <div key={index} className="text-center">
@@ -237,8 +397,7 @@ const VisualWarfare = () => {
             <h2 className="text-4xl font-bold mb-4 text-white">Submit Your Product</h2>
             <p className="text-xl text-gray-400">Tell us about your project and we'll create something amazing</p>
           </div>
-
-          <div onSubmit={handleSubmit} className="bg-gray-800 rounded-xl p-8 border border-gray-700">
+          <form onSubmit={handleSubmit} className="bg-gray-800 rounded-xl p-8 border border-gray-700">
             <div className="grid md:grid-cols-2 gap-6 mb-6">
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">Product Name</label>
@@ -266,7 +425,6 @@ const VisualWarfare = () => {
                 />
               </div>
             </div>
-
             <div className="grid md:grid-cols-2 gap-6 mb-6">
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">Phone Number</label>
@@ -296,7 +454,6 @@ const VisualWarfare = () => {
                 </select>
               </div>
             </div>
-
             <div className="grid md:grid-cols-2 gap-6 mb-6">
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">Brand Colors</label>
@@ -322,7 +479,6 @@ const VisualWarfare = () => {
                 />
               </div>
             </div>
-
             <div className="mb-6">
               <label className="block text-sm font-medium text-gray-300 mb-2">Product Description</label>
               <textarea
@@ -335,7 +491,6 @@ const VisualWarfare = () => {
                 required
               ></textarea>
             </div>
-
             <div className="mb-6">
               <label className="block text-sm font-medium text-gray-300 mb-2">Inspiration/References</label>
               <textarea
@@ -347,7 +502,6 @@ const VisualWarfare = () => {
                 placeholder="Share any inspiration images, competitor examples, or specific ideas you have in mind"
               ></textarea>
             </div>
-
             <div className="grid md:grid-cols-2 gap-6 mb-6">
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">Timeline</label>
@@ -376,7 +530,6 @@ const VisualWarfare = () => {
                 />
               </div>
             </div>
-
             <div className="mb-8">
               <label className="block text-sm font-medium text-gray-300 mb-2">Additional Requests</label>
               <textarea
@@ -388,87 +541,9 @@ const VisualWarfare = () => {
                 placeholder="Any specific requirements, multiple angles needed, file formats, etc."
               ></textarea>
             </div>
-
             {selectedFiles.length > 0 && (
               <div className="mb-6">
                 <h4 className="text-sm font-medium text-gray-300 mb-2">Selected Files:</h4>
                 <div className="flex flex-wrap gap-2">
                   {selectedFiles.map((file, index) => (
-                    <span key={index} className="bg-purple-600/20 text-purple-400 px-3 py-1 rounded-full text-sm">
-                      {file.name}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            <button
-              type="submit"
-              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 rounded-lg text-lg font-medium hover:from-purple-700 hover:to-pink-700 transition-all shadow-lg transform hover:scale-105 flex items-center justify-center"
-            >
-              <Send className="w-5 h-5 mr-2" />
-              Submit Your Project
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing & Contact */}
-      <section className="py-20 px-6 bg-black">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-8 text-white">Ready to Transform Your Products?</h2>
-          
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
-            <div className="bg-gray-800 p-6 rounded-xl border border-gray-700">
-              <h3 className="text-xl font-semibold mb-2 text-white">Basic</h3>
-              <p className="text-gray-400 mb-4">Single product, simple background</p>
-              <div className="text-3xl font-bold text-purple-400 mb-4">$49</div>
-              <ul className="text-sm text-gray-300 space-y-2">
-                <li className="flex items-center"><CheckCircle className="w-4 h-4 mr-2 text-green-400" />1 Product image</li>
-                <li className="flex items-center"><CheckCircle className="w-4 h-4 mr-2 text-green-400" />Custom background</li>
-                <li className="flex items-center"><CheckCircle className="w-4 h-4 mr-2 text-green-400" />High-res delivery</li>
-              </ul>
-            </div>
-            
-            <div className="bg-gradient-to-b from-purple-600/20 to-pink-600/20 p-6 rounded-xl border border-purple-500/50">
-              <h3 className="text-xl font-semibold mb-2 text-white">Professional</h3>
-              <p className="text-gray-400 mb-4">Multiple angles, premium effects</p>
-              <div className="text-3xl font-bold text-purple-400 mb-4">$149</div>
-              <ul className="text-sm text-gray-300 space-y-2">
-                <li className="flex items-center"><CheckCircle className="w-4 h-4 mr-2 text-green-400" />Up to 5 images</li>
-                <li className="flex items-center"><CheckCircle className="w-4 h-4 mr-2 text-green-400" />Premium backgrounds</li>
-                <li className="flex items-center"><CheckCircle className="w-4 h-4 mr-2 text-green-400" />Multiple formats</li>
-                <li className="flex items-center"><CheckCircle className="w-4 h-4 mr-2 text-green-400" />2 revisions</li>
-              </ul>
-            </div>
-            
-            <div className="bg-gray-800 p-6 rounded-xl border border-gray-700">
-              <h3 className="text-xl font-semibold mb-2 text-white">Enterprise</h3>
-              <p className="text-gray-400 mb-4">Full product line, custom branding</p>
-              <div className="text-3xl font-bold text-purple-400 mb-4">Custom</div>
-              <ul className="text-sm text-gray-300 space-y-2">
-                <li className="flex items-center"><CheckCircle className="w-4 h-4 mr-2 text-green-400" />Unlimited images</li>
-                <li className="flex items-center"><CheckCircle className="w-4 h-4 mr-2 text-green-400" />Brand guidelines</li>
-                <li className="flex items-center"><CheckCircle className="w-4 h-4 mr-2 text-green-400" />Priority support</li>
-                <li className="flex items-center"><CheckCircle className="w-4 h-4 mr-2 text-green-400" />Unlimited revisions</li>
-              </ul>
-            </div>
-          </div>
-          
-          <p className="text-gray-400 mb-8">
-            All packages include 48-72 hour delivery and satisfaction guarantee
-          </p>
-          
-          <button 
-            onClick={() => document.getElementById('submit-form').scrollIntoView({ behavior: 'smooth' })}
-            className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-12 py-4 rounded-lg text-xl font-medium hover:from-purple-700 hover:to-pink-700 transition-all shadow-lg transform hover:scale-105"
-          >
-            Get Started Today
-          </button>
-        </div>
-      </section>
-    </div>
-  );
-};
-
-export default VisualWarfare;
+                    <span key={index} className="bg-purple-
